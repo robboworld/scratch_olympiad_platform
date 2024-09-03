@@ -1,0 +1,29 @@
+input SignUp {
+	email: String!
+	password: String!
+	nickname: String!
+	firstname: String!
+	lastname: String!
+	middlename: String
+}
+
+input SignIn {
+	email: String!
+	password: String!
+}
+
+type SignInResponse {
+	accessToken: String!
+	refreshToken: String!
+}
+
+extend type Query {
+	Me: UserHttp! @hasRole(roles:[Student, Teacher, Parent, UnitAdmin, SuperAdmin])
+}
+
+extend type Mutation  {
+	SignUp(input: SignUp!): Response!
+	SignIn(input: SignIn!): SignInResponse!
+	RefreshToken(refreshToken: String!): SignInResponse!
+	ConfirmActivation(activationLink: String!): SignInResponse!
+}

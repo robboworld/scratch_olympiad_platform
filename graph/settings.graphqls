@@ -1,0 +1,11 @@
+type Settings {
+	activationByLink: Boolean!
+}
+
+extend type Query {
+	GetSettings: Settings! @hasRole(roles: [SuperAdmin])
+}
+
+extend type Mutation {
+	SetActivationByLink(activationByLink: Boolean!): Response!  @hasRole(roles: [SuperAdmin])
+}

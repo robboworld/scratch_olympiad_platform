@@ -1,0 +1,40 @@
+type ProjectPageHttp {
+	id: ID!
+	createdAt: Timestamp!
+	updatedAt: Timestamp!
+	authorId: ID!
+	projectId: ID!
+	projectUpdatedAt: Timestamp!
+	title: String!
+	instruction: String!
+	notes: String!
+	linkToScratch: String!
+	isShared: Boolean!
+	isBanned: Boolean!
+}
+
+type ProjectPageHttpList {
+	projectPages: [ProjectPageHttp!]!
+	countRows: Int!
+}
+
+input UpdateProjectPage {
+	id: ID!
+	title: String!
+	instruction: String!
+	notes: String!
+	isShared: Boolean!
+}
+
+extend type Query {
+	GetProjectPageById(id: ID!): ProjectPageHttp! @hasRole(roles: [SuperAdmin, UnitAdmin, Student, Teacher])
+	GetAllProjectPagesByAuthorId(id: ID!, page: Int, pageSize: Int): ProjectPageHttpList! @hasRole(roles: [SuperAdmin, UnitAdmin, Student, Teacher])
+	GetAllProjectPagesByAccessToken(page: Int, pageSize: Int): ProjectPageHttpList! @hasRole(roles: [SuperAdmin, UnitAdmin, Student, Teacher])
+}
+
+extend type Mutation {
+	CreateProjectPage: ProjectPageHttp! @hasRole(roles: [SuperAdmin, UnitAdmin, Student, Teacher])
+	UpdateProjectPage(input: UpdateProjectPage!): ProjectPageHttp! @hasRole(roles: [SuperAdmin, UnitAdmin, Student, Teacher])
+	DeleteProjectPage(id: ID!): Response! @hasRole(roles: [SuperAdmin, UnitAdmin, Student, Teacher])
+	SetIsBanned(projectPageId: ID!, isBanned: Boolean!): Response! @hasRole(roles: [SuperAdmin])
+}

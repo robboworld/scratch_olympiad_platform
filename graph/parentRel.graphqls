@@ -1,0 +1,9 @@
+extend type Query {
+	GetChildrenByParent(parentId: ID!): UsersList!
+	GetParentsByChild(childId: ID!): UsersList!
+}
+
+extend type Mutation {
+	CreateParentRel(parentId: ID!, childID: ID!): Response!
+	DeleteParentRel(parentId: ID!, childID: ID!): Response!
+}
