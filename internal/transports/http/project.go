@@ -37,11 +37,6 @@ func (p ProjectHandlerImpl) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
-			if err != nil {
-				p.loggers.Err.Printf("%s", err.Error())
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
 			w.Header().Set("Content-Type", "application/json")
 			w.Write([]byte(project.Json))
 		case http.MethodPost:
