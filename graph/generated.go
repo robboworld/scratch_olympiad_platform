@@ -53,13 +53,20 @@ type ComplexityRoot struct {
 	}
 
 	ApplicationHttp struct {
-		AuthorID   func(childComplexity int) int
-		CreatedAt  func(childComplexity int) int
-		ID         func(childComplexity int) int
-		Link       func(childComplexity int) int
-		Nomination func(childComplexity int) int
-		Note       func(childComplexity int) int
-		UpdatedAt  func(childComplexity int) int
+		AlgorithmicTaskFile           func(childComplexity int) int
+		AlgorithmicTaskLink           func(childComplexity int) int
+		AuthorID                      func(childComplexity int) int
+		CreatedAt                     func(childComplexity int) int
+		CreativeTaskFile              func(childComplexity int) int
+		CreativeTaskLink              func(childComplexity int) int
+		EngineeringTaskCloudLink      func(childComplexity int) int
+		EngineeringTaskFile           func(childComplexity int) int
+		EngineeringTaskVideo          func(childComplexity int) int
+		EngineeringTaskVideoCloudLink func(childComplexity int) int
+		ID                            func(childComplexity int) int
+		Nomination                    func(childComplexity int) int
+		Note                          func(childComplexity int) int
+		UpdatedAt                     func(childComplexity int) int
 	}
 
 	CourseAPIMediaCollectionHttp struct {
@@ -276,6 +283,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.AbsoluteMediaHttp.URIAbsolute(childComplexity), true
 
+	case "ApplicationHttp.algorithmicTaskFile":
+		if e.complexity.ApplicationHttp.AlgorithmicTaskFile == nil {
+			break
+		}
+
+		return e.complexity.ApplicationHttp.AlgorithmicTaskFile(childComplexity), true
+
+	case "ApplicationHttp.algorithmicTaskLink":
+		if e.complexity.ApplicationHttp.AlgorithmicTaskLink == nil {
+			break
+		}
+
+		return e.complexity.ApplicationHttp.AlgorithmicTaskLink(childComplexity), true
+
 	case "ApplicationHttp.authorId":
 		if e.complexity.ApplicationHttp.AuthorID == nil {
 			break
@@ -290,19 +311,54 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ApplicationHttp.CreatedAt(childComplexity), true
 
+	case "ApplicationHttp.creativeTaskFile":
+		if e.complexity.ApplicationHttp.CreativeTaskFile == nil {
+			break
+		}
+
+		return e.complexity.ApplicationHttp.CreativeTaskFile(childComplexity), true
+
+	case "ApplicationHttp.creativeTaskLink":
+		if e.complexity.ApplicationHttp.CreativeTaskLink == nil {
+			break
+		}
+
+		return e.complexity.ApplicationHttp.CreativeTaskLink(childComplexity), true
+
+	case "ApplicationHttp.engineeringTaskCloudLink":
+		if e.complexity.ApplicationHttp.EngineeringTaskCloudLink == nil {
+			break
+		}
+
+		return e.complexity.ApplicationHttp.EngineeringTaskCloudLink(childComplexity), true
+
+	case "ApplicationHttp.engineeringTaskFile":
+		if e.complexity.ApplicationHttp.EngineeringTaskFile == nil {
+			break
+		}
+
+		return e.complexity.ApplicationHttp.EngineeringTaskFile(childComplexity), true
+
+	case "ApplicationHttp.engineeringTaskVideo":
+		if e.complexity.ApplicationHttp.EngineeringTaskVideo == nil {
+			break
+		}
+
+		return e.complexity.ApplicationHttp.EngineeringTaskVideo(childComplexity), true
+
+	case "ApplicationHttp.engineeringTaskVideoCloudLink":
+		if e.complexity.ApplicationHttp.EngineeringTaskVideoCloudLink == nil {
+			break
+		}
+
+		return e.complexity.ApplicationHttp.EngineeringTaskVideoCloudLink(childComplexity), true
+
 	case "ApplicationHttp.id":
 		if e.complexity.ApplicationHttp.ID == nil {
 			break
 		}
 
 		return e.complexity.ApplicationHttp.ID(childComplexity), true
-
-	case "ApplicationHttp.link":
-		if e.complexity.ApplicationHttp.Link == nil {
-			break
-		}
-
-		return e.complexity.ApplicationHttp.Link(childComplexity), true
 
 	case "ApplicationHttp.nomination":
 		if e.complexity.ApplicationHttp.Nomination == nil {
@@ -2124,8 +2180,8 @@ func (ec *executionContext) fieldContext_ApplicationHttp_nomination(ctx context.
 	return fc, nil
 }
 
-func (ec *executionContext) _ApplicationHttp_link(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationHTTP) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ApplicationHttp_link(ctx, field)
+func (ec *executionContext) _ApplicationHttp_algorithmicTaskLink(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationHttp_algorithmicTaskLink(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -2138,7 +2194,7 @@ func (ec *executionContext) _ApplicationHttp_link(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Link, nil
+		return obj.AlgorithmicTaskLink, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2155,7 +2211,315 @@ func (ec *executionContext) _ApplicationHttp_link(ctx context.Context, field gra
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_ApplicationHttp_link(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_ApplicationHttp_algorithmicTaskLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationHttp_algorithmicTaskFile(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationHttp_algorithmicTaskFile(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AlgorithmicTaskFile, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationHttp_algorithmicTaskFile(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationHttp_creativeTaskLink(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationHttp_creativeTaskLink(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreativeTaskLink, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationHttp_creativeTaskLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationHttp_creativeTaskFile(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationHttp_creativeTaskFile(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreativeTaskFile, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationHttp_creativeTaskFile(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationHttp_engineeringTaskFile(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationHttp_engineeringTaskFile(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.EngineeringTaskFile, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationHttp_engineeringTaskFile(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationHttp_engineeringTaskCloudLink(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationHttp_engineeringTaskCloudLink(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.EngineeringTaskCloudLink, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationHttp_engineeringTaskCloudLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationHttp_engineeringTaskVideo(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationHttp_engineeringTaskVideo(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.EngineeringTaskVideo, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationHttp_engineeringTaskVideo(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationHttp_engineeringTaskVideoCloudLink(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationHttp_engineeringTaskVideoCloudLink(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.EngineeringTaskVideoCloudLink, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationHttp_engineeringTaskVideoCloudLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ApplicationHttp",
 		Field:      field,
@@ -4182,8 +4546,22 @@ func (ec *executionContext) fieldContext_Mutation_CreateApplication(ctx context.
 				return ec.fieldContext_ApplicationHttp_authorId(ctx, field)
 			case "nomination":
 				return ec.fieldContext_ApplicationHttp_nomination(ctx, field)
-			case "link":
-				return ec.fieldContext_ApplicationHttp_link(ctx, field)
+			case "algorithmicTaskLink":
+				return ec.fieldContext_ApplicationHttp_algorithmicTaskLink(ctx, field)
+			case "algorithmicTaskFile":
+				return ec.fieldContext_ApplicationHttp_algorithmicTaskFile(ctx, field)
+			case "creativeTaskLink":
+				return ec.fieldContext_ApplicationHttp_creativeTaskLink(ctx, field)
+			case "creativeTaskFile":
+				return ec.fieldContext_ApplicationHttp_creativeTaskFile(ctx, field)
+			case "engineeringTaskFile":
+				return ec.fieldContext_ApplicationHttp_engineeringTaskFile(ctx, field)
+			case "engineeringTaskCloudLink":
+				return ec.fieldContext_ApplicationHttp_engineeringTaskCloudLink(ctx, field)
+			case "engineeringTaskVideo":
+				return ec.fieldContext_ApplicationHttp_engineeringTaskVideo(ctx, field)
+			case "engineeringTaskVideoCloudLink":
+				return ec.fieldContext_ApplicationHttp_engineeringTaskVideoCloudLink(ctx, field)
 			case "note":
 				return ec.fieldContext_ApplicationHttp_note(ctx, field)
 			}
@@ -9687,7 +10065,7 @@ func (ec *executionContext) unmarshalInputNewApplication(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"nomination", "link", "note"}
+	fieldsInOrder := [...]string{"nomination", "algorithmicTaskLink", "algorithmicTaskFile", "creativeTaskLink", "creativeTaskFile", "engineeringTaskFile", "engineeringTaskCloudLink", "engineeringTaskVideo", "engineeringTaskVideoCloudLink", "note"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -9703,15 +10081,78 @@ func (ec *executionContext) unmarshalInputNewApplication(ctx context.Context, ob
 				return it, err
 			}
 			it.Nomination = data
-		case "link":
+		case "algorithmicTaskLink":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("link"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("algorithmicTaskLink"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Link = data
+			it.AlgorithmicTaskLink = data
+		case "algorithmicTaskFile":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("algorithmicTaskFile"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AlgorithmicTaskFile = data
+		case "creativeTaskLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("creativeTaskLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreativeTaskLink = data
+		case "creativeTaskFile":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("creativeTaskFile"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreativeTaskFile = data
+		case "engineeringTaskFile":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("engineeringTaskFile"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EngineeringTaskFile = data
+		case "engineeringTaskCloudLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("engineeringTaskCloudLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EngineeringTaskCloudLink = data
+		case "engineeringTaskVideo":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("engineeringTaskVideo"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EngineeringTaskVideo = data
+		case "engineeringTaskVideoCloudLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("engineeringTaskVideoCloudLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EngineeringTaskVideoCloudLink = data
 		case "note":
 			var err error
 
@@ -10154,8 +10595,43 @@ func (ec *executionContext) _ApplicationHttp(ctx context.Context, sel ast.Select
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "link":
-			out.Values[i] = ec._ApplicationHttp_link(ctx, field, obj)
+		case "algorithmicTaskLink":
+			out.Values[i] = ec._ApplicationHttp_algorithmicTaskLink(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "algorithmicTaskFile":
+			out.Values[i] = ec._ApplicationHttp_algorithmicTaskFile(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "creativeTaskLink":
+			out.Values[i] = ec._ApplicationHttp_creativeTaskLink(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "creativeTaskFile":
+			out.Values[i] = ec._ApplicationHttp_creativeTaskFile(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "engineeringTaskFile":
+			out.Values[i] = ec._ApplicationHttp_engineeringTaskFile(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "engineeringTaskCloudLink":
+			out.Values[i] = ec._ApplicationHttp_engineeringTaskCloudLink(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "engineeringTaskVideo":
+			out.Values[i] = ec._ApplicationHttp_engineeringTaskVideo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "engineeringTaskVideoCloudLink":
+			out.Values[i] = ec._ApplicationHttp_engineeringTaskVideoCloudLink(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}

@@ -15,13 +15,20 @@ type AbsoluteMediaHTTP struct {
 }
 
 type ApplicationHTTP struct {
-	ID         string `json:"id"`
-	CreatedAt  string `json:"createdAt"`
-	UpdatedAt  string `json:"updatedAt"`
-	AuthorID   string `json:"authorId"`
-	Nomination string `json:"nomination"`
-	Link       string `json:"link"`
-	Note       string `json:"note"`
+	ID                            string `json:"id"`
+	CreatedAt                     string `json:"createdAt"`
+	UpdatedAt                     string `json:"updatedAt"`
+	AuthorID                      string `json:"authorId"`
+	Nomination                    string `json:"nomination"`
+	AlgorithmicTaskLink           string `json:"algorithmicTaskLink"`
+	AlgorithmicTaskFile           string `json:"algorithmicTaskFile"`
+	CreativeTaskLink              string `json:"creativeTaskLink"`
+	CreativeTaskFile              string `json:"creativeTaskFile"`
+	EngineeringTaskFile           string `json:"engineeringTaskFile"`
+	EngineeringTaskCloudLink      string `json:"engineeringTaskCloudLink"`
+	EngineeringTaskVideo          string `json:"engineeringTaskVideo"`
+	EngineeringTaskVideoCloudLink string `json:"engineeringTaskVideoCloudLink"`
+	Note                          string `json:"note"`
 }
 
 type CourseAPIMediaCollectionHTTP struct {
@@ -73,9 +80,16 @@ type MediaHTTP struct {
 }
 
 type NewApplication struct {
-	Nomination string  `json:"nomination"`
-	Link       *string `json:"link,omitempty"`
-	Note       *string `json:"note,omitempty"`
+	Nomination                    string  `json:"nomination"`
+	AlgorithmicTaskLink           *string `json:"algorithmicTaskLink,omitempty"`
+	AlgorithmicTaskFile           *string `json:"algorithmicTaskFile,omitempty"`
+	CreativeTaskLink              *string `json:"creativeTaskLink,omitempty"`
+	CreativeTaskFile              *string `json:"creativeTaskFile,omitempty"`
+	EngineeringTaskFile           *string `json:"engineeringTaskFile,omitempty"`
+	EngineeringTaskCloudLink      *string `json:"engineeringTaskCloudLink,omitempty"`
+	EngineeringTaskVideo          *string `json:"engineeringTaskVideo,omitempty"`
+	EngineeringTaskVideoCloudLink *string `json:"engineeringTaskVideoCloudLink,omitempty"`
+	Note                          *string `json:"note,omitempty"`
 }
 
 type NewUser struct {

@@ -4,13 +4,27 @@ type ApplicationHttp {
     updatedAt: Timestamp!
     authorId: ID!
     nomination: String!
-    link: String!
+    algorithmicTaskLink: String!
+    algorithmicTaskFile: String!
+    creativeTaskLink: String!
+    creativeTaskFile: String!
+    engineeringTaskFile: String!
+    engineeringTaskCloudLink: String!
+    engineeringTaskVideo: String!
+    engineeringTaskVideoCloudLink: String!
     note: String!
 }
 
 input NewApplication {
     nomination: String!
-    link: String
+    algorithmicTaskLink: String
+    algorithmicTaskFile: String
+    creativeTaskLink: String
+    creativeTaskFile: String
+    engineeringTaskFile: String
+    engineeringTaskCloudLink: String
+    engineeringTaskVideo: String
+    engineeringTaskVideoCloudLink: String
     note: String
 }
 

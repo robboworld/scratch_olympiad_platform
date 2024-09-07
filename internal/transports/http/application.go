@@ -41,10 +41,17 @@ func (h ApplicationHandler) CreateApplication(c *gin.Context) {
 	}
 
 	application := models.ApplicationCore{
-		AuthorID:   userID,
-		Nomination: input.Nomination,
-		Link:       utils.StringPointerToString(input.Link),
-		Note:       utils.StringPointerToString(input.Note),
+		AuthorID:                      userID,
+		Nomination:                    input.Nomination,
+		AlgorithmicTaskLink:           utils.StringPointerToString(input.AlgorithmicTaskLink),
+		AlgorithmicTaskFile:           utils.StringPointerToString(input.AlgorithmicTaskFile),
+		CreativeTaskFile:              utils.StringPointerToString(input.CreativeTaskFile),
+		CreativeTaskLink:              utils.StringPointerToString(input.CreativeTaskLink),
+		EngineeringTaskFile:           utils.StringPointerToString(input.EngineeringTaskFile),
+		EngineeringTaskCloudLink:      utils.StringPointerToString(input.EngineeringTaskCloudLink),
+		EngineeringTaskVideo:          utils.StringPointerToString(input.EngineeringTaskVideo),
+		EngineeringTaskVideoCloudLink: utils.StringPointerToString(input.EngineeringTaskVideoCloudLink),
+		Note:                          utils.StringPointerToString(input.Note),
 	}
 	newApplication, err := h.applicationService.CreateApplication(application)
 	if err != nil {

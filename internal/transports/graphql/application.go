@@ -26,10 +26,17 @@ func (r *mutationResolver) CreateApplication(ctx context.Context, input models.N
 		}
 	}
 	application := models.ApplicationCore{
-		AuthorID:   ginContext.Value(consts.KeyId).(uint),
-		Nomination: input.Nomination,
-		Link:       utils.StringPointerToString(input.Link),
-		Note:       utils.StringPointerToString(input.Note),
+		AuthorID:                      ginContext.Value(consts.KeyId).(uint),
+		Nomination:                    input.Nomination,
+		AlgorithmicTaskLink:           utils.StringPointerToString(input.AlgorithmicTaskLink),
+		AlgorithmicTaskFile:           utils.StringPointerToString(input.AlgorithmicTaskFile),
+		CreativeTaskFile:              utils.StringPointerToString(input.CreativeTaskFile),
+		CreativeTaskLink:              utils.StringPointerToString(input.CreativeTaskLink),
+		EngineeringTaskFile:           utils.StringPointerToString(input.EngineeringTaskFile),
+		EngineeringTaskCloudLink:      utils.StringPointerToString(input.EngineeringTaskCloudLink),
+		EngineeringTaskVideo:          utils.StringPointerToString(input.EngineeringTaskVideo),
+		EngineeringTaskVideoCloudLink: utils.StringPointerToString(input.EngineeringTaskVideoCloudLink),
+		Note:                          utils.StringPointerToString(input.Note),
 	}
 	newApplication, err := r.applicationService.CreateApplication(application)
 	if err != nil {
