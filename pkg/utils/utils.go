@@ -84,6 +84,7 @@ func BoolPointerToBool(p *bool) bool {
 }
 
 func GinContextFromContext(ctx context.Context) (*gin.Context, error) {
+	// TODO: return ResponseError
 	ginContext := ctx.Value("GinContextKey")
 	if ginContext == nil {
 		return nil, fmt.Errorf("%s", "could not retrieve gin.Context")

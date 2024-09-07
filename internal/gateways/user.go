@@ -29,7 +29,10 @@ type UserGatewayImpl struct {
 
 func (u UserGatewayImpl) GetUserByActivationLink(link string) (user models.UserCore, err error) {
 	if err = u.postgresClient.Db.Where("activation_link = ?", link).Take(&user).Error; err != nil {
-		return user, err
+		return user, utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+		}
 	}
 	return user, nil
 }
@@ -50,7 +53,7 @@ func (u UserGatewayImpl) GetUserByEmail(email string) (user models.UserCore, err
 	return user, nil
 }
 
-func (u UserGatewayImpl) SetIsActive(id uint, isActive bool) error {
+func (u UserGatewayImpl) SetIsActive(id uint, isActive bool) (err error) {
 	var updateStruct map[string]interface{}
 	if isActive {
 		updateStruct = map[string]interface{}{
@@ -62,37 +65,59 @@ func (u UserGatewayImpl) SetIsActive(id uint, isActive bool) error {
 			"is_active": isActive,
 		}
 	}
-	return u.postgresClient.Db.First(&models.UserCore{ID: id}).Updates(updateStruct).Error
+	if err = u.postgresClient.Db.First(&models.UserCore{ID: id}).Updates(updateStruct).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return utils.ResponseError{
+				Code:    http.StatusBadRequest,
+				Message: consts.ErrNotFoundInDB,
+			}
+		}
+		return utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+		}
+	}
+	return nil
 }
 
 func (u UserGatewayImpl) DoesExistEmail(id uint, email string) (bool, error) {
-	result := u.postgresClient.Db.Where("id != ? AND email = ?", id, email).
-		Take(&models.UserCore{})
-	if result.Error != nil {
-		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+	if err := u.postgresClient.Db.Where("id != ? AND email = ?", id, email).
+		Take(&models.UserCore{}).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return false, nil
 		}
 		return false, utils.ResponseError{
 			Code:    http.StatusInternalServerError,
-			Message: result.Error.Error(),
+			Message: err.Error(),
 		}
 	}
 	return true, nil
 }
 
 func (u UserGatewayImpl) CreateUser(user models.UserCore) (newUser models.UserCore, err error) {
-	result := u.postgresClient.Db.Create(&user).Clauses(clause.Returning{})
-	if result.Error != nil {
+	if err = u.postgresClient.Db.Create(&user).Clauses(clause.Returning{}).Error; err != nil {
 		return models.UserCore{}, utils.ResponseError{
 			Code:    http.StatusInternalServerError,
-			Message: result.Error.Error(),
+			Message: err.Error(),
 		}
 	}
 	return user, nil
 }
 
 func (u UserGatewayImpl) DeleteUser(id uint) (err error) {
-	return u.postgresClient.Db.Delete(&models.UserCore{}, id).Error
+	if err = u.postgresClient.Db.Take(&models.UserCore{}, id).Delete(&models.UserCore{}, id).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return utils.ResponseError{
+				Code:    http.StatusBadRequest,
+				Message: consts.ErrNotFoundInDB,
+			}
+		}
+		return utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+		}
+	}
+	return
 }
 
 func (u UserGatewayImpl) UpdateUser(user models.UserCore) (models.UserCore, error) {
@@ -105,6 +130,12 @@ func (u UserGatewayImpl) UpdateUser(user models.UserCore) (models.UserCore, erro
 			"middlename": user.Middlename,
 			"nickname":   user.Nickname,
 		}).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return models.UserCore{}, utils.ResponseError{
+				Code:    http.StatusBadRequest,
+				Message: consts.ErrNotFoundInDB,
+			}
+		}
 		return models.UserCore{}, utils.ResponseError{
 			Code:    http.StatusInternalServerError,
 			Message: err.Error(),
@@ -114,7 +145,13 @@ func (u UserGatewayImpl) UpdateUser(user models.UserCore) (models.UserCore, erro
 }
 
 func (u UserGatewayImpl) GetUserById(id uint) (user models.UserCore, err error) {
-	if err := u.postgresClient.Db.First(&user, id).Error; err != nil {
+	if err = u.postgresClient.Db.First(&user, id).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return models.UserCore{}, utils.ResponseError{
+				Code:    http.StatusBadRequest,
+				Message: consts.ErrNotFoundInDB,
+			}
+		}
 		return models.UserCore{}, utils.ResponseError{
 			Code:    http.StatusInternalServerError,
 			Message: err.Error(),
@@ -146,5 +183,5 @@ func (u UserGatewayImpl) GetAllUsers(
 		}
 	}
 	result.Count(&count)
-	return users, uint(count), result.Error
+	return users, uint(count), nil
 }
