@@ -6,8 +6,6 @@ package resolvers
 
 import (
 	"context"
-	"net/http"
-
 	"github.com/robboworld/scratch_olympiad_platform/internal/consts"
 	"github.com/robboworld/scratch_olympiad_platform/internal/models"
 	"github.com/robboworld/scratch_olympiad_platform/pkg/utils"
@@ -43,10 +41,7 @@ func (r *mutationResolver) CreateApplication(ctx context.Context, input models.N
 		r.loggers.Err.Printf("%s", err.Error())
 		return nil, &gqlerror.Error{
 			Extensions: map[string]interface{}{
-				"err": utils.ResponseError{
-					Code:    http.StatusInternalServerError,
-					Message: err.Error(),
-				},
+				"err": err,
 			},
 		}
 	}

@@ -28,7 +28,13 @@ func (s SettingsGatewayImpl) GetActivationByLink() (activationByCode bool, err e
 }
 
 func (s SettingsGatewayImpl) SetActivationByLink(activationByCode bool) error {
-	return s.postgresClient.Db.Model(&models.SettingsCore{ID: 1}).Updates(map[string]interface{}{
+	if err := s.postgresClient.Db.Model(&models.SettingsCore{ID: 1}).Updates(map[string]interface{}{
 		"activation_by_link": activationByCode,
-	}).Error
+	}).Error; err != nil {
+		return utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+		}
+	}
+	return nil
 }

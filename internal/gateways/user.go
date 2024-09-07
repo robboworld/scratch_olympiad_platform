@@ -29,6 +29,12 @@ type UserGatewayImpl struct {
 
 func (u UserGatewayImpl) GetUserByActivationLink(link string) (user models.UserCore, err error) {
 	if err = u.postgresClient.Db.Where("activation_link = ?", link).Take(&user).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return user, utils.ResponseError{
+				Code:    http.StatusBadRequest,
+				Message: consts.ErrNotFoundInDB,
+			}
+		}
 		return user, utils.ResponseError{
 			Code:    http.StatusInternalServerError,
 			Message: err.Error(),

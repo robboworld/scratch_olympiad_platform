@@ -37,10 +37,7 @@ type AuthServiceImpl struct {
 func (a AuthServiceImpl) ConfirmActivation(link string) (Tokens, error) {
 	activationByLink, err := a.settingsGateway.GetActivationByLink()
 	if err != nil {
-		return Tokens{Access: "", Refresh: ""}, utils.ResponseError{
-			Code:    http.StatusInternalServerError,
-			Message: err.Error(),
-		}
+		return Tokens{Access: "", Refresh: ""}, err
 	}
 	if !activationByLink {
 		return Tokens{Access: "", Refresh: ""}, utils.ResponseError{
@@ -50,16 +47,10 @@ func (a AuthServiceImpl) ConfirmActivation(link string) (Tokens, error) {
 	}
 	user, err := a.userGateway.GetUserByActivationLink(link)
 	if err != nil {
-		return Tokens{Access: "", Refresh: ""}, utils.ResponseError{
-			Code:    http.StatusInternalServerError,
-			Message: err.Error(),
-		}
+		return Tokens{Access: "", Refresh: ""}, err
 	}
-	if err := a.userGateway.SetIsActive(user.ID, true); err != nil {
-		return Tokens{Access: "", Refresh: ""}, utils.ResponseError{
-			Code:    http.StatusInternalServerError,
-			Message: err.Error(),
-		}
+	if err = a.userGateway.SetIsActive(user.ID, true); err != nil {
+		return Tokens{Access: "", Refresh: ""}, err
 	}
 	access, err := generateToken(user, viper.GetDuration("auth_access_token_ttl"), []byte(viper.GetString("auth_access_signing_key")))
 	if err != nil {
@@ -109,11 +100,10 @@ func (a AuthServiceImpl) SignIn(email, password string) (Tokens, error) {
 		}
 	}
 	if !user.IsActive {
-		return Tokens{},
-			utils.ResponseError{
-				Code:    http.StatusForbidden,
-				Message: consts.ErrUserIsNotActive,
-			}
+		return Tokens{}, utils.ResponseError{
+			Code:    http.StatusForbidden,
+			Message: consts.ErrUserIsNotActive,
+		}
 	}
 	access, err := generateToken(user, viper.GetDuration("auth_access_token_ttl"), []byte(viper.GetString("auth_access_signing_key")))
 	if err != nil {
@@ -182,7 +172,7 @@ func (a AuthServiceImpl) SignUp(newUser models.UserCore) error {
 		subject = "Активация аккаунта"
 		body = "<p>На данный момент активация по ссылке недоступна. Ждите активации от администратора.</p>"
 	}
-	if err := utils.SendEmail(subject, newUser.Email, body); err != nil {
+	if err = utils.SendEmail(subject, newUser.Email, body); err != nil {
 		return utils.ResponseError{
 			Code:    http.StatusInternalServerError,
 			Message: err.Error(),

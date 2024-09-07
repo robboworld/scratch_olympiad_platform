@@ -17,11 +17,10 @@ type ApplicationGatewayImpl struct {
 }
 
 func (u ApplicationGatewayImpl) CreateApplication(application models.ApplicationCore) (newApplication models.ApplicationCore, err error) {
-	result := u.postgresClient.Db.Create(&application).Clauses(clause.Returning{})
-	if result.Error != nil {
+	if err = u.postgresClient.Db.Create(&application).Clauses(clause.Returning{}).Error; err != nil {
 		return models.ApplicationCore{}, utils.ResponseError{
 			Code:    http.StatusInternalServerError,
-			Message: result.Error.Error(),
+			Message: err.Error(),
 		}
 	}
 	return application, nil
