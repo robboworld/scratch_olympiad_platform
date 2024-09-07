@@ -6,12 +6,12 @@ package resolvers
 
 import (
 	"context"
-	"github.com/robboworld/scratch_olympiad_platform/internal/consts"
-	"github.com/robboworld/scratch_olympiad_platform/internal/models"
-	"github.com/robboworld/scratch_olympiad_platform/pkg/utils"
 	"net/http"
 	"strconv"
 
+	"github.com/robboworld/scratch_olympiad_platform/internal/consts"
+	"github.com/robboworld/scratch_olympiad_platform/internal/models"
+	"github.com/robboworld/scratch_olympiad_platform/pkg/utils"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 

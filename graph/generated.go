@@ -8,13 +8,13 @@ import (
 	"embed"
 	"errors"
 	"fmt"
-	"github.com/robboworld/scratch_olympiad_platform/internal/models"
 	"strconv"
 	"sync"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
+	"github.com/robboworld/scratch_olympiad_platform/internal/models"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -1275,7 +1275,7 @@ func (ec *executionContext) dir_hasRole_args(ctx context.Context, rawArgs map[st
 	var arg0 []*models.Role
 	if tmp, ok := rawArgs["roles"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("roles"))
-		arg0, err = ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, tmp)
+		arg0, err = ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1305,7 +1305,7 @@ func (ec *executionContext) field_Mutation_CreateApplication_args(ctx context.Co
 	var arg0 models.NewApplication
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNNewApplication2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐNewApplication(ctx, tmp)
+		arg0, err = ec.unmarshalNNewApplication2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐNewApplication(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1344,7 +1344,7 @@ func (ec *executionContext) field_Mutation_CreateUser_args(ctx context.Context, 
 	var arg0 models.NewUser
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNNewUser2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐNewUser(ctx, tmp)
+		arg0, err = ec.unmarshalNNewUser2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐNewUser(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1491,7 +1491,7 @@ func (ec *executionContext) field_Mutation_SignIn_args(ctx context.Context, rawA
 	var arg0 models.SignIn
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNSignIn2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐSignIn(ctx, tmp)
+		arg0, err = ec.unmarshalNSignIn2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐSignIn(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1506,7 +1506,7 @@ func (ec *executionContext) field_Mutation_SignUp_args(ctx context.Context, rawA
 	var arg0 models.SignUp
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNSignUp2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐSignUp(ctx, tmp)
+		arg0, err = ec.unmarshalNSignUp2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐSignUp(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1521,7 +1521,7 @@ func (ec *executionContext) field_Mutation_UpdateProjectPage_args(ctx context.Co
 	var arg0 models.UpdateProjectPage
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNUpdateProjectPage2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUpdateProjectPage(ctx, tmp)
+		arg0, err = ec.unmarshalNUpdateProjectPage2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUpdateProjectPage(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1536,7 +1536,7 @@ func (ec *executionContext) field_Mutation_UpdateUser_args(ctx context.Context, 
 	var arg0 models.UpdateUser
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNUpdateUser2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUpdateUser(ctx, tmp)
+		arg0, err = ec.unmarshalNUpdateUser2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUpdateUser(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1635,7 +1635,7 @@ func (ec *executionContext) field_Query_GetAllUsers_args(ctx context.Context, ra
 	var arg3 []models.Role
 	if tmp, ok := rawArgs["roles"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("roles"))
-		arg3, err = ec.unmarshalNRole2ᚕgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRoleᚄ(ctx, tmp)
+		arg3, err = ec.unmarshalNRole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2281,7 +2281,7 @@ func (ec *executionContext) _CourseAPIMediaCollectionHttp_banner_image(ctx conte
 	}
 	res := resTmp.(*models.AbsoluteMediaHTTP)
 	fc.Result = res
-	return ec.marshalOAbsoluteMediaHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐAbsoluteMediaHTTP(ctx, field.Selections, res)
+	return ec.marshalOAbsoluteMediaHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐAbsoluteMediaHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_CourseAPIMediaCollectionHttp_banner_image(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2330,7 +2330,7 @@ func (ec *executionContext) _CourseAPIMediaCollectionHttp_course_image(ctx conte
 	}
 	res := resTmp.(*models.MediaHTTP)
 	fc.Result = res
-	return ec.marshalOMediaHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐMediaHTTP(ctx, field.Selections, res)
+	return ec.marshalOMediaHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐMediaHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_CourseAPIMediaCollectionHttp_course_image(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2377,7 +2377,7 @@ func (ec *executionContext) _CourseAPIMediaCollectionHttp_course_video(ctx conte
 	}
 	res := resTmp.(*models.MediaHTTP)
 	fc.Result = res
-	return ec.marshalOMediaHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐMediaHTTP(ctx, field.Selections, res)
+	return ec.marshalOMediaHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐMediaHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_CourseAPIMediaCollectionHttp_course_video(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2424,7 +2424,7 @@ func (ec *executionContext) _CourseAPIMediaCollectionHttp_image(ctx context.Cont
 	}
 	res := resTmp.(*models.ImageHTTP)
 	fc.Result = res
-	return ec.marshalOImageHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐImageHTTP(ctx, field.Selections, res)
+	return ec.marshalOImageHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐImageHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_CourseAPIMediaCollectionHttp_image(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3311,7 +3311,7 @@ func (ec *executionContext) _CourseHttp_media(ctx context.Context, field graphql
 	}
 	res := resTmp.(*models.CourseAPIMediaCollectionHTTP)
 	fc.Result = res
-	return ec.marshalNCourseAPIMediaCollectionHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐCourseAPIMediaCollectionHTTP(ctx, field.Selections, res)
+	return ec.marshalNCourseAPIMediaCollectionHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCourseAPIMediaCollectionHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_CourseHttp_media(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3367,7 +3367,7 @@ func (ec *executionContext) _CoursesListHttp_courses(ctx context.Context, field 
 	}
 	res := resTmp.([]*models.CourseHTTP)
 	fc.Result = res
-	return ec.marshalNCourseHttp2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐCourseHTTPᚄ(ctx, field.Selections, res)
+	return ec.marshalNCourseHttp2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCourseHTTPᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_CoursesListHttp_courses(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3751,7 +3751,7 @@ func (ec *executionContext) _Mutation_CreateUser(ctx context.Context, field grap
 			return ec.resolvers.Mutation().CreateUser(rctx, fc.Args["input"].(models.NewUser))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin"})
+			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin"})
 			if err != nil {
 				return nil, err
 			}
@@ -3771,7 +3771,7 @@ func (ec *executionContext) _Mutation_CreateUser(ctx context.Context, field grap
 		if data, ok := tmp.(*models.UserHTTP); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.UserHTTP`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.UserHTTP`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3785,7 +3785,7 @@ func (ec *executionContext) _Mutation_CreateUser(ctx context.Context, field grap
 	}
 	res := resTmp.(*models.UserHTTP)
 	fc.Result = res
-	return ec.marshalNUserHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUserHTTP(ctx, field.Selections, res)
+	return ec.marshalNUserHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUserHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_CreateUser(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3856,7 +3856,7 @@ func (ec *executionContext) _Mutation_UpdateUser(ctx context.Context, field grap
 			return ec.resolvers.Mutation().UpdateUser(rctx, fc.Args["input"].(models.UpdateUser))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Teacher", "Parent", "Student"})
+			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Teacher", "Parent", "Student"})
 			if err != nil {
 				return nil, err
 			}
@@ -3876,7 +3876,7 @@ func (ec *executionContext) _Mutation_UpdateUser(ctx context.Context, field grap
 		if data, ok := tmp.(*models.UserHTTP); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.UserHTTP`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.UserHTTP`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3890,7 +3890,7 @@ func (ec *executionContext) _Mutation_UpdateUser(ctx context.Context, field grap
 	}
 	res := resTmp.(*models.UserHTTP)
 	fc.Result = res
-	return ec.marshalNUserHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUserHTTP(ctx, field.Selections, res)
+	return ec.marshalNUserHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUserHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_UpdateUser(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3961,7 +3961,7 @@ func (ec *executionContext) _Mutation_DeleteUser(ctx context.Context, field grap
 			return ec.resolvers.Mutation().DeleteUser(rctx, fc.Args["id"].(string))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin"})
+			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin"})
 			if err != nil {
 				return nil, err
 			}
@@ -3981,7 +3981,7 @@ func (ec *executionContext) _Mutation_DeleteUser(ctx context.Context, field grap
 		if data, ok := tmp.(*models.Response); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.Response`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.Response`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3995,7 +3995,7 @@ func (ec *executionContext) _Mutation_DeleteUser(ctx context.Context, field grap
 	}
 	res := resTmp.(*models.Response)
 	fc.Result = res
-	return ec.marshalNResponse2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
+	return ec.marshalNResponse2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_DeleteUser(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4044,7 +4044,7 @@ func (ec *executionContext) _Mutation_SetUserIsActive(ctx context.Context, field
 			return ec.resolvers.Mutation().SetUserIsActive(rctx, fc.Args["id"].(string), fc.Args["isActive"].(bool))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin"})
+			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin"})
 			if err != nil {
 				return nil, err
 			}
@@ -4064,7 +4064,7 @@ func (ec *executionContext) _Mutation_SetUserIsActive(ctx context.Context, field
 		if data, ok := tmp.(*models.Response); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.Response`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.Response`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4078,7 +4078,7 @@ func (ec *executionContext) _Mutation_SetUserIsActive(ctx context.Context, field
 	}
 	res := resTmp.(*models.Response)
 	fc.Result = res
-	return ec.marshalNResponse2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
+	return ec.marshalNResponse2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_SetUserIsActive(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4127,7 +4127,7 @@ func (ec *executionContext) _Mutation_CreateApplication(ctx context.Context, fie
 			return ec.resolvers.Mutation().CreateApplication(rctx, fc.Args["input"].(models.NewApplication))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"Student"})
+			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"Student"})
 			if err != nil {
 				return nil, err
 			}
@@ -4147,7 +4147,7 @@ func (ec *executionContext) _Mutation_CreateApplication(ctx context.Context, fie
 		if data, ok := tmp.(*models.ApplicationHTTP); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.ApplicationHTTP`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.ApplicationHTTP`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4161,7 +4161,7 @@ func (ec *executionContext) _Mutation_CreateApplication(ctx context.Context, fie
 	}
 	res := resTmp.(*models.ApplicationHTTP)
 	fc.Result = res
-	return ec.marshalNApplicationHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐApplicationHTTP(ctx, field.Selections, res)
+	return ec.marshalNApplicationHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐApplicationHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_CreateApplication(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4232,7 +4232,7 @@ func (ec *executionContext) _Mutation_SignUp(ctx context.Context, field graphql.
 	}
 	res := resTmp.(*models.Response)
 	fc.Result = res
-	return ec.marshalNResponse2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
+	return ec.marshalNResponse2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_SignUp(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4291,7 +4291,7 @@ func (ec *executionContext) _Mutation_SignIn(ctx context.Context, field graphql.
 	}
 	res := resTmp.(*models.SignInResponse)
 	fc.Result = res
-	return ec.marshalNSignInResponse2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐSignInResponse(ctx, field.Selections, res)
+	return ec.marshalNSignInResponse2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐSignInResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_SignIn(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4352,7 +4352,7 @@ func (ec *executionContext) _Mutation_RefreshToken(ctx context.Context, field gr
 	}
 	res := resTmp.(*models.SignInResponse)
 	fc.Result = res
-	return ec.marshalNSignInResponse2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐSignInResponse(ctx, field.Selections, res)
+	return ec.marshalNSignInResponse2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐSignInResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_RefreshToken(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4413,7 +4413,7 @@ func (ec *executionContext) _Mutation_ConfirmActivation(ctx context.Context, fie
 	}
 	res := resTmp.(*models.SignInResponse)
 	fc.Result = res
-	return ec.marshalNSignInResponse2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐSignInResponse(ctx, field.Selections, res)
+	return ec.marshalNSignInResponse2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐSignInResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_ConfirmActivation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4474,7 +4474,7 @@ func (ec *executionContext) _Mutation_CreateParentRel(ctx context.Context, field
 	}
 	res := resTmp.(*models.Response)
 	fc.Result = res
-	return ec.marshalNResponse2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
+	return ec.marshalNResponse2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_CreateParentRel(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4533,7 +4533,7 @@ func (ec *executionContext) _Mutation_DeleteParentRel(ctx context.Context, field
 	}
 	res := resTmp.(*models.Response)
 	fc.Result = res
-	return ec.marshalNResponse2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
+	return ec.marshalNResponse2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_DeleteParentRel(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4582,7 +4582,7 @@ func (ec *executionContext) _Mutation_CreateProjectPage(ctx context.Context, fie
 			return ec.resolvers.Mutation().CreateProjectPage(rctx)
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
+			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
 			if err != nil {
 				return nil, err
 			}
@@ -4602,7 +4602,7 @@ func (ec *executionContext) _Mutation_CreateProjectPage(ctx context.Context, fie
 		if data, ok := tmp.(*models.ProjectPageHTTP); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.ProjectPageHTTP`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.ProjectPageHTTP`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4616,7 +4616,7 @@ func (ec *executionContext) _Mutation_CreateProjectPage(ctx context.Context, fie
 	}
 	res := resTmp.(*models.ProjectPageHTTP)
 	fc.Result = res
-	return ec.marshalNProjectPageHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐProjectPageHTTP(ctx, field.Selections, res)
+	return ec.marshalNProjectPageHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐProjectPageHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_CreateProjectPage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4676,7 +4676,7 @@ func (ec *executionContext) _Mutation_UpdateProjectPage(ctx context.Context, fie
 			return ec.resolvers.Mutation().UpdateProjectPage(rctx, fc.Args["input"].(models.UpdateProjectPage))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
+			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
 			if err != nil {
 				return nil, err
 			}
@@ -4696,7 +4696,7 @@ func (ec *executionContext) _Mutation_UpdateProjectPage(ctx context.Context, fie
 		if data, ok := tmp.(*models.ProjectPageHTTP); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.ProjectPageHTTP`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.ProjectPageHTTP`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4710,7 +4710,7 @@ func (ec *executionContext) _Mutation_UpdateProjectPage(ctx context.Context, fie
 	}
 	res := resTmp.(*models.ProjectPageHTTP)
 	fc.Result = res
-	return ec.marshalNProjectPageHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐProjectPageHTTP(ctx, field.Selections, res)
+	return ec.marshalNProjectPageHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐProjectPageHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_UpdateProjectPage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4781,7 +4781,7 @@ func (ec *executionContext) _Mutation_DeleteProjectPage(ctx context.Context, fie
 			return ec.resolvers.Mutation().DeleteProjectPage(rctx, fc.Args["id"].(string))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
+			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
 			if err != nil {
 				return nil, err
 			}
@@ -4801,7 +4801,7 @@ func (ec *executionContext) _Mutation_DeleteProjectPage(ctx context.Context, fie
 		if data, ok := tmp.(*models.Response); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.Response`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.Response`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4815,7 +4815,7 @@ func (ec *executionContext) _Mutation_DeleteProjectPage(ctx context.Context, fie
 	}
 	res := resTmp.(*models.Response)
 	fc.Result = res
-	return ec.marshalNResponse2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
+	return ec.marshalNResponse2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_DeleteProjectPage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4864,7 +4864,7 @@ func (ec *executionContext) _Mutation_SetIsBanned(ctx context.Context, field gra
 			return ec.resolvers.Mutation().SetIsBanned(rctx, fc.Args["projectPageId"].(string), fc.Args["isBanned"].(bool))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin"})
+			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin"})
 			if err != nil {
 				return nil, err
 			}
@@ -4884,7 +4884,7 @@ func (ec *executionContext) _Mutation_SetIsBanned(ctx context.Context, field gra
 		if data, ok := tmp.(*models.Response); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.Response`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.Response`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4898,7 +4898,7 @@ func (ec *executionContext) _Mutation_SetIsBanned(ctx context.Context, field gra
 	}
 	res := resTmp.(*models.Response)
 	fc.Result = res
-	return ec.marshalNResponse2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
+	return ec.marshalNResponse2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_SetIsBanned(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4947,7 +4947,7 @@ func (ec *executionContext) _Mutation_SetActivationByLink(ctx context.Context, f
 			return ec.resolvers.Mutation().SetActivationByLink(rctx, fc.Args["activationByLink"].(bool))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin"})
+			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin"})
 			if err != nil {
 				return nil, err
 			}
@@ -4967,7 +4967,7 @@ func (ec *executionContext) _Mutation_SetActivationByLink(ctx context.Context, f
 		if data, ok := tmp.(*models.Response); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.Response`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.Response`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4981,7 +4981,7 @@ func (ec *executionContext) _Mutation_SetActivationByLink(ctx context.Context, f
 	}
 	res := resTmp.(*models.Response)
 	fc.Result = res
-	return ec.marshalNResponse2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
+	return ec.marshalNResponse2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_SetActivationByLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5832,7 +5832,7 @@ func (ec *executionContext) _ProjectPageHttpList_projectPages(ctx context.Contex
 	}
 	res := resTmp.([]*models.ProjectPageHTTP)
 	fc.Result = res
-	return ec.marshalNProjectPageHttp2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐProjectPageHTTPᚄ(ctx, field.Selections, res)
+	return ec.marshalNProjectPageHttp2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐProjectPageHTTPᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_ProjectPageHttpList_projectPages(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5936,7 +5936,7 @@ func (ec *executionContext) _Query_GetUserByAccessToken(ctx context.Context, fie
 			return ec.resolvers.Query().GetUserByAccessToken(rctx)
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Teacher", "Parent", "Student"})
+			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Teacher", "Parent", "Student"})
 			if err != nil {
 				return nil, err
 			}
@@ -5956,7 +5956,7 @@ func (ec *executionContext) _Query_GetUserByAccessToken(ctx context.Context, fie
 		if data, ok := tmp.(*models.UserHTTP); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.UserHTTP`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.UserHTTP`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5970,7 +5970,7 @@ func (ec *executionContext) _Query_GetUserByAccessToken(ctx context.Context, fie
 	}
 	res := resTmp.(*models.UserHTTP)
 	fc.Result = res
-	return ec.marshalNUserHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUserHTTP(ctx, field.Selections, res)
+	return ec.marshalNUserHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUserHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_GetUserByAccessToken(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6030,7 +6030,7 @@ func (ec *executionContext) _Query_GetUserById(ctx context.Context, field graphq
 			return ec.resolvers.Query().GetUserByID(rctx, fc.Args["id"].(string))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Teacher", "Parent", "Student"})
+			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Teacher", "Parent", "Student"})
 			if err != nil {
 				return nil, err
 			}
@@ -6050,7 +6050,7 @@ func (ec *executionContext) _Query_GetUserById(ctx context.Context, field graphq
 		if data, ok := tmp.(*models.UserHTTP); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.UserHTTP`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.UserHTTP`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6064,7 +6064,7 @@ func (ec *executionContext) _Query_GetUserById(ctx context.Context, field graphq
 	}
 	res := resTmp.(*models.UserHTTP)
 	fc.Result = res
-	return ec.marshalNUserHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUserHTTP(ctx, field.Selections, res)
+	return ec.marshalNUserHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUserHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_GetUserById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6135,7 +6135,7 @@ func (ec *executionContext) _Query_GetAllUsers(ctx context.Context, field graphq
 			return ec.resolvers.Query().GetAllUsers(rctx, fc.Args["page"].(*int), fc.Args["pageSize"].(*int), fc.Args["active"].(bool), fc.Args["roles"].([]models.Role))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin"})
+			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin"})
 			if err != nil {
 				return nil, err
 			}
@@ -6155,7 +6155,7 @@ func (ec *executionContext) _Query_GetAllUsers(ctx context.Context, field graphq
 		if data, ok := tmp.(*models.UsersList); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.UsersList`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.UsersList`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6169,7 +6169,7 @@ func (ec *executionContext) _Query_GetAllUsers(ctx context.Context, field graphq
 	}
 	res := resTmp.(*models.UsersList)
 	fc.Result = res
-	return ec.marshalNUsersList2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUsersList(ctx, field.Selections, res)
+	return ec.marshalNUsersList2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUsersList(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_GetAllUsers(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6220,7 +6220,7 @@ func (ec *executionContext) _Query_Me(ctx context.Context, field graphql.Collect
 			return ec.resolvers.Query().Me(rctx)
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"Student", "Teacher", "Parent", "UnitAdmin", "SuperAdmin"})
+			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"Student", "Teacher", "Parent", "UnitAdmin", "SuperAdmin"})
 			if err != nil {
 				return nil, err
 			}
@@ -6240,7 +6240,7 @@ func (ec *executionContext) _Query_Me(ctx context.Context, field graphql.Collect
 		if data, ok := tmp.(*models.UserHTTP); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.UserHTTP`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.UserHTTP`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6254,7 +6254,7 @@ func (ec *executionContext) _Query_Me(ctx context.Context, field graphql.Collect
 	}
 	res := resTmp.(*models.UserHTTP)
 	fc.Result = res
-	return ec.marshalNUserHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUserHTTP(ctx, field.Selections, res)
+	return ec.marshalNUserHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUserHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_Me(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6314,7 +6314,7 @@ func (ec *executionContext) _Query_GetCourseById(ctx context.Context, field grap
 			return ec.resolvers.Query().GetCourseByID(rctx, fc.Args["id"].(string))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Teacher", "Student"})
+			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Teacher", "Student"})
 			if err != nil {
 				return nil, err
 			}
@@ -6334,7 +6334,7 @@ func (ec *executionContext) _Query_GetCourseById(ctx context.Context, field grap
 		if data, ok := tmp.(*models.CourseHTTP); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.CourseHTTP`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.CourseHTTP`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6348,7 +6348,7 @@ func (ec *executionContext) _Query_GetCourseById(ctx context.Context, field grap
 	}
 	res := resTmp.(*models.CourseHTTP)
 	fc.Result = res
-	return ec.marshalNCourseHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐCourseHTTP(ctx, field.Selections, res)
+	return ec.marshalNCourseHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCourseHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_GetCourseById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6435,7 +6435,7 @@ func (ec *executionContext) _Query_GetCoursesByUser(ctx context.Context, field g
 			return ec.resolvers.Query().GetCoursesByUser(rctx)
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Teacher", "Student"})
+			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Teacher", "Student"})
 			if err != nil {
 				return nil, err
 			}
@@ -6455,7 +6455,7 @@ func (ec *executionContext) _Query_GetCoursesByUser(ctx context.Context, field g
 		if data, ok := tmp.(*models.CoursesListHTTP); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.CoursesListHTTP`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.CoursesListHTTP`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6469,7 +6469,7 @@ func (ec *executionContext) _Query_GetCoursesByUser(ctx context.Context, field g
 	}
 	res := resTmp.(*models.CoursesListHTTP)
 	fc.Result = res
-	return ec.marshalNCoursesListHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐCoursesListHTTP(ctx, field.Selections, res)
+	return ec.marshalNCoursesListHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCoursesListHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_GetCoursesByUser(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6519,7 +6519,7 @@ func (ec *executionContext) _Query_GetChildrenByParent(ctx context.Context, fiel
 	}
 	res := resTmp.(*models.UsersList)
 	fc.Result = res
-	return ec.marshalNUsersList2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUsersList(ctx, field.Selections, res)
+	return ec.marshalNUsersList2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUsersList(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_GetChildrenByParent(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6580,7 +6580,7 @@ func (ec *executionContext) _Query_GetParentsByChild(ctx context.Context, field 
 	}
 	res := resTmp.(*models.UsersList)
 	fc.Result = res
-	return ec.marshalNUsersList2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUsersList(ctx, field.Selections, res)
+	return ec.marshalNUsersList2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUsersList(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_GetParentsByChild(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6631,7 +6631,7 @@ func (ec *executionContext) _Query_GetProjectPageById(ctx context.Context, field
 			return ec.resolvers.Query().GetProjectPageByID(rctx, fc.Args["id"].(string))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
+			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
 			if err != nil {
 				return nil, err
 			}
@@ -6651,7 +6651,7 @@ func (ec *executionContext) _Query_GetProjectPageById(ctx context.Context, field
 		if data, ok := tmp.(*models.ProjectPageHTTP); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.ProjectPageHTTP`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.ProjectPageHTTP`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6665,7 +6665,7 @@ func (ec *executionContext) _Query_GetProjectPageById(ctx context.Context, field
 	}
 	res := resTmp.(*models.ProjectPageHTTP)
 	fc.Result = res
-	return ec.marshalNProjectPageHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐProjectPageHTTP(ctx, field.Selections, res)
+	return ec.marshalNProjectPageHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐProjectPageHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_GetProjectPageById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6736,7 +6736,7 @@ func (ec *executionContext) _Query_GetAllProjectPagesByAuthorId(ctx context.Cont
 			return ec.resolvers.Query().GetAllProjectPagesByAuthorID(rctx, fc.Args["id"].(string), fc.Args["page"].(*int), fc.Args["pageSize"].(*int))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
+			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
 			if err != nil {
 				return nil, err
 			}
@@ -6756,7 +6756,7 @@ func (ec *executionContext) _Query_GetAllProjectPagesByAuthorId(ctx context.Cont
 		if data, ok := tmp.(*models.ProjectPageHTTPList); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.ProjectPageHTTPList`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.ProjectPageHTTPList`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6770,7 +6770,7 @@ func (ec *executionContext) _Query_GetAllProjectPagesByAuthorId(ctx context.Cont
 	}
 	res := resTmp.(*models.ProjectPageHTTPList)
 	fc.Result = res
-	return ec.marshalNProjectPageHttpList2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐProjectPageHTTPList(ctx, field.Selections, res)
+	return ec.marshalNProjectPageHttpList2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐProjectPageHTTPList(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_GetAllProjectPagesByAuthorId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6821,7 +6821,7 @@ func (ec *executionContext) _Query_GetAllProjectPagesByAccessToken(ctx context.C
 			return ec.resolvers.Query().GetAllProjectPagesByAccessToken(rctx, fc.Args["page"].(*int), fc.Args["pageSize"].(*int))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
+			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
 			if err != nil {
 				return nil, err
 			}
@@ -6841,7 +6841,7 @@ func (ec *executionContext) _Query_GetAllProjectPagesByAccessToken(ctx context.C
 		if data, ok := tmp.(*models.ProjectPageHTTPList); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.ProjectPageHTTPList`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.ProjectPageHTTPList`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6855,7 +6855,7 @@ func (ec *executionContext) _Query_GetAllProjectPagesByAccessToken(ctx context.C
 	}
 	res := resTmp.(*models.ProjectPageHTTPList)
 	fc.Result = res
-	return ec.marshalNProjectPageHttpList2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐProjectPageHTTPList(ctx, field.Selections, res)
+	return ec.marshalNProjectPageHttpList2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐProjectPageHTTPList(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_GetAllProjectPagesByAccessToken(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6906,7 +6906,7 @@ func (ec *executionContext) _Query_GetSettings(ctx context.Context, field graphq
 			return ec.resolvers.Query().GetSettings(rctx)
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin"})
+			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin"})
 			if err != nil {
 				return nil, err
 			}
@@ -6926,7 +6926,7 @@ func (ec *executionContext) _Query_GetSettings(ctx context.Context, field graphq
 		if data, ok := tmp.(*models.Settings); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.Settings`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.Settings`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6940,7 +6940,7 @@ func (ec *executionContext) _Query_GetSettings(ctx context.Context, field graphq
 	}
 	res := resTmp.(*models.Settings)
 	fc.Result = res
-	return ec.marshalNSettings2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐSettings(ctx, field.Selections, res)
+	return ec.marshalNSettings2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐSettings(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_GetSettings(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -7513,7 +7513,7 @@ func (ec *executionContext) _UserHttp_role(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.(models.Role)
 	fc.Result = res
-	return ec.marshalNRole2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, field.Selections, res)
+	return ec.marshalNRole2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_UserHttp_role(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -7821,7 +7821,7 @@ func (ec *executionContext) _UsersList_users(ctx context.Context, field graphql.
 	}
 	res := resTmp.([]*models.UserHTTP)
 	fc.Result = res
-	return ec.marshalNUserHttp2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUserHTTPᚄ(ctx, field.Selections, res)
+	return ec.marshalNUserHttp2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUserHTTPᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_UsersList_users(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -9763,7 +9763,7 @@ func (ec *executionContext) unmarshalInputNewUser(ctx context.Context, obj inter
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("role"))
-			data, err := ec.unmarshalNRole2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, v)
+			data, err := ec.unmarshalNRole2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -11763,11 +11763,11 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNApplicationHttp2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐApplicationHTTP(ctx context.Context, sel ast.SelectionSet, v models.ApplicationHTTP) graphql.Marshaler {
+func (ec *executionContext) marshalNApplicationHttp2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐApplicationHTTP(ctx context.Context, sel ast.SelectionSet, v models.ApplicationHTTP) graphql.Marshaler {
 	return ec._ApplicationHttp(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNApplicationHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐApplicationHTTP(ctx context.Context, sel ast.SelectionSet, v *models.ApplicationHTTP) graphql.Marshaler {
+func (ec *executionContext) marshalNApplicationHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐApplicationHTTP(ctx context.Context, sel ast.SelectionSet, v *models.ApplicationHTTP) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -11792,7 +11792,7 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) marshalNCourseAPIMediaCollectionHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐCourseAPIMediaCollectionHTTP(ctx context.Context, sel ast.SelectionSet, v *models.CourseAPIMediaCollectionHTTP) graphql.Marshaler {
+func (ec *executionContext) marshalNCourseAPIMediaCollectionHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCourseAPIMediaCollectionHTTP(ctx context.Context, sel ast.SelectionSet, v *models.CourseAPIMediaCollectionHTTP) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -11802,11 +11802,11 @@ func (ec *executionContext) marshalNCourseAPIMediaCollectionHttp2ᚖgithubᚗcom
 	return ec._CourseAPIMediaCollectionHttp(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNCourseHttp2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐCourseHTTP(ctx context.Context, sel ast.SelectionSet, v models.CourseHTTP) graphql.Marshaler {
+func (ec *executionContext) marshalNCourseHttp2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCourseHTTP(ctx context.Context, sel ast.SelectionSet, v models.CourseHTTP) graphql.Marshaler {
 	return ec._CourseHttp(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNCourseHttp2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐCourseHTTPᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.CourseHTTP) graphql.Marshaler {
+func (ec *executionContext) marshalNCourseHttp2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCourseHTTPᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.CourseHTTP) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -11830,7 +11830,7 @@ func (ec *executionContext) marshalNCourseHttp2ᚕᚖgithubᚗcomᚋskinnykaen�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNCourseHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐCourseHTTP(ctx, sel, v[i])
+			ret[i] = ec.marshalNCourseHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCourseHTTP(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -11850,7 +11850,7 @@ func (ec *executionContext) marshalNCourseHttp2ᚕᚖgithubᚗcomᚋskinnykaen�
 	return ret
 }
 
-func (ec *executionContext) marshalNCourseHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐCourseHTTP(ctx context.Context, sel ast.SelectionSet, v *models.CourseHTTP) graphql.Marshaler {
+func (ec *executionContext) marshalNCourseHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCourseHTTP(ctx context.Context, sel ast.SelectionSet, v *models.CourseHTTP) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -11860,11 +11860,11 @@ func (ec *executionContext) marshalNCourseHttp2ᚖgithubᚗcomᚋskinnykaenᚋrp
 	return ec._CourseHttp(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNCoursesListHttp2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐCoursesListHTTP(ctx context.Context, sel ast.SelectionSet, v models.CoursesListHTTP) graphql.Marshaler {
+func (ec *executionContext) marshalNCoursesListHttp2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCoursesListHTTP(ctx context.Context, sel ast.SelectionSet, v models.CoursesListHTTP) graphql.Marshaler {
 	return ec._CoursesListHttp(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNCoursesListHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐCoursesListHTTP(ctx context.Context, sel ast.SelectionSet, v *models.CoursesListHTTP) graphql.Marshaler {
+func (ec *executionContext) marshalNCoursesListHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCoursesListHTTP(ctx context.Context, sel ast.SelectionSet, v *models.CoursesListHTTP) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -11904,21 +11904,21 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 	return res
 }
 
-func (ec *executionContext) unmarshalNNewApplication2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐNewApplication(ctx context.Context, v interface{}) (models.NewApplication, error) {
+func (ec *executionContext) unmarshalNNewApplication2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐNewApplication(ctx context.Context, v interface{}) (models.NewApplication, error) {
 	res, err := ec.unmarshalInputNewApplication(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNNewUser2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐNewUser(ctx context.Context, v interface{}) (models.NewUser, error) {
+func (ec *executionContext) unmarshalNNewUser2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐNewUser(ctx context.Context, v interface{}) (models.NewUser, error) {
 	res, err := ec.unmarshalInputNewUser(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNProjectPageHttp2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐProjectPageHTTP(ctx context.Context, sel ast.SelectionSet, v models.ProjectPageHTTP) graphql.Marshaler {
+func (ec *executionContext) marshalNProjectPageHttp2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐProjectPageHTTP(ctx context.Context, sel ast.SelectionSet, v models.ProjectPageHTTP) graphql.Marshaler {
 	return ec._ProjectPageHttp(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNProjectPageHttp2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐProjectPageHTTPᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.ProjectPageHTTP) graphql.Marshaler {
+func (ec *executionContext) marshalNProjectPageHttp2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐProjectPageHTTPᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.ProjectPageHTTP) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -11942,7 +11942,7 @@ func (ec *executionContext) marshalNProjectPageHttp2ᚕᚖgithubᚗcomᚋskinnyk
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNProjectPageHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐProjectPageHTTP(ctx, sel, v[i])
+			ret[i] = ec.marshalNProjectPageHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐProjectPageHTTP(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -11962,7 +11962,7 @@ func (ec *executionContext) marshalNProjectPageHttp2ᚕᚖgithubᚗcomᚋskinnyk
 	return ret
 }
 
-func (ec *executionContext) marshalNProjectPageHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐProjectPageHTTP(ctx context.Context, sel ast.SelectionSet, v *models.ProjectPageHTTP) graphql.Marshaler {
+func (ec *executionContext) marshalNProjectPageHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐProjectPageHTTP(ctx context.Context, sel ast.SelectionSet, v *models.ProjectPageHTTP) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -11972,11 +11972,11 @@ func (ec *executionContext) marshalNProjectPageHttp2ᚖgithubᚗcomᚋskinnykaen
 	return ec._ProjectPageHttp(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNProjectPageHttpList2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐProjectPageHTTPList(ctx context.Context, sel ast.SelectionSet, v models.ProjectPageHTTPList) graphql.Marshaler {
+func (ec *executionContext) marshalNProjectPageHttpList2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐProjectPageHTTPList(ctx context.Context, sel ast.SelectionSet, v models.ProjectPageHTTPList) graphql.Marshaler {
 	return ec._ProjectPageHttpList(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNProjectPageHttpList2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐProjectPageHTTPList(ctx context.Context, sel ast.SelectionSet, v *models.ProjectPageHTTPList) graphql.Marshaler {
+func (ec *executionContext) marshalNProjectPageHttpList2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐProjectPageHTTPList(ctx context.Context, sel ast.SelectionSet, v *models.ProjectPageHTTPList) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -11986,11 +11986,11 @@ func (ec *executionContext) marshalNProjectPageHttpList2ᚖgithubᚗcomᚋskinny
 	return ec._ProjectPageHttpList(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNResponse2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐResponse(ctx context.Context, sel ast.SelectionSet, v models.Response) graphql.Marshaler {
+func (ec *executionContext) marshalNResponse2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐResponse(ctx context.Context, sel ast.SelectionSet, v models.Response) graphql.Marshaler {
 	return ec._Response(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNResponse2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐResponse(ctx context.Context, sel ast.SelectionSet, v *models.Response) graphql.Marshaler {
+func (ec *executionContext) marshalNResponse2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐResponse(ctx context.Context, sel ast.SelectionSet, v *models.Response) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -12000,17 +12000,17 @@ func (ec *executionContext) marshalNResponse2ᚖgithubᚗcomᚋskinnykaenᚋrpa_
 	return ec._Response(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNRole2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx context.Context, v interface{}) (models.Role, error) {
+func (ec *executionContext) unmarshalNRole2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx context.Context, v interface{}) (models.Role, error) {
 	var res models.Role
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNRole2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx context.Context, sel ast.SelectionSet, v models.Role) graphql.Marshaler {
+func (ec *executionContext) marshalNRole2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx context.Context, sel ast.SelectionSet, v models.Role) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalNRole2ᚕgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRoleᚄ(ctx context.Context, v interface{}) ([]models.Role, error) {
+func (ec *executionContext) unmarshalNRole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx context.Context, v interface{}) ([]models.Role, error) {
 	var vSlice []interface{}
 	if v != nil {
 		vSlice = graphql.CoerceList(v)
@@ -12019,7 +12019,7 @@ func (ec *executionContext) unmarshalNRole2ᚕgithubᚗcomᚋskinnykaenᚋrpa_cl
 	res := make([]models.Role, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNRole2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNRole2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -12027,7 +12027,7 @@ func (ec *executionContext) unmarshalNRole2ᚕgithubᚗcomᚋskinnykaenᚋrpa_cl
 	return res, nil
 }
 
-func (ec *executionContext) marshalNRole2ᚕgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRoleᚄ(ctx context.Context, sel ast.SelectionSet, v []models.Role) graphql.Marshaler {
+func (ec *executionContext) marshalNRole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx context.Context, sel ast.SelectionSet, v []models.Role) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -12051,7 +12051,7 @@ func (ec *executionContext) marshalNRole2ᚕgithubᚗcomᚋskinnykaenᚋrpa_clon
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNRole2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, sel, v[i])
+			ret[i] = ec.marshalNRole2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -12071,11 +12071,11 @@ func (ec *executionContext) marshalNRole2ᚕgithubᚗcomᚋskinnykaenᚋrpa_clon
 	return ret
 }
 
-func (ec *executionContext) marshalNSettings2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐSettings(ctx context.Context, sel ast.SelectionSet, v models.Settings) graphql.Marshaler {
+func (ec *executionContext) marshalNSettings2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐSettings(ctx context.Context, sel ast.SelectionSet, v models.Settings) graphql.Marshaler {
 	return ec._Settings(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNSettings2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐSettings(ctx context.Context, sel ast.SelectionSet, v *models.Settings) graphql.Marshaler {
+func (ec *executionContext) marshalNSettings2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐSettings(ctx context.Context, sel ast.SelectionSet, v *models.Settings) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -12085,16 +12085,16 @@ func (ec *executionContext) marshalNSettings2ᚖgithubᚗcomᚋskinnykaenᚋrpa_
 	return ec._Settings(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNSignIn2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐSignIn(ctx context.Context, v interface{}) (models.SignIn, error) {
+func (ec *executionContext) unmarshalNSignIn2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐSignIn(ctx context.Context, v interface{}) (models.SignIn, error) {
 	res, err := ec.unmarshalInputSignIn(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNSignInResponse2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐSignInResponse(ctx context.Context, sel ast.SelectionSet, v models.SignInResponse) graphql.Marshaler {
+func (ec *executionContext) marshalNSignInResponse2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐSignInResponse(ctx context.Context, sel ast.SelectionSet, v models.SignInResponse) graphql.Marshaler {
 	return ec._SignInResponse(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNSignInResponse2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐSignInResponse(ctx context.Context, sel ast.SelectionSet, v *models.SignInResponse) graphql.Marshaler {
+func (ec *executionContext) marshalNSignInResponse2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐSignInResponse(ctx context.Context, sel ast.SelectionSet, v *models.SignInResponse) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -12104,7 +12104,7 @@ func (ec *executionContext) marshalNSignInResponse2ᚖgithubᚗcomᚋskinnykaen�
 	return ec._SignInResponse(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNSignUp2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐSignUp(ctx context.Context, v interface{}) (models.SignUp, error) {
+func (ec *executionContext) unmarshalNSignUp2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐSignUp(ctx context.Context, v interface{}) (models.SignUp, error) {
 	res, err := ec.unmarshalInputSignUp(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
@@ -12139,21 +12139,21 @@ func (ec *executionContext) marshalNTimestamp2string(ctx context.Context, sel as
 	return res
 }
 
-func (ec *executionContext) unmarshalNUpdateProjectPage2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUpdateProjectPage(ctx context.Context, v interface{}) (models.UpdateProjectPage, error) {
+func (ec *executionContext) unmarshalNUpdateProjectPage2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUpdateProjectPage(ctx context.Context, v interface{}) (models.UpdateProjectPage, error) {
 	res, err := ec.unmarshalInputUpdateProjectPage(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNUpdateUser2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUpdateUser(ctx context.Context, v interface{}) (models.UpdateUser, error) {
+func (ec *executionContext) unmarshalNUpdateUser2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUpdateUser(ctx context.Context, v interface{}) (models.UpdateUser, error) {
 	res, err := ec.unmarshalInputUpdateUser(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNUserHttp2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUserHTTP(ctx context.Context, sel ast.SelectionSet, v models.UserHTTP) graphql.Marshaler {
+func (ec *executionContext) marshalNUserHttp2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUserHTTP(ctx context.Context, sel ast.SelectionSet, v models.UserHTTP) graphql.Marshaler {
 	return ec._UserHttp(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNUserHttp2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUserHTTPᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.UserHTTP) graphql.Marshaler {
+func (ec *executionContext) marshalNUserHttp2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUserHTTPᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.UserHTTP) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -12177,7 +12177,7 @@ func (ec *executionContext) marshalNUserHttp2ᚕᚖgithubᚗcomᚋskinnykaenᚋr
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNUserHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUserHTTP(ctx, sel, v[i])
+			ret[i] = ec.marshalNUserHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUserHTTP(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -12197,7 +12197,7 @@ func (ec *executionContext) marshalNUserHttp2ᚕᚖgithubᚗcomᚋskinnykaenᚋr
 	return ret
 }
 
-func (ec *executionContext) marshalNUserHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUserHTTP(ctx context.Context, sel ast.SelectionSet, v *models.UserHTTP) graphql.Marshaler {
+func (ec *executionContext) marshalNUserHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUserHTTP(ctx context.Context, sel ast.SelectionSet, v *models.UserHTTP) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -12207,11 +12207,11 @@ func (ec *executionContext) marshalNUserHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_
 	return ec._UserHttp(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNUsersList2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUsersList(ctx context.Context, sel ast.SelectionSet, v models.UsersList) graphql.Marshaler {
+func (ec *executionContext) marshalNUsersList2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUsersList(ctx context.Context, sel ast.SelectionSet, v models.UsersList) graphql.Marshaler {
 	return ec._UsersList(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNUsersList2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUsersList(ctx context.Context, sel ast.SelectionSet, v *models.UsersList) graphql.Marshaler {
+func (ec *executionContext) marshalNUsersList2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUsersList(ctx context.Context, sel ast.SelectionSet, v *models.UsersList) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -12474,7 +12474,7 @@ func (ec *executionContext) marshalN__TypeKind2string(ctx context.Context, sel a
 	return res
 }
 
-func (ec *executionContext) marshalOAbsoluteMediaHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐAbsoluteMediaHTTP(ctx context.Context, sel ast.SelectionSet, v *models.AbsoluteMediaHTTP) graphql.Marshaler {
+func (ec *executionContext) marshalOAbsoluteMediaHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐAbsoluteMediaHTTP(ctx context.Context, sel ast.SelectionSet, v *models.AbsoluteMediaHTTP) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -12507,7 +12507,7 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
-func (ec *executionContext) marshalOImageHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐImageHTTP(ctx context.Context, sel ast.SelectionSet, v *models.ImageHTTP) graphql.Marshaler {
+func (ec *executionContext) marshalOImageHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐImageHTTP(ctx context.Context, sel ast.SelectionSet, v *models.ImageHTTP) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -12530,14 +12530,14 @@ func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.Sele
 	return res
 }
 
-func (ec *executionContext) marshalOMediaHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐMediaHTTP(ctx context.Context, sel ast.SelectionSet, v *models.MediaHTTP) graphql.Marshaler {
+func (ec *executionContext) marshalOMediaHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐMediaHTTP(ctx context.Context, sel ast.SelectionSet, v *models.MediaHTTP) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._MediaHttp(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx context.Context, v interface{}) ([]*models.Role, error) {
+func (ec *executionContext) unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx context.Context, v interface{}) ([]*models.Role, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -12549,7 +12549,7 @@ func (ec *executionContext) unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa
 	res := make([]*models.Role, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalORole2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, vSlice[i])
+		res[i], err = ec.unmarshalORole2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -12557,7 +12557,7 @@ func (ec *executionContext) unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa
 	return res, nil
 }
 
-func (ec *executionContext) marshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx context.Context, sel ast.SelectionSet, v []*models.Role) graphql.Marshaler {
+func (ec *executionContext) marshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx context.Context, sel ast.SelectionSet, v []*models.Role) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -12584,7 +12584,7 @@ func (ec *executionContext) marshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_c
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalORole2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, sel, v[i])
+			ret[i] = ec.marshalORole2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -12598,7 +12598,7 @@ func (ec *executionContext) marshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_c
 	return ret
 }
 
-func (ec *executionContext) unmarshalORole2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx context.Context, v interface{}) (*models.Role, error) {
+func (ec *executionContext) unmarshalORole2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx context.Context, v interface{}) (*models.Role, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -12607,7 +12607,7 @@ func (ec *executionContext) unmarshalORole2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cl
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalORole2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx context.Context, sel ast.SelectionSet, v *models.Role) graphql.Marshaler {
+func (ec *executionContext) marshalORole2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx context.Context, sel ast.SelectionSet, v *models.Role) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

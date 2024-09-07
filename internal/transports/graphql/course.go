@@ -7,6 +7,7 @@ package resolvers
 import (
 	"context"
 	"fmt"
+
 	"github.com/robboworld/scratch_olympiad_platform/internal/models"
 )
 

@@ -6,11 +6,12 @@ package resolvers
 
 import (
 	"context"
+	"time"
+
 	"github.com/robboworld/scratch_olympiad_platform/internal/consts"
 	"github.com/robboworld/scratch_olympiad_platform/internal/models"
 	"github.com/robboworld/scratch_olympiad_platform/pkg/utils"
 	"github.com/vektah/gqlparser/v2/gqlerror"
-	"time"
 )
 
 // SignUp is the resolver for the SignUp field.
