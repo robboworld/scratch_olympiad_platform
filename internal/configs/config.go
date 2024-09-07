@@ -1,7 +1,7 @@
 package configs
 
 import (
-	"github.com/skinnykaen/rpa_clone/internal/consts"
+	"github.com/robboworld/scratch_olympiad_platform/internal/consts"
 	"github.com/spf13/viper"
 )
 

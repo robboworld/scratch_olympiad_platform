@@ -2,10 +2,10 @@ package http
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/skinnykaen/rpa_clone/internal/consts"
-	"github.com/skinnykaen/rpa_clone/internal/models"
-	"github.com/skinnykaen/rpa_clone/internal/services"
-	"github.com/skinnykaen/rpa_clone/pkg/logger"
+	"github.com/robboworld/scratch_olympiad_platform/internal/consts"
+	"github.com/robboworld/scratch_olympiad_platform/internal/models"
+	"github.com/robboworld/scratch_olympiad_platform/internal/services"
+	"github.com/robboworld/scratch_olympiad_platform/pkg/logger"
 	"io"
 	"net/http"
 	"strconv"

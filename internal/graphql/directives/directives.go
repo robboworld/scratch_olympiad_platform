@@ -3,9 +3,10 @@ package directives
 import (
 	"context"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/skinnykaen/rpa_clone/internal/consts"
-	"github.com/skinnykaen/rpa_clone/internal/models"
-	"github.com/skinnykaen/rpa_clone/pkg/utils"
+	"github.com/robboworld/scratch_olympiad_platform/internal/consts"
+	"github.com/robboworld/scratch_olympiad_platform/internal/models"
+	"github.com/robboworld/scratch_olympiad_platform/pkg/utils"
+
 	"github.com/vektah/gqlparser/v2/gqlerror"
 	"log"
 	"net/http"

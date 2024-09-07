@@ -2,7 +2,7 @@ package http
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/skinnykaen/rpa_clone/pkg/logger"
+	"github.com/robboworld/scratch_olympiad_platform/pkg/logger"
 	"io"
 	"net/http"
 	"os"

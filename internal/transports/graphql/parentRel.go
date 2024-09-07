@@ -7,8 +7,7 @@ package resolvers
 import (
 	"context"
 	"fmt"
-
-	"github.com/skinnykaen/rpa_clone/internal/models"
+	"github.com/robboworld/scratch_olympiad_platform/internal/models"
 )
 
 // CreateParentRel is the resolver for the CreateParentRel field.

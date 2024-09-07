@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/jordan-wright/email"
-	"github.com/skinnykaen/rpa_clone/internal/models"
+	"github.com/robboworld/scratch_olympiad_platform/internal/models"
 	"github.com/spf13/viper"
 	"golang.org/x/crypto/bcrypt"
 	"net/mail"

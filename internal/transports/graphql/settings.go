@@ -6,10 +6,10 @@ package resolvers
 
 import (
 	"context"
+	"github.com/robboworld/scratch_olympiad_platform/internal/models"
+	"github.com/robboworld/scratch_olympiad_platform/pkg/utils"
 	"net/http"
 
-	"github.com/skinnykaen/rpa_clone/internal/models"
-	"github.com/skinnykaen/rpa_clone/pkg/utils"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 

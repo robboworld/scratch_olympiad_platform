@@ -1,7 +1,7 @@
 package gateways
 
 import (
-	"github.com/skinnykaen/rpa_clone/internal/db"
+	"github.com/robboworld/scratch_olympiad_platform/internal/db"
 	"go.uber.org/fx"
 )
 

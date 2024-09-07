@@ -1,7 +1,7 @@
 package services
 
 import (
-	"github.com/skinnykaen/rpa_clone/internal/gateways"
+	"github.com/robboworld/scratch_olympiad_platform/internal/gateways"
 	"go.uber.org/fx"
 )
 

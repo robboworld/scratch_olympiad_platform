@@ -1,8 +1,8 @@
 package http
 
 import (
-	"github.com/skinnykaen/rpa_clone/internal/services"
-	"github.com/skinnykaen/rpa_clone/pkg/logger"
+	"github.com/robboworld/scratch_olympiad_platform/internal/services"
+	"github.com/robboworld/scratch_olympiad_platform/pkg/logger"
 )
 
 type Handlers struct {

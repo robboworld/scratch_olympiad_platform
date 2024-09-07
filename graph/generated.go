@@ -8,13 +8,13 @@ import (
 	"embed"
 	"errors"
 	"fmt"
+	"github.com/robboworld/scratch_olympiad_platform/internal/models"
 	"strconv"
 	"sync"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/skinnykaen/rpa_clone/internal/models"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )

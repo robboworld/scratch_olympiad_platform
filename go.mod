@@ -1,4 +1,4 @@
-module github.com/skinnykaen/rpa_clone
+module github.com/robboworld/scratch_olympiad_platform
 
 go 1.20
 
