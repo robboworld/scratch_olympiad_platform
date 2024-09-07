@@ -176,7 +176,7 @@ func (a AuthServiceImpl) SignUp(newUser models.UserCore) error {
 	var subject, body string
 	if activationByLink {
 		subject = "Ваша ссылка активации аккаунта"
-		body = "<p>Перейдите по ссылке" + viper.GetString("activation_path") +
+		body = "<p>Перейдите по ссылке " + viper.GetString("activation_path") +
 			newUser.ActivationLink + " для активации вашего аккаунта.</p>"
 	} else {
 		subject = "Активация аккаунта"

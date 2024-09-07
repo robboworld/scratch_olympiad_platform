@@ -1,8 +1,11 @@
 package utils
 
 import (
+	"context"
 	"crypto/sha1"
 	"encoding/hex"
+	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/jordan-wright/email"
 	"github.com/skinnykaen/rpa_clone/internal/models"
 	"github.com/spf13/viper"
@@ -78,4 +81,17 @@ func BoolPointerToBool(p *bool) bool {
 		b = *p
 	}
 	return b
+}
+
+func GinContextFromContext(ctx context.Context) (*gin.Context, error) {
+	ginContext := ctx.Value("GinContextKey")
+	if ginContext == nil {
+		return nil, fmt.Errorf("%s", "could not retrieve gin.Context")
+	}
+
+	gc, ok := ginContext.(*gin.Context)
+	if !ok {
+		return nil, fmt.Errorf("%s", "gin.Context has wrong type")
+	}
+	return gc, nil
 }

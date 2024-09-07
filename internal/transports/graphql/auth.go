@@ -17,16 +17,12 @@ import (
 // SignUp is the resolver for the SignUp field.
 func (r *mutationResolver) SignUp(ctx context.Context, input models.SignUp) (*models.Response, error) {
 	// middlename не обязательное поле и может быть nil
-	var middlename string
-	if input.Middlename != nil {
-		middlename = *input.Middlename
-	}
 	newUser := models.UserCore{
 		Email:          input.Email,
 		Password:       input.Password,
 		Firstname:      input.Firstname,
 		Lastname:       input.Lastname,
-		Middlename:     middlename,
+		Middlename:     utils.StringPointerToString(input.Middlename),
 		Nickname:       input.Nickname,
 		Role:           models.RoleStudent,
 		IsActive:       false,
@@ -96,7 +92,16 @@ func (r *mutationResolver) ConfirmActivation(ctx context.Context, activationLink
 
 // Me is the resolver for the Me field.
 func (r *queryResolver) Me(ctx context.Context) (*models.UserHTTP, error) {
-	user, err := r.userService.GetUserById(ctx.Value(consts.KeyId).(uint), ctx.Value(consts.KeyRole).(models.Role))
+	ginContext, err := utils.GinContextFromContext(ctx)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return nil, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": err,
+			},
+		}
+	}
+	user, err := r.userService.GetUserById(ginContext.Value(consts.KeyId).(uint), ginContext.Value(consts.KeyRole).(models.Role))
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
 		return nil, &gqlerror.Error{

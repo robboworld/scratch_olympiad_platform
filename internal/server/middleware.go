@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"github.com/dgrijalva/jwt-go/v4"
+	"github.com/gin-gonic/gin"
 	"github.com/skinnykaen/rpa_clone/internal/consts"
 	"github.com/skinnykaen/rpa_clone/internal/models"
 	"github.com/skinnykaen/rpa_clone/internal/services"
@@ -13,19 +14,20 @@ import (
 	"time"
 )
 
-func Auth(next http.Handler, errLogger *log.Logger) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		authHeader := r.Header.Get("Authorization")
+func AuthMiddleware(errLogger *log.Logger) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
-			r = r.WithContext(context.WithValue(r.Context(), consts.KeyId, "0"))
-			r = r.WithContext(context.WithValue(r.Context(), consts.KeyRole, models.RoleAnonymous))
-			next.ServeHTTP(w, r)
+			c.Set(consts.KeyId, uint(0))
+			c.Set(consts.KeyRole, models.RoleAnonymous)
+			c.Next()
 			return
 		}
 		headerParts := strings.Split(authHeader, " ")
 		if len(headerParts) != 2 {
 			errLogger.Printf("%s", "invalid authorization header format")
-			http.Error(w, "invalid authorization header format", http.StatusBadRequest)
+			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid authorization header format"})
+			c.Abort()
 			return
 		}
 		data, err := jwt.ParseWithClaims(headerParts[1], &services.UserClaims{},
@@ -34,27 +36,40 @@ func Auth(next http.Handler, errLogger *log.Logger) http.Handler {
 			})
 		if data == nil {
 			errLogger.Printf("%s", err.Error())
-			http.Error(w, err.Error(), http.StatusUnauthorized)
+			c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+			c.Abort()
 			return
 		}
 		claims, ok := data.Claims.(*services.UserClaims)
 		if err != nil {
 			if claims.ExpiresAt.Unix() < time.Now().Unix() {
 				errLogger.Printf("%s", err.Error())
-				http.Error(w, consts.ErrTokenExpired, http.StatusUnauthorized)
+				c.JSON(http.StatusUnauthorized, gin.H{"error": consts.ErrTokenExpired})
+				c.Abort()
 				return
 			}
 			errLogger.Printf("%s", err.Error())
-			http.Error(w, err.Error(), http.StatusUnauthorized)
+			c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+			c.Abort()
 			return
 		}
 		if !ok {
 			errLogger.Printf("%s", consts.ErrNotStandardToken)
-			http.Error(w, consts.ErrNotStandardToken, http.StatusUnauthorized)
+			c.JSON(http.StatusUnauthorized, gin.H{"error": consts.ErrNotStandardToken})
+			c.Abort()
 			return
 		}
-		r = r.WithContext(context.WithValue(r.Context(), consts.KeyId, claims.Id))
-		r = r.WithContext(context.WithValue(r.Context(), consts.KeyRole, claims.Role))
-		next.ServeHTTP(w, r)
-	})
+
+		c.Set(consts.KeyId, claims.Id)
+		c.Set(consts.KeyRole, claims.Role)
+		c.Next()
+	}
+}
+
+func GinContextToContextMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		ctx := context.WithValue(c.Request.Context(), "GinContextKey", c)
+		c.Request = c.Request.WithContext(ctx)
+		c.Next()
+	}
 }

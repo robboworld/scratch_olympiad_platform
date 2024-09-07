@@ -18,6 +18,15 @@ import (
 
 // CreateUser is the resolver for the CreateUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, input models.NewUser) (*models.UserHTTP, error) {
+	ginContext, err := utils.GinContextFromContext(ctx)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return nil, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": err,
+			},
+		}
+	}
 	user := models.UserCore{
 		Email:      input.Email,
 		Password:   input.Password,
@@ -28,7 +37,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input models.NewUser)
 		IsActive:   true,
 		Role:       input.Role,
 	}
-	newUser, err := r.userService.CreateUser(user, ctx.Value(consts.KeyRole).(models.Role))
+	newUser, err := r.userService.CreateUser(user, ginContext.Value(consts.KeyRole).(models.Role))
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
 		return nil, &gqlerror.Error{
@@ -47,6 +56,15 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input models.NewUser)
 
 // UpdateUser is the resolver for the UpdateUser field.
 func (r *mutationResolver) UpdateUser(ctx context.Context, input models.UpdateUser) (*models.UserHTTP, error) {
+	ginContext, err := utils.GinContextFromContext(ctx)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return nil, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": err,
+			},
+		}
+	}
 	atoi, err := strconv.Atoi(input.ID)
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
@@ -68,7 +86,7 @@ func (r *mutationResolver) UpdateUser(ctx context.Context, input models.UpdateUs
 		Middlename: input.Middlename,
 		Nickname:   input.Nickname,
 	}
-	updatedUser, err := r.userService.UpdateUser(user, ctx.Value(consts.KeyRole).(models.Role))
+	updatedUser, err := r.userService.UpdateUser(user, ginContext.Value(consts.KeyRole).(models.Role))
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
 		return nil, &gqlerror.Error{
@@ -144,7 +162,16 @@ func (r *mutationResolver) SetUserIsActive(ctx context.Context, id string, isAct
 
 // GetUserByAccessToken is the resolver for the GetUserByAccessToken field.
 func (r *queryResolver) GetUserByAccessToken(ctx context.Context) (*models.UserHTTP, error) {
-	user, err := r.userService.GetUserById(ctx.Value(consts.KeyId).(uint), ctx.Value(consts.KeyRole).(models.Role))
+	ginContext, err := utils.GinContextFromContext(ctx)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return nil, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": err,
+			},
+		}
+	}
+	user, err := r.userService.GetUserById(ginContext.Value(consts.KeyId).(uint), ginContext.Value(consts.KeyRole).(models.Role))
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
 		return nil, &gqlerror.Error{
@@ -163,6 +190,15 @@ func (r *queryResolver) GetUserByAccessToken(ctx context.Context) (*models.UserH
 
 // GetUserByID is the resolver for the GetUserById field.
 func (r *queryResolver) GetUserByID(ctx context.Context, id string) (*models.UserHTTP, error) {
+	ginContext, err := utils.GinContextFromContext(ctx)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return nil, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": err,
+			},
+		}
+	}
 	atoi, err := strconv.Atoi(id)
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
@@ -175,7 +211,7 @@ func (r *queryResolver) GetUserByID(ctx context.Context, id string) (*models.Use
 			},
 		}
 	}
-	user, err := r.userService.GetUserById(uint(atoi), ctx.Value(consts.KeyRole).(models.Role))
+	user, err := r.userService.GetUserById(uint(atoi), ginContext.Value(consts.KeyRole).(models.Role))
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
 		return nil, &gqlerror.Error{
@@ -194,7 +230,16 @@ func (r *queryResolver) GetUserByID(ctx context.Context, id string) (*models.Use
 
 // GetAllUsers is the resolver for the GetAllUsers field.
 func (r *queryResolver) GetAllUsers(ctx context.Context, page *int, pageSize *int, active bool, roles []models.Role) (*models.UsersList, error) {
-	users, countRows, err := r.userService.GetAllUsers(page, pageSize, active, roles, ctx.Value(consts.KeyRole).(models.Role))
+	ginContext, err := utils.GinContextFromContext(ctx)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return nil, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": err,
+			},
+		}
+	}
+	users, countRows, err := r.userService.GetAllUsers(page, pageSize, active, roles, ginContext.Value(consts.KeyRole).(models.Role))
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
 		return &models.UsersList{}, &gqlerror.Error{
