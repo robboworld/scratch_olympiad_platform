@@ -14,6 +14,16 @@ type AbsoluteMediaHTTP struct {
 	URIAbsolute string `json:"uri_absolute"`
 }
 
+type ApplicationHTTP struct {
+	ID         string `json:"id"`
+	CreatedAt  string `json:"createdAt"`
+	UpdatedAt  string `json:"updatedAt"`
+	AuthorID   string `json:"authorId"`
+	Nomination string `json:"nomination"`
+	Link       string `json:"link"`
+	Note       string `json:"note"`
+}
+
 type CourseAPIMediaCollectionHTTP struct {
 	ID          string             `json:"id"`
 	BannerImage *AbsoluteMediaHTTP `json:"banner_image,omitempty"`
@@ -60,6 +70,12 @@ type ImageHTTP struct {
 type MediaHTTP struct {
 	ID  string `json:"id"`
 	URI string `json:"uri"`
+}
+
+type NewApplication struct {
+	Nomination string  `json:"nomination"`
+	Link       *string `json:"link,omitempty"`
+	Note       *string `json:"note,omitempty"`
 }
 
 type NewUser struct {

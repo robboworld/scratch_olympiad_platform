@@ -1,0 +1,19 @@
+type ApplicationHttp {
+    id: ID!
+    createdAt: Timestamp!
+    updatedAt: Timestamp!
+    authorId: ID!
+    nomination: String!
+    link: String!
+    note: String!
+}
+
+input NewApplication {
+    nomination: String!
+    link: String
+    note: String
+}
+
+extend type Mutation {
+    CreateApplication(input: NewApplication!): ApplicationHttp! @hasRole(roles: [Student])
+}

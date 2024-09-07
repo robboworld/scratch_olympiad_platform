@@ -12,6 +12,7 @@ type Gateways struct {
 	Project     ProjectGateway
 	ProjectPage ProjectPageGateway
 	Settings    SettingsGateway
+	Application ApplicationGateway
 }
 
 func SetupGateways(pc db.PostgresClient) Gateways {
@@ -21,5 +22,6 @@ func SetupGateways(pc db.PostgresClient) Gateways {
 		Project:     ProjectGatewayImpl{pc},
 		ProjectPage: ProjectPageGatewayImpl{pc},
 		Settings:    SettingsGatewayImpl{pc},
+		Application: ApplicationGatewayImpl{pc},
 	}
 }
