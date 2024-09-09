@@ -32,8 +32,7 @@ func (h ApplicationHandler) CreateApplication(c *gin.Context) {
 
 	userID := c.Value(consts.KeyId).(uint)
 	role := c.Value(consts.KeyRole).(models.Role)
-	roleStudent := models.RoleStudent
-	accessRoles := []*models.Role{&roleStudent}
+	accessRoles := []models.Role{models.RoleStudent}
 	if !utils.DoesHaveRole(role, accessRoles) {
 		h.loggers.Err.Printf("%s", consts.ErrAccessDenied)
 		c.JSON(http.StatusForbidden, gin.H{"error": consts.ErrAccessDenied})

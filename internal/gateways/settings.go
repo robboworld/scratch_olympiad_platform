@@ -17,7 +17,7 @@ type SettingsGatewayImpl struct {
 }
 
 func (s SettingsGatewayImpl) GetActivationByLink() (activationByCode bool, err error) {
-	if err := s.postgresClient.Db.Model(&models.SettingsCore{}).Select("activation_by_link").Where("id = ? ", 1).
+	if err = s.postgresClient.Db.Model(&models.SettingsCore{}).Select("activation_by_link").Where("id = ? ", 1).
 		First(&activationByCode).Error; err != nil {
 		return false, utils.ResponseError{
 			Code:    http.StatusInternalServerError,

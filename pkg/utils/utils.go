@@ -52,7 +52,7 @@ func GetOffsetAndLimit(page, pageSize *int) (offset, limit int) {
 	return
 }
 
-func DoesHaveRole(clientRole models.Role, roles []*models.Role) bool {
+func DoesHaveRole(clientRole models.Role, roles []models.Role) bool {
 	for _, role := range roles {
 		if role.String() == clientRole.String() {
 			return true

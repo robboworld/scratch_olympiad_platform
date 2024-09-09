@@ -42,7 +42,7 @@ type ResolverRoot interface {
 }
 
 type DirectiveRoot struct {
-	HasRole func(ctx context.Context, obj interface{}, next graphql.Resolver, roles []*models.Role) (res interface{}, err error)
+	HasRole func(ctx context.Context, obj interface{}, next graphql.Resolver, roles []models.Role) (res interface{}, err error)
 }
 
 type ComplexityRoot struct {
@@ -1328,10 +1328,10 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 func (ec *executionContext) dir_hasRole_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 []*models.Role
+	var arg0 []models.Role
 	if tmp, ok := rawArgs["roles"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("roles"))
-		arg0, err = ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, tmp)
+		arg0, err = ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -4115,7 +4115,7 @@ func (ec *executionContext) _Mutation_CreateUser(ctx context.Context, field grap
 			return ec.resolvers.Mutation().CreateUser(rctx, fc.Args["input"].(models.NewUser))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "UnitAdmin"})
 			if err != nil {
 				return nil, err
 			}
@@ -4220,7 +4220,7 @@ func (ec *executionContext) _Mutation_UpdateUser(ctx context.Context, field grap
 			return ec.resolvers.Mutation().UpdateUser(rctx, fc.Args["input"].(models.UpdateUser))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Teacher", "Parent", "Student"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Teacher", "Parent", "Student"})
 			if err != nil {
 				return nil, err
 			}
@@ -4325,7 +4325,7 @@ func (ec *executionContext) _Mutation_DeleteUser(ctx context.Context, field grap
 			return ec.resolvers.Mutation().DeleteUser(rctx, fc.Args["id"].(string))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "UnitAdmin"})
 			if err != nil {
 				return nil, err
 			}
@@ -4408,7 +4408,7 @@ func (ec *executionContext) _Mutation_SetUserIsActive(ctx context.Context, field
 			return ec.resolvers.Mutation().SetUserIsActive(rctx, fc.Args["id"].(string), fc.Args["isActive"].(bool))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "UnitAdmin"})
 			if err != nil {
 				return nil, err
 			}
@@ -4491,7 +4491,7 @@ func (ec *executionContext) _Mutation_CreateApplication(ctx context.Context, fie
 			return ec.resolvers.Mutation().CreateApplication(rctx, fc.Args["input"].(models.NewApplication))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"Student"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"Student"})
 			if err != nil {
 				return nil, err
 			}
@@ -4960,7 +4960,7 @@ func (ec *executionContext) _Mutation_CreateProjectPage(ctx context.Context, fie
 			return ec.resolvers.Mutation().CreateProjectPage(rctx)
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
 			if err != nil {
 				return nil, err
 			}
@@ -5054,7 +5054,7 @@ func (ec *executionContext) _Mutation_UpdateProjectPage(ctx context.Context, fie
 			return ec.resolvers.Mutation().UpdateProjectPage(rctx, fc.Args["input"].(models.UpdateProjectPage))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
 			if err != nil {
 				return nil, err
 			}
@@ -5159,7 +5159,7 @@ func (ec *executionContext) _Mutation_DeleteProjectPage(ctx context.Context, fie
 			return ec.resolvers.Mutation().DeleteProjectPage(rctx, fc.Args["id"].(string))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
 			if err != nil {
 				return nil, err
 			}
@@ -5242,7 +5242,7 @@ func (ec *executionContext) _Mutation_SetIsBanned(ctx context.Context, field gra
 			return ec.resolvers.Mutation().SetIsBanned(rctx, fc.Args["projectPageId"].(string), fc.Args["isBanned"].(bool))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin"})
 			if err != nil {
 				return nil, err
 			}
@@ -5325,7 +5325,7 @@ func (ec *executionContext) _Mutation_SetActivationByLink(ctx context.Context, f
 			return ec.resolvers.Mutation().SetActivationByLink(rctx, fc.Args["activationByLink"].(bool))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin"})
 			if err != nil {
 				return nil, err
 			}
@@ -6314,7 +6314,7 @@ func (ec *executionContext) _Query_GetUserByAccessToken(ctx context.Context, fie
 			return ec.resolvers.Query().GetUserByAccessToken(rctx)
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Teacher", "Parent", "Student"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Teacher", "Parent", "Student"})
 			if err != nil {
 				return nil, err
 			}
@@ -6408,7 +6408,7 @@ func (ec *executionContext) _Query_GetUserById(ctx context.Context, field graphq
 			return ec.resolvers.Query().GetUserByID(rctx, fc.Args["id"].(string))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Teacher", "Parent", "Student"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Teacher", "Parent", "Student"})
 			if err != nil {
 				return nil, err
 			}
@@ -6513,7 +6513,7 @@ func (ec *executionContext) _Query_GetAllUsers(ctx context.Context, field graphq
 			return ec.resolvers.Query().GetAllUsers(rctx, fc.Args["page"].(*int), fc.Args["pageSize"].(*int), fc.Args["active"].(bool), fc.Args["roles"].([]models.Role))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "UnitAdmin"})
 			if err != nil {
 				return nil, err
 			}
@@ -6598,7 +6598,7 @@ func (ec *executionContext) _Query_Me(ctx context.Context, field graphql.Collect
 			return ec.resolvers.Query().Me(rctx)
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"Student", "Teacher", "Parent", "UnitAdmin", "SuperAdmin"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"Student", "Teacher", "Parent", "UnitAdmin", "SuperAdmin"})
 			if err != nil {
 				return nil, err
 			}
@@ -6692,7 +6692,7 @@ func (ec *executionContext) _Query_GetCourseById(ctx context.Context, field grap
 			return ec.resolvers.Query().GetCourseByID(rctx, fc.Args["id"].(string))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Teacher", "Student"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Teacher", "Student"})
 			if err != nil {
 				return nil, err
 			}
@@ -6813,7 +6813,7 @@ func (ec *executionContext) _Query_GetCoursesByUser(ctx context.Context, field g
 			return ec.resolvers.Query().GetCoursesByUser(rctx)
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Teacher", "Student"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Teacher", "Student"})
 			if err != nil {
 				return nil, err
 			}
@@ -7009,7 +7009,7 @@ func (ec *executionContext) _Query_GetProjectPageById(ctx context.Context, field
 			return ec.resolvers.Query().GetProjectPageByID(rctx, fc.Args["id"].(string))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
 			if err != nil {
 				return nil, err
 			}
@@ -7114,7 +7114,7 @@ func (ec *executionContext) _Query_GetAllProjectPagesByAuthorId(ctx context.Cont
 			return ec.resolvers.Query().GetAllProjectPagesByAuthorID(rctx, fc.Args["id"].(string), fc.Args["page"].(*int), fc.Args["pageSize"].(*int))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
 			if err != nil {
 				return nil, err
 			}
@@ -7199,7 +7199,7 @@ func (ec *executionContext) _Query_GetAllProjectPagesByAccessToken(ctx context.C
 			return ec.resolvers.Query().GetAllProjectPagesByAccessToken(rctx, fc.Args["page"].(*int), fc.Args["pageSize"].(*int))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
 			if err != nil {
 				return nil, err
 			}
@@ -7284,7 +7284,7 @@ func (ec *executionContext) _Query_GetSettings(ctx context.Context, field graphq
 			return ec.resolvers.Query().GetSettings(rctx)
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin"})
 			if err != nil {
 				return nil, err
 			}
@@ -13013,7 +13013,7 @@ func (ec *executionContext) marshalOMediaHttp2ᚖgithubᚗcomᚋrobboworldᚋscr
 	return ec._MediaHttp(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx context.Context, v interface{}) ([]*models.Role, error) {
+func (ec *executionContext) unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx context.Context, v interface{}) ([]models.Role, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -13022,10 +13022,10 @@ func (ec *executionContext) unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscr
 		vSlice = graphql.CoerceList(v)
 	}
 	var err error
-	res := make([]*models.Role, len(vSlice))
+	res := make([]models.Role, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalORole2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNRole2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -13033,7 +13033,7 @@ func (ec *executionContext) unmarshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscr
 	return res, nil
 }
 
-func (ec *executionContext) marshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx context.Context, sel ast.SelectionSet, v []*models.Role) graphql.Marshaler {
+func (ec *executionContext) marshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx context.Context, sel ast.SelectionSet, v []models.Role) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -13060,7 +13060,7 @@ func (ec *executionContext) marshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscrat
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalORole2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, sel, v[i])
+			ret[i] = ec.marshalNRole2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -13071,23 +13071,13 @@ func (ec *executionContext) marshalORole2ᚕᚖgithubᚗcomᚋrobboworldᚋscrat
 	}
 	wg.Wait()
 
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
 	return ret
-}
-
-func (ec *executionContext) unmarshalORole2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx context.Context, v interface{}) (*models.Role, error) {
-	if v == nil {
-		return nil, nil
-	}
-	var res = new(models.Role)
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalORole2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx context.Context, sel ast.SelectionSet, v *models.Role) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return v
 }
 
 func (ec *executionContext) unmarshalOString2ᚖstring(ctx context.Context, v interface{}) (*string, error) {

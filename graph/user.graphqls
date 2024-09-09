@@ -72,5 +72,5 @@ type Query {
 	GetAllUsers(page: Int, pageSize: Int, active: Boolean!, roles: [Role!]!): UsersList! @hasRole(roles: [SuperAdmin, UnitAdmin])
 }
 
-directive  @hasRole(roles: [Role]) on FIELD_DEFINITION
+directive @hasRole(roles: [Role!]) on FIELD_DEFINITION
 scalar Timestamp

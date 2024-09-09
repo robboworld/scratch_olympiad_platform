@@ -12,8 +12,8 @@ import (
 	"net/http"
 )
 
-func HasRole(errLogger *log.Logger) func(ctx context.Context, obj interface{}, next graphql.Resolver, roles []*models.Role) (interface{}, error) {
-	return func(ctx context.Context, obj interface{}, next graphql.Resolver, roles []*models.Role) (interface{}, error) {
+func HasRole(errLogger *log.Logger) func(ctx context.Context, obj interface{}, next graphql.Resolver, roles []models.Role) (interface{}, error) {
+	return func(ctx context.Context, obj interface{}, next graphql.Resolver, roles []models.Role) (interface{}, error) {
 		ginContext, err := utils.GinContextFromContext(ctx)
 		if err != nil {
 			errLogger.Printf("%s", err.Error())
