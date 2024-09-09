@@ -86,7 +86,7 @@ func BoolPointerToBool(p *bool) bool {
 func GinContextFromContext(ctx context.Context) (*gin.Context, error) {
 	ginContext := ctx.Value("GinContextKey")
 	if ginContext == nil {
-		return nil, &ResponseError{
+		return nil, ResponseError{
 			Code:    http.StatusBadRequest,
 			Message: "Gin context not found in request context",
 		}
@@ -94,7 +94,7 @@ func GinContextFromContext(ctx context.Context) (*gin.Context, error) {
 
 	gc, ok := ginContext.(*gin.Context)
 	if !ok {
-		return nil, &ResponseError{
+		return nil, ResponseError{
 			Code:    http.StatusInternalServerError,
 			Message: "Gin context has an invalid type",
 		}
