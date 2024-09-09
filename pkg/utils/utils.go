@@ -4,12 +4,12 @@ import (
 	"context"
 	"crypto/sha1"
 	"encoding/hex"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/jordan-wright/email"
 	"github.com/robboworld/scratch_olympiad_platform/internal/models"
 	"github.com/spf13/viper"
 	"golang.org/x/crypto/bcrypt"
+	"net/http"
 	"net/mail"
 	"net/smtp"
 )
@@ -84,15 +84,20 @@ func BoolPointerToBool(p *bool) bool {
 }
 
 func GinContextFromContext(ctx context.Context) (*gin.Context, error) {
-	// TODO: return ResponseError
 	ginContext := ctx.Value("GinContextKey")
 	if ginContext == nil {
-		return nil, fmt.Errorf("%s", "could not retrieve gin.Context")
+		return nil, &ResponseError{
+			Code:    http.StatusBadRequest,
+			Message: "Gin context not found in request context",
+		}
 	}
 
 	gc, ok := ginContext.(*gin.Context)
 	if !ok {
-		return nil, fmt.Errorf("%s", "gin.Context has wrong type")
+		return nil, &ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: "Gin context has an invalid type",
+		}
 	}
 	return gc, nil
 }

@@ -150,18 +150,12 @@ func (a AuthServiceImpl) SignUp(newUser models.UserCore) error {
 	newUser.Password = passwordHash
 	newUser, err = a.userGateway.CreateUser(newUser)
 	if err != nil {
-		return utils.ResponseError{
-			Code:    http.StatusInternalServerError,
-			Message: err.Error(),
-		}
+		return err
 	}
 
 	activationByLink, err := a.settingsGateway.GetActivationByLink()
 	if err != nil {
-		return utils.ResponseError{
-			Code:    http.StatusInternalServerError,
-			Message: err.Error(),
-		}
+		return err
 	}
 	var subject, body string
 	if activationByLink {
