@@ -14,7 +14,7 @@ type NominationServiceImpl struct {
 	nominationGateway gateways.NominationGateway
 }
 
-func (p NominationServiceImpl) GetAllNominations(page, pageSize *int) (nominations []models.NominationCore, countRows uint, err error) {
+func (n NominationServiceImpl) GetAllNominations(page, pageSize *int) (nominations []models.NominationCore, countRows uint, err error) {
 	offset, limit := utils.GetOffsetAndLimit(page, pageSize)
-	return p.nominationGateway.GetAllNominations(offset, limit)
+	return n.nominationGateway.GetAllNominations(offset, limit)
 }

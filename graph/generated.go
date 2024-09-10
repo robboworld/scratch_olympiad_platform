@@ -69,6 +69,18 @@ type ComplexityRoot struct {
 		UpdatedAt                     func(childComplexity int) int
 	}
 
+	CountryHttp struct {
+		CreatedAt func(childComplexity int) int
+		ID        func(childComplexity int) int
+		Name      func(childComplexity int) int
+		UpdatedAt func(childComplexity int) int
+	}
+
+	CountryHttpList struct {
+		CountRows func(childComplexity int) int
+		Countries func(childComplexity int) int
+	}
+
 	CourseAPIMediaCollectionHttp struct {
 		BannerImage func(childComplexity int) int
 		CourseImage func(childComplexity int) int
@@ -180,6 +192,7 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
+		GetAllCountries                 func(childComplexity int, page *int, pageSize *int) int
 		GetAllNominations               func(childComplexity int, page *int, pageSize *int) int
 		GetAllProjectPagesByAccessToken func(childComplexity int, page *int, pageSize *int) int
 		GetAllProjectPagesByAuthorID    func(childComplexity int, id string, page *int, pageSize *int) int
@@ -252,6 +265,7 @@ type QueryResolver interface {
 	GetUserByID(ctx context.Context, id string) (*models.UserHTTP, error)
 	GetAllUsers(ctx context.Context, page *int, pageSize *int, active bool, roles []models.Role) (*models.UsersList, error)
 	Me(ctx context.Context) (*models.UserHTTP, error)
+	GetAllCountries(ctx context.Context, page *int, pageSize *int) (*models.CountryHTTPList, error)
 	GetCourseByID(ctx context.Context, id string) (*models.CourseHTTP, error)
 	GetCoursesByUser(ctx context.Context) (*models.CoursesListHTTP, error)
 	GetAllNominations(ctx context.Context, page *int, pageSize *int) (*models.NominationHTTPList, error)
@@ -396,6 +410,48 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ApplicationHttp.UpdatedAt(childComplexity), true
+
+	case "CountryHttp.createdAt":
+		if e.complexity.CountryHttp.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.CountryHttp.CreatedAt(childComplexity), true
+
+	case "CountryHttp.id":
+		if e.complexity.CountryHttp.ID == nil {
+			break
+		}
+
+		return e.complexity.CountryHttp.ID(childComplexity), true
+
+	case "CountryHttp.name":
+		if e.complexity.CountryHttp.Name == nil {
+			break
+		}
+
+		return e.complexity.CountryHttp.Name(childComplexity), true
+
+	case "CountryHttp.updatedAt":
+		if e.complexity.CountryHttp.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.CountryHttp.UpdatedAt(childComplexity), true
+
+	case "CountryHttpList.countRows":
+		if e.complexity.CountryHttpList.CountRows == nil {
+			break
+		}
+
+		return e.complexity.CountryHttpList.CountRows(childComplexity), true
+
+	case "CountryHttpList.countries":
+		if e.complexity.CountryHttpList.Countries == nil {
+			break
+		}
+
+		return e.complexity.CountryHttpList.Countries(childComplexity), true
 
 	case "CourseAPIMediaCollectionHttp.banner_image":
 		if e.complexity.CourseAPIMediaCollectionHttp.BannerImage == nil {
@@ -1011,6 +1067,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ProjectPageHttpList.ProjectPages(childComplexity), true
 
+	case "Query.GetAllCountries":
+		if e.complexity.Query.GetAllCountries == nil {
+			break
+		}
+
+		args, err := ec.field_Query_GetAllCountries_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetAllCountries(childComplexity, args["page"].(*int), args["pageSize"].(*int)), true
+
 	case "Query.GetAllNominations":
 		if e.complexity.Query.GetAllNominations == nil {
 			break
@@ -1383,7 +1451,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 	return introspection.WrapTypeFromDef(parsedSchema, parsedSchema.Types[name]), nil
 }
 
-//go:embed "application.graphqls" "auth.graphqls" "course.graphqls" "nomination.graphqls" "parentRel.graphqls" "projectPage.graphqls" "settings.graphqls" "user.graphqls"
+//go:embed "application.graphqls" "auth.graphqls" "country.graphqls" "course.graphqls" "nomination.graphqls" "parentRel.graphqls" "projectPage.graphqls" "settings.graphqls" "user.graphqls"
 var sourcesFS embed.FS
 
 func sourceData(filename string) string {
@@ -1397,6 +1465,7 @@ func sourceData(filename string) string {
 var sources = []*ast.Source{
 	{Name: "application.graphqls", Input: sourceData("application.graphqls"), BuiltIn: false},
 	{Name: "auth.graphqls", Input: sourceData("auth.graphqls"), BuiltIn: false},
+	{Name: "country.graphqls", Input: sourceData("country.graphqls"), BuiltIn: false},
 	{Name: "course.graphqls", Input: sourceData("course.graphqls"), BuiltIn: false},
 	{Name: "nomination.graphqls", Input: sourceData("nomination.graphqls"), BuiltIn: false},
 	{Name: "parentRel.graphqls", Input: sourceData("parentRel.graphqls"), BuiltIn: false},
@@ -1683,6 +1752,30 @@ func (ec *executionContext) field_Mutation_UpdateUser_args(ctx context.Context, 
 		}
 	}
 	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_GetAllCountries_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *int
+	if tmp, ok := rawArgs["page"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("page"))
+		arg0, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["page"] = arg0
+	var arg1 *int
+	if tmp, ok := rawArgs["pageSize"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pageSize"))
+		arg1, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["pageSize"] = arg1
 	return args, nil
 }
 
@@ -2680,6 +2773,280 @@ func (ec *executionContext) fieldContext_ApplicationHttp_note(ctx context.Contex
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CountryHttp_id(ctx context.Context, field graphql.CollectedField, obj *models.CountryHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CountryHttp_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CountryHttp_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CountryHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CountryHttp_createdAt(ctx context.Context, field graphql.CollectedField, obj *models.CountryHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CountryHttp_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNTimestamp2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CountryHttp_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CountryHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Timestamp does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CountryHttp_updatedAt(ctx context.Context, field graphql.CollectedField, obj *models.CountryHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CountryHttp_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNTimestamp2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CountryHttp_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CountryHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Timestamp does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CountryHttp_name(ctx context.Context, field graphql.CollectedField, obj *models.CountryHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CountryHttp_name(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Name, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CountryHttp_name(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CountryHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CountryHttpList_countries(ctx context.Context, field graphql.CollectedField, obj *models.CountryHTTPList) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CountryHttpList_countries(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Countries, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*models.CountryHTTP)
+	fc.Result = res
+	return ec.marshalNCountryHttp2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCountryHTTPᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CountryHttpList_countries(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CountryHttpList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_CountryHttp_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_CountryHttp_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_CountryHttp_updatedAt(ctx, field)
+			case "name":
+				return ec.fieldContext_CountryHttp_name(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CountryHttp", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CountryHttpList_countRows(ctx context.Context, field graphql.CollectedField, obj *models.CountryHTTPList) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CountryHttpList_countRows(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CountRows, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CountryHttpList_countRows(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CountryHttpList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -7149,6 +7516,91 @@ func (ec *executionContext) fieldContext_Query_Me(ctx context.Context, field gra
 	return fc, nil
 }
 
+func (ec *executionContext) _Query_GetAllCountries(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_GetAllCountries(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Query().GetAllCountries(rctx, fc.Args["page"].(*int), fc.Args["pageSize"].(*int))
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"Student"})
+			if err != nil {
+				return nil, err
+			}
+			if ec.directives.HasRole == nil {
+				return nil, errors.New("directive hasRole is not implemented")
+			}
+			return ec.directives.HasRole(ctx, nil, directive0, roles)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, graphql.ErrorOnPath(ctx, err)
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(*models.CountryHTTPList); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.CountryHTTPList`, tmp)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.CountryHTTPList)
+	fc.Result = res
+	return ec.marshalNCountryHttpList2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCountryHTTPList(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_GetAllCountries(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "countries":
+				return ec.fieldContext_CountryHttpList_countries(ctx, field)
+			case "countRows":
+				return ec.fieldContext_CountryHttpList_countRows(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CountryHttpList", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_GetAllCountries_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_GetCourseById(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Query_GetCourseById(ctx, field)
 	if err != nil {
@@ -11223,6 +11675,104 @@ func (ec *executionContext) _ApplicationHttp(ctx context.Context, sel ast.Select
 	return out
 }
 
+var countryHttpImplementors = []string{"CountryHttp"}
+
+func (ec *executionContext) _CountryHttp(ctx context.Context, sel ast.SelectionSet, obj *models.CountryHTTP) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, countryHttpImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CountryHttp")
+		case "id":
+			out.Values[i] = ec._CountryHttp_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._CountryHttp_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._CountryHttp_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "name":
+			out.Values[i] = ec._CountryHttp_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var countryHttpListImplementors = []string{"CountryHttpList"}
+
+func (ec *executionContext) _CountryHttpList(ctx context.Context, sel ast.SelectionSet, obj *models.CountryHTTPList) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, countryHttpListImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CountryHttpList")
+		case "countries":
+			out.Values[i] = ec._CountryHttpList_countries(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "countRows":
+			out.Values[i] = ec._CountryHttpList_countRows(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var courseAPIMediaCollectionHttpImplementors = []string{"CourseAPIMediaCollectionHttp"}
 
 func (ec *executionContext) _CourseAPIMediaCollectionHttp(ctx context.Context, sel ast.SelectionSet, obj *models.CourseAPIMediaCollectionHTTP) graphql.Marshaler {
@@ -12114,6 +12664,28 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "GetAllCountries":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_GetAllCountries(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
 		case "GetCourseById":
 			field := field
 
@@ -12956,6 +13528,74 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) marshalNCountryHttp2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCountryHTTPᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.CountryHTTP) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNCountryHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCountryHTTP(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNCountryHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCountryHTTP(ctx context.Context, sel ast.SelectionSet, v *models.CountryHTTP) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._CountryHttp(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNCountryHttpList2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCountryHTTPList(ctx context.Context, sel ast.SelectionSet, v models.CountryHTTPList) graphql.Marshaler {
+	return ec._CountryHttpList(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNCountryHttpList2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCountryHTTPList(ctx context.Context, sel ast.SelectionSet, v *models.CountryHTTPList) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._CountryHttpList(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNCourseAPIMediaCollectionHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCourseAPIMediaCollectionHTTP(ctx context.Context, sel ast.SelectionSet, v *models.CourseAPIMediaCollectionHTTP) graphql.Marshaler {

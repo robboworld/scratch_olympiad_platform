@@ -14,6 +14,7 @@ type Services struct {
 	SettingsService    SettingsService
 	ApplicationService ApplicationService
 	NominationService  NominationService
+	CountryService     CountryService
 }
 
 func SetupServices(
@@ -23,6 +24,7 @@ func SetupServices(
 	settingsGateway gateways.SettingsGateway,
 	applicationGateway gateways.ApplicationGateway,
 	nominationGateway gateways.NominationGateway,
+	countryGateway gateways.CountryGateway,
 ) Services {
 	return Services{
 		UserService: &UserServiceImpl{
@@ -47,6 +49,9 @@ func SetupServices(
 		},
 		NominationService: &NominationServiceImpl{
 			nominationGateway: nominationGateway,
+		},
+		CountryService: &CountryServiceImpl{
+			countryGateway: countryGateway,
 		},
 	}
 }

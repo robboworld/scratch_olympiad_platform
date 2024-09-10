@@ -13,6 +13,7 @@ type Resolver struct {
 	settingsService    services.SettingsService
 	applicationService services.ApplicationService
 	nominationService  services.NominationService
+	countryService     services.CountryService
 }
 
 func SetupResolvers(
@@ -23,6 +24,7 @@ func SetupResolvers(
 	settingsService services.SettingsService,
 	applicationService services.ApplicationService,
 	nominationService services.NominationService,
+	countryService services.CountryService,
 ) Resolver {
 	return Resolver{
 		loggers:            loggers,
@@ -32,5 +34,6 @@ func SetupResolvers(
 		settingsService:    settingsService,
 		applicationService: applicationService,
 		nominationService:  nominationService,
+		countryService:     countryService,
 	}
 }

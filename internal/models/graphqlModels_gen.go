@@ -31,6 +31,18 @@ type ApplicationHTTP struct {
 	Note                          string `json:"note"`
 }
 
+type CountryHTTP struct {
+	ID        string `json:"id"`
+	CreatedAt string `json:"createdAt"`
+	UpdatedAt string `json:"updatedAt"`
+	Name      string `json:"name"`
+}
+
+type CountryHTTPList struct {
+	Countries []*CountryHTTP `json:"countries"`
+	CountRows int            `json:"countRows"`
+}
+
 type CourseAPIMediaCollectionHTTP struct {
 	ID          string             `json:"id"`
 	BannerImage *AbsoluteMediaHTTP `json:"banner_image,omitempty"`

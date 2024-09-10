@@ -6,14 +6,14 @@ package resolvers
 
 import (
 	"context"
+	"github.com/vektah/gqlparser/v2/gqlerror"
 
 	"github.com/robboworld/scratch_olympiad_platform/internal/models"
-	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
-// GetAllNominations is the resolver for the GetAllNominations field.
-func (r *queryResolver) GetAllNominations(ctx context.Context, page *int, pageSize *int) (*models.NominationHTTPList, error) {
-	nominations, countRows, err := r.nominationService.GetAllNominations(page, pageSize)
+// GetAllCountries is the resolver for the GetAllCountries field.
+func (r *queryResolver) GetAllCountries(ctx context.Context, page *int, pageSize *int) (*models.CountryHTTPList, error) {
+	countries, countRows, err := r.countryService.GetAllCountries(page, pageSize)
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
 		return nil, &gqlerror.Error{
@@ -22,8 +22,8 @@ func (r *queryResolver) GetAllNominations(ctx context.Context, page *int, pageSi
 			},
 		}
 	}
-	return &models.NominationHTTPList{
-		Nominations: models.FromNominationsCore(nominations),
-		CountRows:   int(countRows),
+	return &models.CountryHTTPList{
+		Countries: models.FromCountriesCore(countries),
+		CountRows: int(countRows),
 	}, nil
 }
