@@ -2,6 +2,7 @@ package consts
 
 // http code 400
 const (
+	ErrDoesNotMatchAge          = "does not match the age"
 	ErrCountryNotFoundInDB      = "country not found"
 	ErrNominationNotFoundInDB   = "nomination not found"
 	ErrEmailAlreadyInUse        = "email already in use"

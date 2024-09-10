@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"net/mail"
 	"net/smtp"
+	"time"
 )
 
 func SendEmail(subject, to, body string) (err error) {
@@ -81,6 +82,16 @@ func BoolPointerToBool(p *bool) bool {
 		b = *p
 	}
 	return b
+}
+
+func CalculateAge(birthdate time.Time) int {
+	today := time.Now()
+	age := today.Year() - birthdate.Year()
+
+	if today.YearDay() < birthdate.YearDay() {
+		age--
+	}
+	return age
 }
 
 func GinContextFromContext(ctx context.Context) (*gin.Context, error) {

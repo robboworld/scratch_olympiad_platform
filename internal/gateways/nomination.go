@@ -2,6 +2,7 @@ package gateways
 
 import (
 	"errors"
+	"github.com/robboworld/scratch_olympiad_platform/internal/consts"
 	"github.com/robboworld/scratch_olympiad_platform/internal/db"
 	"github.com/robboworld/scratch_olympiad_platform/internal/models"
 	"github.com/robboworld/scratch_olympiad_platform/pkg/utils"
@@ -12,6 +13,7 @@ import (
 type NominationGateway interface {
 	GetAllNominations(offset, limit int) (nominations []models.NominationCore, countRows uint, err error)
 	DoesExistName(id uint, name string) (bool, error)
+	GetNominationByName(name string) (nomination models.NominationCore, err error)
 }
 
 type NominationGatewayImpl struct {
@@ -43,4 +45,20 @@ func (n NominationGatewayImpl) DoesExistName(id uint, name string) (bool, error)
 		}
 	}
 	return true, nil
+}
+
+func (n NominationGatewayImpl) GetNominationByName(name string) (nomination models.NominationCore, err error) {
+	if err = n.postgresClient.Db.Where("name = ?", name).Take(&nomination).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nomination, utils.ResponseError{
+				Code:    http.StatusBadRequest,
+				Message: consts.ErrNominationNotFoundInDB,
+			}
+		}
+		return nomination, utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+		}
+	}
+	return nomination, nil
 }

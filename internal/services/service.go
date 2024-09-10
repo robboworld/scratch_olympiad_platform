@@ -48,6 +48,8 @@ func SetupServices(
 		},
 		ApplicationService: &ApplicationServiceImpl{
 			applicationGateway: applicationGateway,
+			nominationGateway:  nominationGateway,
+			userGateway:        userGateway,
 		},
 		NominationService: &NominationServiceImpl{
 			nominationGateway: nominationGateway,
