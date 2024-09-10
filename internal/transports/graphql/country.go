@@ -6,9 +6,9 @@ package resolvers
 
 import (
 	"context"
-	"github.com/vektah/gqlparser/v2/gqlerror"
 
 	"github.com/robboworld/scratch_olympiad_platform/internal/models"
+	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
 // GetAllCountries is the resolver for the GetAllCountries field.

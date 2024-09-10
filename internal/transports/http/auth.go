@@ -2,6 +2,7 @@ package http
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/robboworld/scratch_olympiad_platform/internal/consts"
 	"github.com/robboworld/scratch_olympiad_platform/internal/models"
 	"github.com/robboworld/scratch_olympiad_platform/internal/services"
 	"github.com/robboworld/scratch_olympiad_platform/pkg/logger"
@@ -32,19 +33,27 @@ func (h AuthHandler) SignUp(c *gin.Context) {
 		return
 	}
 
+	birthdate, err := time.Parse(time.DateOnly, input.Birthdate)
+	if err != nil {
+		h.loggers.Err.Printf("%s", consts.ErrTimeParse)
+		c.JSON(http.StatusBadRequest, gin.H{"error": consts.ErrTimeParse})
+		return
+	}
 	newUser := models.UserCore{
 		Email:          input.Email,
 		Password:       input.Password,
-		Firstname:      input.Firstname,
-		Lastname:       input.Lastname,
-		Middlename:     utils.StringPointerToString(input.Middlename),
+		FullName:       input.FullName,
+		FullNameNative: input.FullNameNative,
+		Country:        input.Country,
+		City:           input.City,
+		Birthdate:      birthdate,
 		Nickname:       input.Nickname,
 		Role:           models.RoleStudent,
 		IsActive:       false,
 		ActivationLink: utils.GetHashString(time.Now().String()),
 	}
 
-	err := h.authService.SignUp(newUser)
+	err = h.authService.SignUp(newUser)
 	if err != nil {
 		h.loggers.Err.Printf("%s", err.Error())
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

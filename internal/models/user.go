@@ -14,9 +14,11 @@ type UserCore struct {
 	Email          string         `gorm:"not null;"`
 	Password       string         `gorm:"not null;"`
 	Role           Role           `gorm:"not null;"`
-	Firstname      string         `gorm:"not null;"`
-	Lastname       string         `gorm:"not null;"`
-	Middlename     string         `gorm:""`
+	FullName       string         `gorm:"not null;"`
+	FullNameNative string         `gorm:"not null;"`
+	Country        string         `gorm:"not null;"`
+	City           string         `gorm:"not null;"`
+	Birthdate      time.Time      `gorm:"not null;"`
 	Nickname       string         `gorm:"not null;"`
 	IsActive       bool           `gorm:"not null;default:false;type:boolean;column:is_active"`
 	ActivationLink string
@@ -24,14 +26,17 @@ type UserCore struct {
 
 func (u *UserHTTP) ToCore() UserCore {
 	id, _ := strconv.ParseUint(u.ID, 10, 64)
+	birthDate, _ := time.Parse(time.DateOnly, u.Birthdate)
 	return UserCore{
 		ID:             uint(id),
 		Email:          u.Email,
 		Password:       u.Password,
 		Role:           u.Role,
-		Firstname:      u.Firstname,
-		Lastname:       u.Lastname,
-		Middlename:     u.Middlename,
+		FullName:       u.FullName,
+		FullNameNative: u.FullNameNative,
+		Country:        u.Country,
+		City:           u.City,
+		Birthdate:      birthDate,
 		Nickname:       u.Nickname,
 		IsActive:       u.IsActive,
 		ActivationLink: u.ActivationLink,
@@ -43,9 +48,11 @@ func (u *UserHTTP) FromCore(userCore UserCore) {
 	u.CreatedAt = userCore.CreatedAt.Format(time.DateTime)
 	u.UpdatedAt = userCore.UpdatedAt.Format(time.DateTime)
 	u.Email = userCore.Email
-	u.Firstname = userCore.Firstname
-	u.Lastname = userCore.Lastname
-	u.Middlename = userCore.Middlename
+	u.FullName = userCore.FullName
+	u.FullNameNative = userCore.FullNameNative
+	u.Country = userCore.Country
+	u.City = userCore.City
+	u.Birthdate = userCore.Birthdate.Format(time.DateOnly)
 	u.Nickname = userCore.Nickname
 	u.IsActive = userCore.IsActive
 	u.Role = userCore.Role

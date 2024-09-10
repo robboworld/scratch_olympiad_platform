@@ -31,6 +31,7 @@ type AuthService interface {
 
 type AuthServiceImpl struct {
 	userGateway     gateways.UserGateway
+	countryGateway  gateways.CountryGateway
 	settingsGateway gateways.SettingsGateway
 }
 
@@ -143,6 +144,16 @@ func (a AuthServiceImpl) SignUp(newUser models.UserCore) error {
 		return utils.ResponseError{
 			Code:    http.StatusBadRequest,
 			Message: consts.ErrShortPassword,
+		}
+	}
+	exist, err = a.countryGateway.DoesExistName(0, newUser.Country)
+	if err != nil {
+		return err
+	}
+	if !exist {
+		return utils.ResponseError{
+			Code:    http.StatusBadRequest,
+			Message: consts.ErrCountryNotFoundInDB,
 		}
 	}
 

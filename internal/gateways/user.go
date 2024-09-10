@@ -130,11 +130,13 @@ func (u UserGatewayImpl) UpdateUser(user models.UserCore) (models.UserCore, erro
 	if err := u.postgresClient.Db.Model(&user).Clauses(clause.Returning{}).
 		Take(&models.UserCore{}, user.ID).
 		Updates(map[string]interface{}{
-			"email":      user.Email,
-			"firstname":  user.Firstname,
-			"lastname":   user.Lastname,
-			"middlename": user.Middlename,
-			"nickname":   user.Nickname,
+			"email":            user.Email,
+			"full_name":        user.FullName,
+			"full_name_native": user.FullNameNative,
+			"country":          user.Country,
+			"city":             user.City,
+			"birthdate":        user.Birthdate,
+			"nickname":         user.Nickname,
 		}).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return models.UserCore{}, utils.ResponseError{

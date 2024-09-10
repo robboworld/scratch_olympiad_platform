@@ -28,10 +28,12 @@ func SetupServices(
 ) Services {
 	return Services{
 		UserService: &UserServiceImpl{
-			userGateway: userGateway,
+			userGateway:    userGateway,
+			countryGateway: countryGateway,
 		},
 		AuthService: &AuthServiceImpl{
 			userGateway:     userGateway,
+			countryGateway:  countryGateway,
 			settingsGateway: settingsGateway,
 		},
 		ProjectService: &ProjectServiceImpl{

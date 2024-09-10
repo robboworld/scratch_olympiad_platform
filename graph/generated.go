@@ -149,12 +149,14 @@ type ComplexityRoot struct {
 	}
 
 	NewUserResponse struct {
-		Email      func(childComplexity int) int
-		Firstname  func(childComplexity int) int
-		ID         func(childComplexity int) int
-		Lastname   func(childComplexity int) int
-		Middlename func(childComplexity int) int
-		Role       func(childComplexity int) int
+		Birthdate      func(childComplexity int) int
+		City           func(childComplexity int) int
+		Country        func(childComplexity int) int
+		Email          func(childComplexity int) int
+		FullName       func(childComplexity int) int
+		FullNameNative func(childComplexity int) int
+		ID             func(childComplexity int) int
+		Role           func(childComplexity int) int
 	}
 
 	NominationHttp struct {
@@ -223,13 +225,15 @@ type ComplexityRoot struct {
 
 	UserHttp struct {
 		ActivationLink func(childComplexity int) int
+		Birthdate      func(childComplexity int) int
+		City           func(childComplexity int) int
+		Country        func(childComplexity int) int
 		CreatedAt      func(childComplexity int) int
 		Email          func(childComplexity int) int
-		Firstname      func(childComplexity int) int
+		FullName       func(childComplexity int) int
+		FullNameNative func(childComplexity int) int
 		ID             func(childComplexity int) int
 		IsActive       func(childComplexity int) int
-		Lastname       func(childComplexity int) int
-		Middlename     func(childComplexity int) int
 		Nickname       func(childComplexity int) int
 		Password       func(childComplexity int) int
 		Role           func(childComplexity int) int
@@ -871,6 +875,27 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.UpdateUser(childComplexity, args["input"].(models.UpdateUser)), true
 
+	case "NewUserResponse.birthdate":
+		if e.complexity.NewUserResponse.Birthdate == nil {
+			break
+		}
+
+		return e.complexity.NewUserResponse.Birthdate(childComplexity), true
+
+	case "NewUserResponse.city":
+		if e.complexity.NewUserResponse.City == nil {
+			break
+		}
+
+		return e.complexity.NewUserResponse.City(childComplexity), true
+
+	case "NewUserResponse.country":
+		if e.complexity.NewUserResponse.Country == nil {
+			break
+		}
+
+		return e.complexity.NewUserResponse.Country(childComplexity), true
+
 	case "NewUserResponse.email":
 		if e.complexity.NewUserResponse.Email == nil {
 			break
@@ -878,12 +903,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.NewUserResponse.Email(childComplexity), true
 
-	case "NewUserResponse.firstname":
-		if e.complexity.NewUserResponse.Firstname == nil {
+	case "NewUserResponse.fullName":
+		if e.complexity.NewUserResponse.FullName == nil {
 			break
 		}
 
-		return e.complexity.NewUserResponse.Firstname(childComplexity), true
+		return e.complexity.NewUserResponse.FullName(childComplexity), true
+
+	case "NewUserResponse.fullNameNative":
+		if e.complexity.NewUserResponse.FullNameNative == nil {
+			break
+		}
+
+		return e.complexity.NewUserResponse.FullNameNative(childComplexity), true
 
 	case "NewUserResponse.id":
 		if e.complexity.NewUserResponse.ID == nil {
@@ -891,20 +923,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.NewUserResponse.ID(childComplexity), true
-
-	case "NewUserResponse.lastname":
-		if e.complexity.NewUserResponse.Lastname == nil {
-			break
-		}
-
-		return e.complexity.NewUserResponse.Lastname(childComplexity), true
-
-	case "NewUserResponse.middlename":
-		if e.complexity.NewUserResponse.Middlename == nil {
-			break
-		}
-
-		return e.complexity.NewUserResponse.Middlename(childComplexity), true
 
 	case "NewUserResponse.role":
 		if e.complexity.NewUserResponse.Role == nil {
@@ -1250,6 +1268,27 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.UserHttp.ActivationLink(childComplexity), true
 
+	case "UserHttp.birthdate":
+		if e.complexity.UserHttp.Birthdate == nil {
+			break
+		}
+
+		return e.complexity.UserHttp.Birthdate(childComplexity), true
+
+	case "UserHttp.city":
+		if e.complexity.UserHttp.City == nil {
+			break
+		}
+
+		return e.complexity.UserHttp.City(childComplexity), true
+
+	case "UserHttp.country":
+		if e.complexity.UserHttp.Country == nil {
+			break
+		}
+
+		return e.complexity.UserHttp.Country(childComplexity), true
+
 	case "UserHttp.createdAt":
 		if e.complexity.UserHttp.CreatedAt == nil {
 			break
@@ -1264,12 +1303,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.UserHttp.Email(childComplexity), true
 
-	case "UserHttp.firstname":
-		if e.complexity.UserHttp.Firstname == nil {
+	case "UserHttp.fullName":
+		if e.complexity.UserHttp.FullName == nil {
 			break
 		}
 
-		return e.complexity.UserHttp.Firstname(childComplexity), true
+		return e.complexity.UserHttp.FullName(childComplexity), true
+
+	case "UserHttp.fullNameNative":
+		if e.complexity.UserHttp.FullNameNative == nil {
+			break
+		}
+
+		return e.complexity.UserHttp.FullNameNative(childComplexity), true
 
 	case "UserHttp.id":
 		if e.complexity.UserHttp.ID == nil {
@@ -1284,20 +1330,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.UserHttp.IsActive(childComplexity), true
-
-	case "UserHttp.lastname":
-		if e.complexity.UserHttp.Lastname == nil {
-			break
-		}
-
-		return e.complexity.UserHttp.Lastname(childComplexity), true
-
-	case "UserHttp.middlename":
-		if e.complexity.UserHttp.Middlename == nil {
-			break
-		}
-
-		return e.complexity.UserHttp.Middlename(childComplexity), true
 
 	case "UserHttp.nickname":
 		if e.complexity.UserHttp.Nickname == nil {
@@ -4648,12 +4680,16 @@ func (ec *executionContext) fieldContext_Mutation_CreateUser(ctx context.Context
 				return ec.fieldContext_UserHttp_password(ctx, field)
 			case "role":
 				return ec.fieldContext_UserHttp_role(ctx, field)
-			case "firstname":
-				return ec.fieldContext_UserHttp_firstname(ctx, field)
-			case "lastname":
-				return ec.fieldContext_UserHttp_lastname(ctx, field)
-			case "middlename":
-				return ec.fieldContext_UserHttp_middlename(ctx, field)
+			case "fullName":
+				return ec.fieldContext_UserHttp_fullName(ctx, field)
+			case "fullNameNative":
+				return ec.fieldContext_UserHttp_fullNameNative(ctx, field)
+			case "country":
+				return ec.fieldContext_UserHttp_country(ctx, field)
+			case "city":
+				return ec.fieldContext_UserHttp_city(ctx, field)
+			case "birthdate":
+				return ec.fieldContext_UserHttp_birthdate(ctx, field)
 			case "nickname":
 				return ec.fieldContext_UserHttp_nickname(ctx, field)
 			case "isActive":
@@ -4753,12 +4789,16 @@ func (ec *executionContext) fieldContext_Mutation_UpdateUser(ctx context.Context
 				return ec.fieldContext_UserHttp_password(ctx, field)
 			case "role":
 				return ec.fieldContext_UserHttp_role(ctx, field)
-			case "firstname":
-				return ec.fieldContext_UserHttp_firstname(ctx, field)
-			case "lastname":
-				return ec.fieldContext_UserHttp_lastname(ctx, field)
-			case "middlename":
-				return ec.fieldContext_UserHttp_middlename(ctx, field)
+			case "fullName":
+				return ec.fieldContext_UserHttp_fullName(ctx, field)
+			case "fullNameNative":
+				return ec.fieldContext_UserHttp_fullNameNative(ctx, field)
+			case "country":
+				return ec.fieldContext_UserHttp_country(ctx, field)
+			case "city":
+				return ec.fieldContext_UserHttp_city(ctx, field)
+			case "birthdate":
+				return ec.fieldContext_UserHttp_birthdate(ctx, field)
 			case "nickname":
 				return ec.fieldContext_UserHttp_nickname(ctx, field)
 			case "isActive":
@@ -5998,8 +6038,8 @@ func (ec *executionContext) fieldContext_NewUserResponse_role(ctx context.Contex
 	return fc, nil
 }
 
-func (ec *executionContext) _NewUserResponse_firstname(ctx context.Context, field graphql.CollectedField, obj *models.NewUserResponse) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_NewUserResponse_firstname(ctx, field)
+func (ec *executionContext) _NewUserResponse_fullName(ctx context.Context, field graphql.CollectedField, obj *models.NewUserResponse) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NewUserResponse_fullName(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -6012,7 +6052,7 @@ func (ec *executionContext) _NewUserResponse_firstname(ctx context.Context, fiel
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Firstname, nil
+		return obj.FullName, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6029,7 +6069,7 @@ func (ec *executionContext) _NewUserResponse_firstname(ctx context.Context, fiel
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_NewUserResponse_firstname(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_NewUserResponse_fullName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "NewUserResponse",
 		Field:      field,
@@ -6042,8 +6082,8 @@ func (ec *executionContext) fieldContext_NewUserResponse_firstname(ctx context.C
 	return fc, nil
 }
 
-func (ec *executionContext) _NewUserResponse_lastname(ctx context.Context, field graphql.CollectedField, obj *models.NewUserResponse) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_NewUserResponse_lastname(ctx, field)
+func (ec *executionContext) _NewUserResponse_fullNameNative(ctx context.Context, field graphql.CollectedField, obj *models.NewUserResponse) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NewUserResponse_fullNameNative(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -6056,7 +6096,7 @@ func (ec *executionContext) _NewUserResponse_lastname(ctx context.Context, field
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Lastname, nil
+		return obj.FullNameNative, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6073,7 +6113,7 @@ func (ec *executionContext) _NewUserResponse_lastname(ctx context.Context, field
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_NewUserResponse_lastname(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_NewUserResponse_fullNameNative(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "NewUserResponse",
 		Field:      field,
@@ -6086,8 +6126,8 @@ func (ec *executionContext) fieldContext_NewUserResponse_lastname(ctx context.Co
 	return fc, nil
 }
 
-func (ec *executionContext) _NewUserResponse_middlename(ctx context.Context, field graphql.CollectedField, obj *models.NewUserResponse) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_NewUserResponse_middlename(ctx, field)
+func (ec *executionContext) _NewUserResponse_country(ctx context.Context, field graphql.CollectedField, obj *models.NewUserResponse) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NewUserResponse_country(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -6100,7 +6140,7 @@ func (ec *executionContext) _NewUserResponse_middlename(ctx context.Context, fie
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Middlename, nil
+		return obj.Country, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6117,7 +6157,7 @@ func (ec *executionContext) _NewUserResponse_middlename(ctx context.Context, fie
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_NewUserResponse_middlename(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_NewUserResponse_country(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "NewUserResponse",
 		Field:      field,
@@ -6125,6 +6165,94 @@ func (ec *executionContext) fieldContext_NewUserResponse_middlename(ctx context.
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NewUserResponse_city(ctx context.Context, field graphql.CollectedField, obj *models.NewUserResponse) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NewUserResponse_city(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.City, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NewUserResponse_city(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NewUserResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NewUserResponse_birthdate(ctx context.Context, field graphql.CollectedField, obj *models.NewUserResponse) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NewUserResponse_birthdate(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Birthdate, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNTimestamp2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NewUserResponse_birthdate(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NewUserResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Timestamp does not have child fields")
 		},
 	}
 	return fc, nil
@@ -7213,12 +7341,16 @@ func (ec *executionContext) fieldContext_Query_GetUserByAccessToken(ctx context.
 				return ec.fieldContext_UserHttp_password(ctx, field)
 			case "role":
 				return ec.fieldContext_UserHttp_role(ctx, field)
-			case "firstname":
-				return ec.fieldContext_UserHttp_firstname(ctx, field)
-			case "lastname":
-				return ec.fieldContext_UserHttp_lastname(ctx, field)
-			case "middlename":
-				return ec.fieldContext_UserHttp_middlename(ctx, field)
+			case "fullName":
+				return ec.fieldContext_UserHttp_fullName(ctx, field)
+			case "fullNameNative":
+				return ec.fieldContext_UserHttp_fullNameNative(ctx, field)
+			case "country":
+				return ec.fieldContext_UserHttp_country(ctx, field)
+			case "city":
+				return ec.fieldContext_UserHttp_city(ctx, field)
+			case "birthdate":
+				return ec.fieldContext_UserHttp_birthdate(ctx, field)
 			case "nickname":
 				return ec.fieldContext_UserHttp_nickname(ctx, field)
 			case "isActive":
@@ -7307,12 +7439,16 @@ func (ec *executionContext) fieldContext_Query_GetUserById(ctx context.Context, 
 				return ec.fieldContext_UserHttp_password(ctx, field)
 			case "role":
 				return ec.fieldContext_UserHttp_role(ctx, field)
-			case "firstname":
-				return ec.fieldContext_UserHttp_firstname(ctx, field)
-			case "lastname":
-				return ec.fieldContext_UserHttp_lastname(ctx, field)
-			case "middlename":
-				return ec.fieldContext_UserHttp_middlename(ctx, field)
+			case "fullName":
+				return ec.fieldContext_UserHttp_fullName(ctx, field)
+			case "fullNameNative":
+				return ec.fieldContext_UserHttp_fullNameNative(ctx, field)
+			case "country":
+				return ec.fieldContext_UserHttp_country(ctx, field)
+			case "city":
+				return ec.fieldContext_UserHttp_city(ctx, field)
+			case "birthdate":
+				return ec.fieldContext_UserHttp_birthdate(ctx, field)
 			case "nickname":
 				return ec.fieldContext_UserHttp_nickname(ctx, field)
 			case "isActive":
@@ -7497,12 +7633,16 @@ func (ec *executionContext) fieldContext_Query_Me(ctx context.Context, field gra
 				return ec.fieldContext_UserHttp_password(ctx, field)
 			case "role":
 				return ec.fieldContext_UserHttp_role(ctx, field)
-			case "firstname":
-				return ec.fieldContext_UserHttp_firstname(ctx, field)
-			case "lastname":
-				return ec.fieldContext_UserHttp_lastname(ctx, field)
-			case "middlename":
-				return ec.fieldContext_UserHttp_middlename(ctx, field)
+			case "fullName":
+				return ec.fieldContext_UserHttp_fullName(ctx, field)
+			case "fullNameNative":
+				return ec.fieldContext_UserHttp_fullNameNative(ctx, field)
+			case "country":
+				return ec.fieldContext_UserHttp_country(ctx, field)
+			case "city":
+				return ec.fieldContext_UserHttp_city(ctx, field)
+			case "birthdate":
+				return ec.fieldContext_UserHttp_birthdate(ctx, field)
 			case "nickname":
 				return ec.fieldContext_UserHttp_nickname(ctx, field)
 			case "isActive":
@@ -8919,8 +9059,8 @@ func (ec *executionContext) fieldContext_UserHttp_role(ctx context.Context, fiel
 	return fc, nil
 }
 
-func (ec *executionContext) _UserHttp_firstname(ctx context.Context, field graphql.CollectedField, obj *models.UserHTTP) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_UserHttp_firstname(ctx, field)
+func (ec *executionContext) _UserHttp_fullName(ctx context.Context, field graphql.CollectedField, obj *models.UserHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserHttp_fullName(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -8933,7 +9073,7 @@ func (ec *executionContext) _UserHttp_firstname(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Firstname, nil
+		return obj.FullName, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -8950,7 +9090,7 @@ func (ec *executionContext) _UserHttp_firstname(ctx context.Context, field graph
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_UserHttp_firstname(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_UserHttp_fullName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "UserHttp",
 		Field:      field,
@@ -8963,8 +9103,8 @@ func (ec *executionContext) fieldContext_UserHttp_firstname(ctx context.Context,
 	return fc, nil
 }
 
-func (ec *executionContext) _UserHttp_lastname(ctx context.Context, field graphql.CollectedField, obj *models.UserHTTP) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_UserHttp_lastname(ctx, field)
+func (ec *executionContext) _UserHttp_fullNameNative(ctx context.Context, field graphql.CollectedField, obj *models.UserHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserHttp_fullNameNative(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -8977,7 +9117,7 @@ func (ec *executionContext) _UserHttp_lastname(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Lastname, nil
+		return obj.FullNameNative, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -8994,7 +9134,7 @@ func (ec *executionContext) _UserHttp_lastname(ctx context.Context, field graphq
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_UserHttp_lastname(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_UserHttp_fullNameNative(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "UserHttp",
 		Field:      field,
@@ -9007,8 +9147,8 @@ func (ec *executionContext) fieldContext_UserHttp_lastname(ctx context.Context, 
 	return fc, nil
 }
 
-func (ec *executionContext) _UserHttp_middlename(ctx context.Context, field graphql.CollectedField, obj *models.UserHTTP) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_UserHttp_middlename(ctx, field)
+func (ec *executionContext) _UserHttp_country(ctx context.Context, field graphql.CollectedField, obj *models.UserHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserHttp_country(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -9021,7 +9161,7 @@ func (ec *executionContext) _UserHttp_middlename(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Middlename, nil
+		return obj.Country, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -9038,7 +9178,7 @@ func (ec *executionContext) _UserHttp_middlename(ctx context.Context, field grap
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_UserHttp_middlename(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_UserHttp_country(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "UserHttp",
 		Field:      field,
@@ -9046,6 +9186,94 @@ func (ec *executionContext) fieldContext_UserHttp_middlename(ctx context.Context
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _UserHttp_city(ctx context.Context, field graphql.CollectedField, obj *models.UserHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserHttp_city(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.City, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_UserHttp_city(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "UserHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _UserHttp_birthdate(ctx context.Context, field graphql.CollectedField, obj *models.UserHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserHttp_birthdate(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Birthdate, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNTimestamp2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_UserHttp_birthdate(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "UserHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Timestamp does not have child fields")
 		},
 	}
 	return fc, nil
@@ -9234,12 +9462,16 @@ func (ec *executionContext) fieldContext_UsersList_users(ctx context.Context, fi
 				return ec.fieldContext_UserHttp_password(ctx, field)
 			case "role":
 				return ec.fieldContext_UserHttp_role(ctx, field)
-			case "firstname":
-				return ec.fieldContext_UserHttp_firstname(ctx, field)
-			case "lastname":
-				return ec.fieldContext_UserHttp_lastname(ctx, field)
-			case "middlename":
-				return ec.fieldContext_UserHttp_middlename(ctx, field)
+			case "fullName":
+				return ec.fieldContext_UserHttp_fullName(ctx, field)
+			case "fullNameNative":
+				return ec.fieldContext_UserHttp_fullNameNative(ctx, field)
+			case "country":
+				return ec.fieldContext_UserHttp_country(ctx, field)
+			case "city":
+				return ec.fieldContext_UserHttp_city(ctx, field)
+			case "birthdate":
+				return ec.fieldContext_UserHttp_birthdate(ctx, field)
 			case "nickname":
 				return ec.fieldContext_UserHttp_nickname(ctx, field)
 			case "isActive":
@@ -11187,7 +11419,7 @@ func (ec *executionContext) unmarshalInputNewUser(ctx context.Context, obj inter
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"email", "password", "role", "firstname", "lastname", "middlename", "nickname"}
+	fieldsInOrder := [...]string{"email", "password", "role", "fullName", "fullNameNative", "country", "city", "birthdate", "nickname"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -11221,33 +11453,51 @@ func (ec *executionContext) unmarshalInputNewUser(ctx context.Context, obj inter
 				return it, err
 			}
 			it.Role = data
-		case "firstname":
+		case "fullName":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstname"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fullName"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Firstname = data
-		case "lastname":
+			it.FullName = data
+		case "fullNameNative":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastname"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fullNameNative"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Lastname = data
-		case "middlename":
+			it.FullNameNative = data
+		case "country":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("middlename"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("country"))
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Middlename = data
+			it.Country = data
+		case "city":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("city"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.City = data
+		case "birthdate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("birthdate"))
+			data, err := ec.unmarshalNTimestamp2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Birthdate = data
 		case "nickname":
 			var err error
 
@@ -11308,7 +11558,7 @@ func (ec *executionContext) unmarshalInputSignUp(ctx context.Context, obj interf
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"email", "password", "nickname", "firstname", "lastname", "middlename"}
+	fieldsInOrder := [...]string{"email", "password", "nickname", "fullName", "fullNameNative", "country", "city", "birthdate"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -11342,33 +11592,51 @@ func (ec *executionContext) unmarshalInputSignUp(ctx context.Context, obj interf
 				return it, err
 			}
 			it.Nickname = data
-		case "firstname":
+		case "fullName":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstname"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fullName"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Firstname = data
-		case "lastname":
+			it.FullName = data
+		case "fullNameNative":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastname"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fullNameNative"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Lastname = data
-		case "middlename":
+			it.FullNameNative = data
+		case "country":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("middlename"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("country"))
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Middlename = data
+			it.Country = data
+		case "city":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("city"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.City = data
+		case "birthdate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("birthdate"))
+			data, err := ec.unmarshalNTimestamp2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Birthdate = data
 		}
 	}
 
@@ -11447,7 +11715,7 @@ func (ec *executionContext) unmarshalInputUpdateUser(ctx context.Context, obj in
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"id", "email", "firstname", "lastname", "middlename", "nickname"}
+	fieldsInOrder := [...]string{"id", "email", "fullName", "fullNameNative", "country", "city", "birthdate", "nickname"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -11472,33 +11740,51 @@ func (ec *executionContext) unmarshalInputUpdateUser(ctx context.Context, obj in
 				return it, err
 			}
 			it.Email = data
-		case "firstname":
+		case "fullName":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstname"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fullName"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Firstname = data
-		case "lastname":
+			it.FullName = data
+		case "fullNameNative":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastname"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fullNameNative"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Lastname = data
-		case "middlename":
+			it.FullNameNative = data
+		case "country":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("middlename"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("country"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Middlename = data
+			it.Country = data
+		case "city":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("city"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.City = data
+		case "birthdate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("birthdate"))
+			data, err := ec.unmarshalNTimestamp2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Birthdate = data
 		case "nickname":
 			var err error
 
@@ -12273,18 +12559,28 @@ func (ec *executionContext) _NewUserResponse(ctx context.Context, sel ast.Select
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "firstname":
-			out.Values[i] = ec._NewUserResponse_firstname(ctx, field, obj)
+		case "fullName":
+			out.Values[i] = ec._NewUserResponse_fullName(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "lastname":
-			out.Values[i] = ec._NewUserResponse_lastname(ctx, field, obj)
+		case "fullNameNative":
+			out.Values[i] = ec._NewUserResponse_fullNameNative(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "middlename":
-			out.Values[i] = ec._NewUserResponse_middlename(ctx, field, obj)
+		case "country":
+			out.Values[i] = ec._NewUserResponse_country(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "city":
+			out.Values[i] = ec._NewUserResponse_city(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "birthdate":
+			out.Values[i] = ec._NewUserResponse_birthdate(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -13078,18 +13374,28 @@ func (ec *executionContext) _UserHttp(ctx context.Context, sel ast.SelectionSet,
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "firstname":
-			out.Values[i] = ec._UserHttp_firstname(ctx, field, obj)
+		case "fullName":
+			out.Values[i] = ec._UserHttp_fullName(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "lastname":
-			out.Values[i] = ec._UserHttp_lastname(ctx, field, obj)
+		case "fullNameNative":
+			out.Values[i] = ec._UserHttp_fullNameNative(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "middlename":
-			out.Values[i] = ec._UserHttp_middlename(ctx, field, obj)
+		case "country":
+			out.Values[i] = ec._UserHttp_country(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "city":
+			out.Values[i] = ec._UserHttp_city(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "birthdate":
+			out.Values[i] = ec._UserHttp_birthdate(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}

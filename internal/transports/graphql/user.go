@@ -8,6 +8,7 @@ import (
 	"context"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/robboworld/scratch_olympiad_platform/graph"
 	"github.com/robboworld/scratch_olympiad_platform/internal/consts"
@@ -27,15 +28,29 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input models.NewUser)
 			},
 		}
 	}
+	birthdate, err := time.Parse(time.DateOnly, input.Birthdate)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return nil, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": utils.ResponseError{
+					Code:    http.StatusBadRequest,
+					Message: consts.ErrTimeParse,
+				},
+			},
+		}
+	}
 	user := models.UserCore{
-		Email:      input.Email,
-		Password:   input.Password,
-		Firstname:  input.Firstname,
-		Lastname:   input.Lastname,
-		Middlename: utils.StringPointerToString(input.Middlename),
-		Nickname:   input.Nickname,
-		IsActive:   true,
-		Role:       input.Role,
+		Email:          input.Email,
+		Password:       input.Password,
+		FullName:       input.FullName,
+		FullNameNative: input.FullNameNative,
+		Country:        input.Country,
+		City:           input.City,
+		Birthdate:      birthdate,
+		Nickname:       input.Nickname,
+		IsActive:       true,
+		Role:           input.Role,
 	}
 	newUser, err := r.userService.CreateUser(user, ginContext.Value(consts.KeyRole).(models.Role))
 	if err != nil {
@@ -74,14 +89,28 @@ func (r *mutationResolver) UpdateUser(ctx context.Context, input models.UpdateUs
 			},
 		}
 	}
+	birthdate, err := time.Parse(time.DateOnly, input.Birthdate)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return nil, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": utils.ResponseError{
+					Code:    http.StatusBadRequest,
+					Message: consts.ErrTimeParse,
+				},
+			},
+		}
+	}
 	// TODO not required field
 	user := models.UserCore{
-		ID:         uint(atoi),
-		Email:      input.Email,
-		Firstname:  input.Firstname,
-		Lastname:   input.Lastname,
-		Middlename: input.Middlename,
-		Nickname:   input.Nickname,
+		ID:             uint(atoi),
+		Email:          input.Email,
+		FullName:       input.FullName,
+		FullNameNative: input.FullNameNative,
+		Country:        input.Country,
+		City:           input.City,
+		Birthdate:      birthdate,
+		Nickname:       input.Nickname,
 	}
 	updatedUser, err := r.userService.UpdateUser(user, ginContext.Value(consts.KeyRole).(models.Role))
 	if err != nil {

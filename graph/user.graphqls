@@ -5,9 +5,11 @@ type UserHttp {
 	email: String!
 	password: String!
 	role: Role!
-	firstname: String!
-	lastname: String!
-	middlename: String!
+	fullName: String!
+	fullNameNative: String!
+	country: String!
+	city: String!
+	birthdate: Timestamp!
 	nickname: String!
 	isActive: Boolean!
 	activationLink: String!
@@ -26,18 +28,22 @@ input NewUser {
 	email: String!
 	password: String!
 	role: Role!
-	firstname: String!
-	lastname: String!
-	middlename: String
+	fullName: String!
+	fullNameNative: String!
+	country: String!
+	city: String!
+	birthdate: Timestamp!
 	nickname: String!
 }
 
 input UpdateUser {
 	id: ID!
 	email: String!
-	firstname: String!
-	lastname: String!
-	middlename: String!
+	fullName: String!
+	fullNameNative: String!
+	country: String!
+	city: String!
+	birthdate: Timestamp!
 	nickname: String!
 }
 
@@ -45,9 +51,11 @@ type NewUserResponse {
 	id: ID!
 	email: String!
 	role: Int!
-	firstname: String!
-	lastname: String!
-	middlename: String!
+	fullName: String!
+	fullNameNative: String!
+	country: String!
+	city: String!
+	birthdate: Timestamp!
 }
 
 type UsersList {

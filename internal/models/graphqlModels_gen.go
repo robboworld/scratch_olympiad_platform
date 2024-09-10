@@ -105,22 +105,26 @@ type NewApplication struct {
 }
 
 type NewUser struct {
-	Email      string  `json:"email"`
-	Password   string  `json:"password"`
-	Role       Role    `json:"role"`
-	Firstname  string  `json:"firstname"`
-	Lastname   string  `json:"lastname"`
-	Middlename *string `json:"middlename,omitempty"`
-	Nickname   string  `json:"nickname"`
+	Email          string `json:"email"`
+	Password       string `json:"password"`
+	Role           Role   `json:"role"`
+	FullName       string `json:"fullName"`
+	FullNameNative string `json:"fullNameNative"`
+	Country        string `json:"country"`
+	City           string `json:"city"`
+	Birthdate      string `json:"birthdate"`
+	Nickname       string `json:"nickname"`
 }
 
 type NewUserResponse struct {
-	ID         string `json:"id"`
-	Email      string `json:"email"`
-	Role       int    `json:"role"`
-	Firstname  string `json:"firstname"`
-	Lastname   string `json:"lastname"`
-	Middlename string `json:"middlename"`
+	ID             string `json:"id"`
+	Email          string `json:"email"`
+	Role           int    `json:"role"`
+	FullName       string `json:"fullName"`
+	FullNameNative string `json:"fullNameNative"`
+	Country        string `json:"country"`
+	City           string `json:"city"`
+	Birthdate      string `json:"birthdate"`
 }
 
 type NominationHTTP struct {
@@ -176,12 +180,14 @@ type SignInResponse struct {
 }
 
 type SignUp struct {
-	Email      string  `json:"email"`
-	Password   string  `json:"password"`
-	Nickname   string  `json:"nickname"`
-	Firstname  string  `json:"firstname"`
-	Lastname   string  `json:"lastname"`
-	Middlename *string `json:"middlename,omitempty"`
+	Email          string `json:"email"`
+	Password       string `json:"password"`
+	Nickname       string `json:"nickname"`
+	FullName       string `json:"fullName"`
+	FullNameNative string `json:"fullNameNative"`
+	Country        string `json:"country"`
+	City           string `json:"city"`
+	Birthdate      string `json:"birthdate"`
 }
 
 type UpdateProjectPage struct {
@@ -193,12 +199,14 @@ type UpdateProjectPage struct {
 }
 
 type UpdateUser struct {
-	ID         string `json:"id"`
-	Email      string `json:"email"`
-	Firstname  string `json:"firstname"`
-	Lastname   string `json:"lastname"`
-	Middlename string `json:"middlename"`
-	Nickname   string `json:"nickname"`
+	ID             string `json:"id"`
+	Email          string `json:"email"`
+	FullName       string `json:"fullName"`
+	FullNameNative string `json:"fullNameNative"`
+	Country        string `json:"country"`
+	City           string `json:"city"`
+	Birthdate      string `json:"birthdate"`
+	Nickname       string `json:"nickname"`
 }
 
 type UserHTTP struct {
@@ -208,9 +216,11 @@ type UserHTTP struct {
 	Email          string `json:"email"`
 	Password       string `json:"password"`
 	Role           Role   `json:"role"`
-	Firstname      string `json:"firstname"`
-	Lastname       string `json:"lastname"`
-	Middlename     string `json:"middlename"`
+	FullName       string `json:"fullName"`
+	FullNameNative string `json:"fullNameNative"`
+	Country        string `json:"country"`
+	City           string `json:"city"`
+	Birthdate      string `json:"birthdate"`
 	Nickname       string `json:"nickname"`
 	IsActive       bool   `json:"isActive"`
 	ActivationLink string `json:"activationLink"`

@@ -2,9 +2,11 @@ input SignUp {
 	email: String!
 	password: String!
 	nickname: String!
-	firstname: String!
-	lastname: String!
-	middlename: String
+	fullName: String!
+	fullNameNative: String!
+	country: String!
+	city: String!
+	birthdate: Timestamp!
 }
 
 input SignIn {

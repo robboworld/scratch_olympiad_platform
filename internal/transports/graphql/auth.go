@@ -6,6 +6,7 @@ package resolvers
 
 import (
 	"context"
+	"net/http"
 	"time"
 
 	"github.com/robboworld/scratch_olympiad_platform/internal/consts"
@@ -16,19 +17,32 @@ import (
 
 // SignUp is the resolver for the SignUp field.
 func (r *mutationResolver) SignUp(ctx context.Context, input models.SignUp) (*models.Response, error) {
-	// middlename не обязательное поле и может быть nil
+	birthdate, err := time.Parse(time.DateOnly, input.Birthdate)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return nil, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": utils.ResponseError{
+					Code:    http.StatusBadRequest,
+					Message: consts.ErrTimeParse,
+				},
+			},
+		}
+	}
 	newUser := models.UserCore{
 		Email:          input.Email,
 		Password:       input.Password,
-		Firstname:      input.Firstname,
-		Lastname:       input.Lastname,
-		Middlename:     utils.StringPointerToString(input.Middlename),
+		FullName:       input.FullName,
+		FullNameNative: input.FullNameNative,
+		Country:        input.Country,
+		City:           input.City,
+		Birthdate:      birthdate,
 		Nickname:       input.Nickname,
 		Role:           models.RoleStudent,
 		IsActive:       false,
 		ActivationLink: utils.GetHashString(time.Now().String()),
 	}
-	err := r.authService.SignUp(newUser)
+	err = r.authService.SignUp(newUser)
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
 		return &models.Response{Ok: false}, &gqlerror.Error{

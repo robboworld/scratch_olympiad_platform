@@ -18,7 +18,8 @@ type UserService interface {
 }
 
 type UserServiceImpl struct {
-	userGateway gateways.UserGateway
+	userGateway    gateways.UserGateway
+	countryGateway gateways.CountryGateway
 }
 
 func (u UserServiceImpl) SetIsActive(id uint, isActive bool) error {
@@ -54,6 +55,17 @@ func (u UserServiceImpl) CreateUser(user models.UserCore, clientRole models.Role
 			Message: consts.ErrShortPassword,
 		}
 	}
+	exist, err = u.countryGateway.DoesExistName(0, user.Country)
+	if err != nil {
+		return models.UserCore{}, err
+	}
+	if !exist {
+		return models.UserCore{}, utils.ResponseError{
+			Code:    http.StatusBadRequest,
+			Message: consts.ErrCountryNotFoundInDB,
+		}
+	}
+
 	passwordHash := utils.HashPassword(user.Password)
 	user.Password = passwordHash
 	return u.userGateway.CreateUser(user)
@@ -108,6 +120,16 @@ func (u UserServiceImpl) UpdateUser(user models.UserCore, clientRole models.Role
 		return models.UserCore{}, utils.ResponseError{
 			Code:    http.StatusForbidden,
 			Message: consts.ErrEmailAlreadyInUse,
+		}
+	}
+	exist, err = u.countryGateway.DoesExistName(0, user.Country)
+	if err != nil {
+		return models.UserCore{}, err
+	}
+	if !exist {
+		return models.UserCore{}, utils.ResponseError{
+			Code:    http.StatusBadRequest,
+			Message: consts.ErrCountryNotFoundInDB,
 		}
 	}
 	return u.userGateway.UpdateUser(user)
