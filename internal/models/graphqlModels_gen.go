@@ -111,6 +111,20 @@ type NewUserResponse struct {
 	Middlename string `json:"middlename"`
 }
 
+type NominationHTTP struct {
+	ID        string `json:"id"`
+	CreatedAt string `json:"createdAt"`
+	UpdatedAt string `json:"updatedAt"`
+	Name      string `json:"name"`
+	MinAge    int    `json:"minAge"`
+	MaxAge    int    `json:"maxAge"`
+}
+
+type NominationHTTPList struct {
+	Nominations []*NominationHTTP `json:"nominations"`
+	CountRows   int               `json:"countRows"`
+}
+
 type ProjectPageHTTP struct {
 	ID               string `json:"id"`
 	CreatedAt        string `json:"createdAt"`

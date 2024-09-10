@@ -1,0 +1,17 @@
+type NominationHttp {
+    id: ID!
+    createdAt: Timestamp!
+    updatedAt: Timestamp!
+    name: String!
+    minAge: Int!
+    maxAge: Int!
+}
+
+type NominationHttpList {
+    nominations: [NominationHttp!]!
+    countRows: Int!
+}
+
+extend type Query {
+    GetAllNominations(page: Int, pageSize: Int): NominationHttpList! @hasRole(roles: [Student])
+}

@@ -77,6 +77,7 @@ func (c *PostgresClient) Migrate() (err error) {
 		&models.ParentRelCore{},
 		&models.SettingsCore{},
 		&models.ApplicationCore{},
+		&models.NominationCore{},
 	)
 	if err != nil {
 		return err

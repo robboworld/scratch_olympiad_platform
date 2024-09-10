@@ -13,6 +13,7 @@ type Services struct {
 	ProjectPageService ProjectPageService
 	SettingsService    SettingsService
 	ApplicationService ApplicationService
+	NominationService  NominationService
 }
 
 func SetupServices(
@@ -21,6 +22,7 @@ func SetupServices(
 	projectPageGateway gateways.ProjectPageGateway,
 	settingsGateway gateways.SettingsGateway,
 	applicationGateway gateways.ApplicationGateway,
+	nominationGateway gateways.NominationGateway,
 ) Services {
 	return Services{
 		UserService: &UserServiceImpl{
@@ -42,6 +44,9 @@ func SetupServices(
 		},
 		ApplicationService: &ApplicationServiceImpl{
 			applicationGateway: applicationGateway,
+		},
+		NominationService: &NominationServiceImpl{
+			nominationGateway: nominationGateway,
 		},
 	}
 }
