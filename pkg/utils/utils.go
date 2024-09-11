@@ -2,6 +2,7 @@ package utils
 
 import (
 	"context"
+	"crypto/rand"
 	"crypto/sha1"
 	"encoding/hex"
 	"github.com/gin-gonic/gin"
@@ -9,6 +10,7 @@ import (
 	"github.com/robboworld/scratch_olympiad_platform/internal/models"
 	"github.com/spf13/viper"
 	"golang.org/x/crypto/bcrypt"
+	"io"
 	"net/http"
 	"net/mail"
 	"net/smtp"
@@ -111,4 +113,18 @@ func GinContextFromContext(ctx context.Context) (*gin.Context, error) {
 		}
 	}
 	return gc, nil
+}
+
+func GetRandomString(length int) (string, error) {
+	const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	b := make([]byte, length)
+	n, err := io.ReadAtLeast(rand.Reader, b, length)
+	if n != length {
+		return "", err
+	}
+
+	for i := 0; i < len(b); i++ {
+		b[i] = letters[int(b[i])%len(letters)]
+	}
+	return string(b), nil
 }

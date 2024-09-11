@@ -6,9 +6,11 @@ import (
 	"github.com/robboworld/scratch_olympiad_platform/internal/db"
 	"github.com/robboworld/scratch_olympiad_platform/internal/models"
 	"github.com/robboworld/scratch_olympiad_platform/pkg/utils"
+	"github.com/spf13/viper"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"net/http"
+	"time"
 )
 
 type UserGateway interface {
@@ -21,6 +23,8 @@ type UserGateway interface {
 	GetAllUsers(offset, limit int, isActive bool, role []models.Role) (users []models.UserCore, countRows uint, err error)
 	DoesExistEmail(id uint, email string) (bool, error)
 	SetIsActive(id uint, isActive bool) error
+	SetVerificationCode(id uint, verificationCode string) error
+	SetPassword(id uint, password string) error
 }
 
 type UserGatewayImpl struct {
@@ -59,7 +63,7 @@ func (u UserGatewayImpl) GetUserByEmail(email string) (user models.UserCore, err
 	return user, nil
 }
 
-func (u UserGatewayImpl) SetIsActive(id uint, isActive bool) (err error) {
+func (u UserGatewayImpl) SetIsActive(id uint, isActive bool) error {
 	var updateStruct map[string]interface{}
 	if isActive {
 		updateStruct = map[string]interface{}{
@@ -71,7 +75,7 @@ func (u UserGatewayImpl) SetIsActive(id uint, isActive bool) (err error) {
 			"is_active": isActive,
 		}
 	}
-	if err = u.postgresClient.Db.First(&models.UserCore{ID: id}).Updates(updateStruct).Error; err != nil {
+	if err := u.postgresClient.Db.First(&models.UserCore{ID: id}).Updates(updateStruct).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return utils.ResponseError{
 				Code:    http.StatusBadRequest,
@@ -191,4 +195,54 @@ func (u UserGatewayImpl) GetAllUsers(
 	}
 	result.Count(&count)
 	return users, uint(count), nil
+}
+
+func (u UserGatewayImpl) SetVerificationCode(id uint, verificationCode string) error {
+	var updateStruct map[string]interface{}
+	if verificationCode == "" {
+		updateStruct = map[string]interface{}{
+			"verification_code":     verificationCode,
+			"verification_code_ttl": nil,
+		}
+	} else {
+		updateStruct = map[string]interface{}{
+			"verification_code":     verificationCode,
+			"verification_code_ttl": time.Now().Add(time.Second * viper.GetDuration("auth_verification_code_ttl")),
+		}
+	}
+
+	if err := u.postgresClient.Db.First(&models.UserCore{ID: id}).Updates(updateStruct).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return utils.ResponseError{
+				Code:    http.StatusBadRequest,
+				Message: consts.ErrNotFoundInDB,
+			}
+		}
+		return utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+		}
+	}
+	return nil
+}
+
+func (u UserGatewayImpl) SetPassword(id uint, password string) error {
+	var updateStruct map[string]interface{}
+	updateStruct = map[string]interface{}{
+		"password": password,
+	}
+
+	if err := u.postgresClient.Db.First(&models.UserCore{ID: id}).Updates(updateStruct).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return utils.ResponseError{
+				Code:    http.StatusBadRequest,
+				Message: consts.ErrNotFoundInDB,
+			}
+		}
+		return utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+		}
+	}
+	return nil
 }

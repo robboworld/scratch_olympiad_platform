@@ -130,22 +130,24 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		ConfirmActivation   func(childComplexity int, activationLink string) int
-		CreateApplication   func(childComplexity int, input models.NewApplication) int
-		CreateParentRel     func(childComplexity int, parentID string, childID string) int
-		CreateProjectPage   func(childComplexity int) int
-		CreateUser          func(childComplexity int, input models.NewUser) int
-		DeleteParentRel     func(childComplexity int, parentID string, childID string) int
-		DeleteProjectPage   func(childComplexity int, id string) int
-		DeleteUser          func(childComplexity int, id string) int
-		RefreshToken        func(childComplexity int, refreshToken string) int
-		SetActivationByLink func(childComplexity int, activationByLink bool) int
-		SetIsBanned         func(childComplexity int, projectPageID string, isBanned bool) int
-		SetUserIsActive     func(childComplexity int, id string, isActive bool) int
-		SignIn              func(childComplexity int, input models.SignIn) int
-		SignUp              func(childComplexity int, input models.SignUp) int
-		UpdateProjectPage   func(childComplexity int, input models.UpdateProjectPage) int
-		UpdateUser          func(childComplexity int, input models.UpdateUser) int
+		ConfirmActivation    func(childComplexity int, activationLink string) int
+		ConfirmResetPassword func(childComplexity int, email string, verificationCode string) int
+		CreateApplication    func(childComplexity int, input models.NewApplication) int
+		CreateParentRel      func(childComplexity int, parentID string, childID string) int
+		CreateProjectPage    func(childComplexity int) int
+		CreateUser           func(childComplexity int, input models.NewUser) int
+		DeleteParentRel      func(childComplexity int, parentID string, childID string) int
+		DeleteProjectPage    func(childComplexity int, id string) int
+		DeleteUser           func(childComplexity int, id string) int
+		RefreshToken         func(childComplexity int, refreshToken string) int
+		RequestResetPassword func(childComplexity int, email string) int
+		SetActivationByLink  func(childComplexity int, activationByLink bool) int
+		SetIsBanned          func(childComplexity int, projectPageID string, isBanned bool) int
+		SetUserIsActive      func(childComplexity int, id string, isActive bool) int
+		SignIn               func(childComplexity int, input models.SignIn) int
+		SignUp               func(childComplexity int, input models.SignUp) int
+		UpdateProjectPage    func(childComplexity int, input models.UpdateProjectPage) int
+		UpdateUser           func(childComplexity int, input models.UpdateUser) int
 	}
 
 	NewUserResponse struct {
@@ -255,6 +257,8 @@ type MutationResolver interface {
 	SignIn(ctx context.Context, input models.SignIn) (*models.SignInResponse, error)
 	RefreshToken(ctx context.Context, refreshToken string) (*models.SignInResponse, error)
 	ConfirmActivation(ctx context.Context, activationLink string) (*models.SignInResponse, error)
+	RequestResetPassword(ctx context.Context, email string) (*models.Response, error)
+	ConfirmResetPassword(ctx context.Context, email string, verificationCode string) (*models.Response, error)
 	CreateParentRel(ctx context.Context, parentID string, childID string) (*models.Response, error)
 	DeleteParentRel(ctx context.Context, parentID string, childID string) (*models.Response, error)
 	CreateProjectPage(ctx context.Context) (*models.ProjectPageHTTP, error)
@@ -699,6 +703,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.ConfirmActivation(childComplexity, args["activationLink"].(string)), true
 
+	case "Mutation.ConfirmResetPassword":
+		if e.complexity.Mutation.ConfirmResetPassword == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_ConfirmResetPassword_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.ConfirmResetPassword(childComplexity, args["email"].(string), args["verificationCode"].(string)), true
+
 	case "Mutation.CreateApplication":
 		if e.complexity.Mutation.CreateApplication == nil {
 			break
@@ -789,6 +805,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.RefreshToken(childComplexity, args["refreshToken"].(string)), true
+
+	case "Mutation.RequestResetPassword":
+		if e.complexity.Mutation.RequestResetPassword == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_RequestResetPassword_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.RequestResetPassword(childComplexity, args["email"].(string)), true
 
 	case "Mutation.SetActivationByLink":
 		if e.complexity.Mutation.SetActivationByLink == nil {
@@ -1533,6 +1561,30 @@ func (ec *executionContext) field_Mutation_ConfirmActivation_args(ctx context.Co
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_ConfirmResetPassword_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["email"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["email"] = arg0
+	var arg1 string
+	if tmp, ok := rawArgs["verificationCode"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("verificationCode"))
+		arg1, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["verificationCode"] = arg1
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_CreateApplication_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -1653,6 +1705,21 @@ func (ec *executionContext) field_Mutation_RefreshToken_args(ctx context.Context
 		}
 	}
 	args["refreshToken"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_RequestResetPassword_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["email"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["email"] = arg0
 	return args, nil
 }
 
@@ -5322,6 +5389,124 @@ func (ec *executionContext) fieldContext_Mutation_ConfirmActivation(ctx context.
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_ConfirmActivation_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_RequestResetPassword(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_RequestResetPassword(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().RequestResetPassword(rctx, fc.Args["email"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.Response)
+	fc.Result = res
+	return ec.marshalNResponse2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_RequestResetPassword(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "ok":
+				return ec.fieldContext_Response_ok(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Response", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_RequestResetPassword_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_ConfirmResetPassword(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_ConfirmResetPassword(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().ConfirmResetPassword(rctx, fc.Args["email"].(string), fc.Args["verificationCode"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.Response)
+	fc.Result = res
+	return ec.marshalNResponse2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_ConfirmResetPassword(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "ok":
+				return ec.fieldContext_Response_ok(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Response", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_ConfirmResetPassword_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -12366,6 +12551,20 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "ConfirmActivation":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_ConfirmActivation(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "RequestResetPassword":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_RequestResetPassword(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "ConfirmResetPassword":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_ConfirmResetPassword(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++

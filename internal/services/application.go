@@ -29,7 +29,7 @@ func (a ApplicationServiceImpl) CreateApplication(application models.Application
 			Message: consts.ErrNominationNotFoundInDB,
 		}
 	}
-	client, err := a.userGateway.GetUserById(application.AuthorID)
+	user, err := a.userGateway.GetUserById(application.AuthorID)
 	if err != nil {
 		return models.ApplicationCore{}, err
 	}
@@ -39,8 +39,8 @@ func (a ApplicationServiceImpl) CreateApplication(application models.Application
 		return models.ApplicationCore{}, err
 	}
 
-	clientAge := uint(utils.CalculateUserAge(client.Birthdate))
-	if clientAge < nomination.MinAge || clientAge > nomination.MaxAge {
+	userAge := uint(utils.CalculateUserAge(user.Birthdate))
+	if userAge < nomination.MinAge || userAge > nomination.MaxAge {
 		return models.ApplicationCore{}, utils.ResponseError{
 			Code:    http.StatusForbidden,
 			Message: consts.ErrDoesNotMatchAgeCategory,

@@ -9,7 +9,9 @@ const (
 	ErrTimeParse                = "string to time error"
 	ErrIncorrectPasswordOrEmail = "incorrect password or email"
 	ErrNotFoundInDB             = "not found"
-	ErrShortPassword            = "please input password, at least 6 symbols"
+	ErrShortPassword            = "please input password, at least 8 symbols"
+	ErrVerificationCodeInvalid  = "verification code is invalid"
+	ErrShortVerificationCode    = "please input verification code, at 6 symbols"
 )
 
 // http code 401
@@ -24,6 +26,11 @@ const (
 	ErrProjectPageIsBanned     = "the projectPage is banned. no access"
 	ErrAccessDenied            = "access denied"
 	ErrDoesNotMatchAgeCategory = "does not match the age category"
+)
+
+// ErrVerificationCodeExpired http code 410
+const (
+	ErrVerificationCodeExpired = "verification code has expired"
 )
 
 // ErrActivationLinkUnavailable have http code 503

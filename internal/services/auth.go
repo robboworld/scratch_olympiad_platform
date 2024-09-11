@@ -27,6 +27,8 @@ type AuthService interface {
 	SignIn(email, password string) (Tokens, error)
 	Refresh(token string) (string, error)
 	ConfirmActivation(link string) (Tokens, error)
+	RequestResetPassword(email string) error
+	ConfirmResetPassword(email, verificationCode string) error
 }
 
 type AuthServiceImpl struct {
@@ -178,6 +180,91 @@ func (a AuthServiceImpl) SignUp(newUser models.UserCore) error {
 		body = "<p>На данный момент активация по ссылке недоступна. Ждите активации от администратора.</p>"
 	}
 	if err = utils.SendEmail(subject, newUser.Email, body); err != nil {
+		return utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+		}
+	}
+	return nil
+}
+
+func (a AuthServiceImpl) RequestResetPassword(email string) error {
+	user, err := a.userGateway.GetUserByEmail(email)
+	if err != nil {
+		return err
+	}
+	if !user.IsActive {
+		return utils.ResponseError{
+			Code:    http.StatusForbidden,
+			Message: consts.ErrUserIsNotActive,
+		}
+	}
+	verificationCode, err := utils.GetRandomString(6)
+	if err != nil {
+		return utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+		}
+	}
+	err = a.userGateway.SetVerificationCode(user.ID, verificationCode)
+	if err != nil {
+		return err
+	}
+
+	subject := "Сброс пароля"
+	body := "<p>Ваш код подтверждения для сброса пароля: " + verificationCode + "</p>"
+	if err = utils.SendEmail(subject, user.Email, body); err != nil {
+		return utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+		}
+	}
+	return nil
+}
+
+func (a AuthServiceImpl) ConfirmResetPassword(email, verificationCode string) error {
+	user, err := a.userGateway.GetUserByEmail(email)
+	if err != nil {
+		return err
+	}
+	if len(verificationCode) != 6 {
+		return utils.ResponseError{
+			Code:    http.StatusBadRequest,
+			Message: consts.ErrShortVerificationCode,
+		}
+	}
+	if verificationCode != user.VerificationCode {
+		return utils.ResponseError{
+			Code:    http.StatusBadRequest,
+			Message: consts.ErrVerificationCodeInvalid,
+		}
+	}
+	if user.VerificationCodeTtl.Before(time.Now()) {
+		return utils.ResponseError{
+			Code:    http.StatusGone,
+			Message: consts.ErrVerificationCodeExpired,
+		}
+	}
+	newPassword, err := utils.GetRandomString(8)
+	if err != nil {
+		return utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+		}
+	}
+	newPasswordHash := utils.HashPassword(newPassword)
+	err = a.userGateway.SetPassword(user.ID, newPasswordHash)
+	if err != nil {
+		return err
+	}
+	err = a.userGateway.SetVerificationCode(user.ID, "")
+	if err != nil {
+		return err
+	}
+
+	subject := "Новый пароль"
+	body := "<p> Ваш новый пароль: " + newPassword + "</p>"
+	if err = utils.SendEmail(subject, user.Email, body); err != nil {
 		return utils.ResponseError{
 			Code:    http.StatusInternalServerError,
 			Message: err.Error(),

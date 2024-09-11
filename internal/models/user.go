@@ -7,20 +7,22 @@ import (
 )
 
 type UserCore struct {
-	ID             uint `gorm:"primaryKey"`
-	CreatedAt      time.Time
-	UpdatedAt      time.Time
-	DeletedAt      gorm.DeletedAt `gorm:"index"`
-	Email          string         `gorm:"not null;"`
-	Password       string         `gorm:"not null;"`
-	Role           Role           `gorm:"not null;"`
-	FullName       string         `gorm:"not null;"`
-	FullNameNative string         `gorm:"not null;"`
-	Country        string         `gorm:"not null;"`
-	City           string         `gorm:"not null;"`
-	Birthdate      time.Time      `gorm:"not null;"`
-	IsActive       bool           `gorm:"not null;default:false;type:boolean;column:is_active"`
-	ActivationLink string
+	ID                  uint `gorm:"primaryKey"`
+	CreatedAt           time.Time
+	UpdatedAt           time.Time
+	DeletedAt           gorm.DeletedAt `gorm:"index"`
+	Email               string         `gorm:"not null;"`
+	Password            string         `gorm:"not null;"`
+	Role                Role           `gorm:"not null;"`
+	FullName            string         `gorm:"not null;"`
+	FullNameNative      string         `gorm:"not null;"`
+	Country             string         `gorm:"not null;"`
+	City                string         `gorm:"not null;"`
+	Birthdate           time.Time      `gorm:"not null;"`
+	IsActive            bool           `gorm:"not null;default:false;type:boolean;column:is_active"`
+	ActivationLink      string
+	VerificationCode    string
+	VerificationCodeTtl time.Time
 }
 
 func (u *UserHTTP) ToCore() UserCore {
