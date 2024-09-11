@@ -140,7 +140,7 @@ func (a AuthServiceImpl) SignUp(newUser models.UserCore) error {
 			Message: consts.ErrEmailAlreadyInUse,
 		}
 	}
-	if len(newUser.Password) < 6 {
+	if len(newUser.Password) < 8 {
 		return utils.ResponseError{
 			Code:    http.StatusBadRequest,
 			Message: consts.ErrShortPassword,
