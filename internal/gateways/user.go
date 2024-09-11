@@ -136,7 +136,6 @@ func (u UserGatewayImpl) UpdateUser(user models.UserCore) (models.UserCore, erro
 			"country":          user.Country,
 			"city":             user.City,
 			"birthdate":        user.Birthdate,
-			"nickname":         user.Nickname,
 		}).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return models.UserCore{}, utils.ResponseError{

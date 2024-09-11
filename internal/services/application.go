@@ -39,11 +39,11 @@ func (a ApplicationServiceImpl) CreateApplication(application models.Application
 		return models.ApplicationCore{}, err
 	}
 
-	clientAge := uint(utils.CalculateAge(client.Birthdate))
+	clientAge := uint(utils.CalculateUserAge(client.Birthdate))
 	if clientAge < nomination.MinAge || clientAge > nomination.MaxAge {
 		return models.ApplicationCore{}, utils.ResponseError{
-			Code:    http.StatusBadRequest,
-			Message: consts.ErrDoesNotMatchAge,
+			Code:    http.StatusForbidden,
+			Message: consts.ErrDoesNotMatchAgeCategory,
 		}
 	}
 

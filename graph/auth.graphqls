@@ -1,7 +1,6 @@
 input SignUp {
 	email: String!
 	password: String!
-	nickname: String!
 	fullName: String!
 	fullNameNative: String!
 	country: String!

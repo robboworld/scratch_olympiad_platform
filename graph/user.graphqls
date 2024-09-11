@@ -10,7 +10,6 @@ type UserHttp {
 	country: String!
 	city: String!
 	birthdate: Timestamp!
-	nickname: String!
 	isActive: Boolean!
 	activationLink: String!
 }
@@ -33,7 +32,6 @@ input NewUser {
 	country: String!
 	city: String!
 	birthdate: Timestamp!
-	nickname: String!
 }
 
 input UpdateUser {
@@ -44,7 +42,6 @@ input UpdateUser {
 	country: String!
 	city: String!
 	birthdate: Timestamp!
-	nickname: String!
 }
 
 type NewUserResponse {

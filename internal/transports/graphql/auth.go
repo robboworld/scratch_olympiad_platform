@@ -37,7 +37,6 @@ func (r *mutationResolver) SignUp(ctx context.Context, input models.SignUp) (*mo
 		Country:        input.Country,
 		City:           input.City,
 		Birthdate:      birthdate,
-		Nickname:       input.Nickname,
 		Role:           models.RoleStudent,
 		IsActive:       false,
 		ActivationLink: utils.GetHashString(time.Now().String()),

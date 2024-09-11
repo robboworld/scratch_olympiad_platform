@@ -84,7 +84,7 @@ func BoolPointerToBool(p *bool) bool {
 	return b
 }
 
-func CalculateAge(birthdate time.Time) int {
+func CalculateUserAge(birthdate time.Time) int {
 	today := time.Now()
 	age := today.Year() - birthdate.Year()
 

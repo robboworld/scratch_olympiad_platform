@@ -19,7 +19,6 @@ type UserCore struct {
 	Country        string         `gorm:"not null;"`
 	City           string         `gorm:"not null;"`
 	Birthdate      time.Time      `gorm:"not null;"`
-	Nickname       string         `gorm:"not null;"`
 	IsActive       bool           `gorm:"not null;default:false;type:boolean;column:is_active"`
 	ActivationLink string
 }
@@ -37,7 +36,6 @@ func (u *UserHTTP) ToCore() UserCore {
 		Country:        u.Country,
 		City:           u.City,
 		Birthdate:      birthDate,
-		Nickname:       u.Nickname,
 		IsActive:       u.IsActive,
 		ActivationLink: u.ActivationLink,
 	}
@@ -53,7 +51,6 @@ func (u *UserHTTP) FromCore(userCore UserCore) {
 	u.Country = userCore.Country
 	u.City = userCore.City
 	u.Birthdate = userCore.Birthdate.Format(time.DateOnly)
-	u.Nickname = userCore.Nickname
 	u.IsActive = userCore.IsActive
 	u.Role = userCore.Role
 }

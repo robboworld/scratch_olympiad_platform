@@ -47,7 +47,6 @@ func (h AuthHandler) SignUp(c *gin.Context) {
 		Country:        input.Country,
 		City:           input.City,
 		Birthdate:      birthdate,
-		Nickname:       input.Nickname,
 		Role:           models.RoleStudent,
 		IsActive:       false,
 		ActivationLink: utils.GetHashString(time.Now().String()),

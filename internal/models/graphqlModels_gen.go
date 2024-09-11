@@ -113,7 +113,6 @@ type NewUser struct {
 	Country        string `json:"country"`
 	City           string `json:"city"`
 	Birthdate      string `json:"birthdate"`
-	Nickname       string `json:"nickname"`
 }
 
 type NewUserResponse struct {
@@ -182,7 +181,6 @@ type SignInResponse struct {
 type SignUp struct {
 	Email          string `json:"email"`
 	Password       string `json:"password"`
-	Nickname       string `json:"nickname"`
 	FullName       string `json:"fullName"`
 	FullNameNative string `json:"fullNameNative"`
 	Country        string `json:"country"`
@@ -206,7 +204,6 @@ type UpdateUser struct {
 	Country        string `json:"country"`
 	City           string `json:"city"`
 	Birthdate      string `json:"birthdate"`
-	Nickname       string `json:"nickname"`
 }
 
 type UserHTTP struct {
@@ -221,7 +218,6 @@ type UserHTTP struct {
 	Country        string `json:"country"`
 	City           string `json:"city"`
 	Birthdate      string `json:"birthdate"`
-	Nickname       string `json:"nickname"`
 	IsActive       bool   `json:"isActive"`
 	ActivationLink string `json:"activationLink"`
 }

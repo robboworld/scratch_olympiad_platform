@@ -2,7 +2,6 @@ package consts
 
 // http code 400
 const (
-	ErrDoesNotMatchAge          = "does not match the age"
 	ErrCountryNotFoundInDB      = "country not found"
 	ErrNominationNotFoundInDB   = "nomination not found"
 	ErrEmailAlreadyInUse        = "email already in use"
@@ -21,9 +20,10 @@ const (
 
 // http code 403
 const (
-	ErrUserIsNotActive     = "user is not active. please check your email"
-	ErrProjectPageIsBanned = "the projectPage is banned. no access"
-	ErrAccessDenied        = "access denied"
+	ErrUserIsNotActive         = "user is not active. please check your email"
+	ErrProjectPageIsBanned     = "the projectPage is banned. no access"
+	ErrAccessDenied            = "access denied"
+	ErrDoesNotMatchAgeCategory = "does not match the age category"
 )
 
 // ErrActivationLinkUnavailable have http code 503
