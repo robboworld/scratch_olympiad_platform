@@ -2,16 +2,15 @@ package consts
 
 // http code 400
 const (
-	ErrCountryNotFoundInDB      = "country not found"
-	ErrNominationNotFoundInDB   = "nomination not found"
-	ErrEmailAlreadyInUse        = "email already in use"
-	ErrAtoi                     = "string to int error"
-	ErrTimeParse                = "string to time error"
-	ErrIncorrectPasswordOrEmail = "incorrect password or email"
-	ErrNotFoundInDB             = "not found"
-	ErrShortPassword            = "please input password, at least 8 symbols"
-	ErrVerificationCodeInvalid  = "verification code is invalid"
-	ErrShortVerificationCode    = "please input verification code, at 6 symbols"
+	ErrCountryNotFoundInDB       = "country not found"
+	ErrNominationNotFoundInDB    = "nomination not found"
+	ErrEmailAlreadyInUse         = "email already in use"
+	ErrAtoi                      = "string to int error"
+	ErrTimeParse                 = "string to time error"
+	ErrIncorrectPasswordOrEmail  = "incorrect password or email"
+	ErrNotFoundInDB              = "not found"
+	ErrShortPassword             = "please input password, at least 8 symbols"
+	ErrPasswordResetTokenInvalid = "password reset token invalid"
 )
 
 // http code 401
@@ -28,9 +27,9 @@ const (
 	ErrDoesNotMatchAgeCategory = "does not match the age category"
 )
 
-// ErrVerificationCodeExpired http code 410
+// ErrPasswordResetTokenExpired http code 410
 const (
-	ErrVerificationCodeExpired = "verification code has expired"
+	ErrPasswordResetTokenExpired = "password reset token expired"
 )
 
 // ErrActivationLinkUnavailable have http code 503

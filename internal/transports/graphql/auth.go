@@ -103,9 +103,9 @@ func (r *mutationResolver) ConfirmActivation(ctx context.Context, activationLink
 	}, nil
 }
 
-// RequestResetPassword is the resolver for the RequestResetPassword field.
-func (r *mutationResolver) RequestResetPassword(ctx context.Context, email string) (*models.Response, error) {
-	err := r.authService.RequestResetPassword(email)
+// ForgotPassword is the resolver for the ForgotPassword field.
+func (r *mutationResolver) ForgotPassword(ctx context.Context, email string) (*models.Response, error) {
+	err := r.authService.ForgotPassword(email)
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
 		return &models.Response{Ok: false}, &gqlerror.Error{
@@ -117,9 +117,9 @@ func (r *mutationResolver) RequestResetPassword(ctx context.Context, email strin
 	return &models.Response{Ok: true}, nil
 }
 
-// ConfirmResetPassword is the resolver for the ConfirmResetPassword field.
-func (r *mutationResolver) ConfirmResetPassword(ctx context.Context, email string, verificationCode string) (*models.Response, error) {
-	err := r.authService.ConfirmResetPassword(email, verificationCode)
+// ResetPassword is the resolver for the ResetPassword field.
+func (r *mutationResolver) ResetPassword(ctx context.Context, resetToken string) (*models.Response, error) {
+	err := r.authService.ResetPassword(resetToken)
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
 		return &models.Response{Ok: false}, &gqlerror.Error{

@@ -27,8 +27,8 @@ type AuthService interface {
 	SignIn(email, password string) (Tokens, error)
 	Refresh(token string) (string, error)
 	ConfirmActivation(link string) (Tokens, error)
-	RequestResetPassword(email string) error
-	ConfirmResetPassword(email, verificationCode string) error
+	ForgotPassword(email string) error
+	ResetPassword(resetToken string) error
 }
 
 type AuthServiceImpl struct {
@@ -188,7 +188,7 @@ func (a AuthServiceImpl) SignUp(newUser models.UserCore) error {
 	return nil
 }
 
-func (a AuthServiceImpl) RequestResetPassword(email string) error {
+func (a AuthServiceImpl) ForgotPassword(email string) error {
 	user, err := a.userGateway.GetUserByEmail(email)
 	if err != nil {
 		return err
@@ -199,20 +199,16 @@ func (a AuthServiceImpl) RequestResetPassword(email string) error {
 			Message: consts.ErrUserIsNotActive,
 		}
 	}
-	verificationCode, err := utils.GetRandomString(6)
-	if err != nil {
-		return utils.ResponseError{
-			Code:    http.StatusInternalServerError,
-			Message: err.Error(),
-		}
-	}
-	err = a.userGateway.SetVerificationCode(user.ID, verificationCode)
+
+	resetToken := utils.GetHashString(time.Now().String())
+	resetTokenAt := time.Now().Add(time.Minute * viper.GetDuration("auth_reset_token_at"))
+	err = a.userGateway.SetPasswordResetToken(user.ID, resetToken, resetTokenAt)
 	if err != nil {
 		return err
 	}
 
-	subject := "Сброс пароля"
-	body := "<p>Ваш код подтверждения для сброса пароля: " + verificationCode + "</p>"
+	subject := "Ваша ссылка на сброс пароля (действует " + viper.GetString("auth_reset_token_at") + " минут)"
+	body := "<p>Ссылка для сброса пароля: " + viper.GetString("reset_password_path") + resetToken + "</p>"
 	if err = utils.SendEmail(subject, user.Email, body); err != nil {
 		return utils.ResponseError{
 			Code:    http.StatusInternalServerError,
@@ -222,27 +218,18 @@ func (a AuthServiceImpl) RequestResetPassword(email string) error {
 	return nil
 }
 
-func (a AuthServiceImpl) ConfirmResetPassword(email, verificationCode string) error {
-	user, err := a.userGateway.GetUserByEmail(email)
+func (a AuthServiceImpl) ResetPassword(resetToken string) error {
+	user, err := a.userGateway.GetUserByPasswordResetToken(resetToken)
 	if err != nil {
-		return err
-	}
-	if len(verificationCode) != 6 {
 		return utils.ResponseError{
 			Code:    http.StatusBadRequest,
-			Message: consts.ErrShortVerificationCode,
+			Message: consts.ErrPasswordResetTokenInvalid,
 		}
 	}
-	if verificationCode != user.VerificationCode {
-		return utils.ResponseError{
-			Code:    http.StatusBadRequest,
-			Message: consts.ErrVerificationCodeInvalid,
-		}
-	}
-	if user.VerificationCodeTtl.Before(time.Now()) {
+	if user.PasswordResetTokenAt.Before(time.Now()) {
 		return utils.ResponseError{
 			Code:    http.StatusGone,
-			Message: consts.ErrVerificationCodeExpired,
+			Message: consts.ErrPasswordResetTokenExpired,
 		}
 	}
 	newPassword, err := utils.GetRandomString(8)
@@ -257,13 +244,13 @@ func (a AuthServiceImpl) ConfirmResetPassword(email, verificationCode string) er
 	if err != nil {
 		return err
 	}
-	err = a.userGateway.SetVerificationCode(user.ID, "")
+	err = a.userGateway.SetPasswordResetToken(user.ID, "", time.Time{})
 	if err != nil {
 		return err
 	}
 
-	subject := "Новый пароль"
-	body := "<p> Ваш новый пароль: " + newPassword + "</p>"
+	subject := "Ваш новый пароль"
+	body := "<p>Новый пароль: " + newPassword + "</p>"
 	if err = utils.SendEmail(subject, user.Email, body); err != nil {
 		return utils.ResponseError{
 			Code:    http.StatusInternalServerError,

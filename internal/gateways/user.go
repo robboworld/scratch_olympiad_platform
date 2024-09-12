@@ -6,7 +6,6 @@ import (
 	"github.com/robboworld/scratch_olympiad_platform/internal/db"
 	"github.com/robboworld/scratch_olympiad_platform/internal/models"
 	"github.com/robboworld/scratch_olympiad_platform/pkg/utils"
-	"github.com/spf13/viper"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"net/http"
@@ -21,9 +20,10 @@ type UserGateway interface {
 	GetUserByActivationLink(link string) (user models.UserCore, err error)
 	GetUserByEmail(email string) (user models.UserCore, err error)
 	GetAllUsers(offset, limit int, isActive bool, role []models.Role) (users []models.UserCore, countRows uint, err error)
+	GetUserByPasswordResetToken(resetToken string) (user models.UserCore, err error)
 	DoesExistEmail(id uint, email string) (bool, error)
 	SetIsActive(id uint, isActive bool) error
-	SetVerificationCode(id uint, verificationCode string) error
+	SetPasswordResetToken(id uint, resetToken string, resetTokenAt time.Time) error
 	SetPassword(id uint, password string) error
 }
 
@@ -197,20 +197,11 @@ func (u UserGatewayImpl) GetAllUsers(
 	return users, uint(count), nil
 }
 
-func (u UserGatewayImpl) SetVerificationCode(id uint, verificationCode string) error {
-	var updateStruct map[string]interface{}
-	if verificationCode == "" {
-		updateStruct = map[string]interface{}{
-			"verification_code":     verificationCode,
-			"verification_code_ttl": nil,
-		}
-	} else {
-		updateStruct = map[string]interface{}{
-			"verification_code":     verificationCode,
-			"verification_code_ttl": time.Now().Add(time.Second * viper.GetDuration("auth_verification_code_ttl")),
-		}
+func (u UserGatewayImpl) SetPasswordResetToken(id uint, resetToken string, resetTokenAt time.Time) error {
+	updateStruct := map[string]interface{}{
+		"password_reset_token":    resetToken,
+		"password_reset_token_at": resetTokenAt,
 	}
-
 	if err := u.postgresClient.Db.First(&models.UserCore{ID: id}).Updates(updateStruct).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return utils.ResponseError{
@@ -245,4 +236,20 @@ func (u UserGatewayImpl) SetPassword(id uint, password string) error {
 		}
 	}
 	return nil
+}
+
+func (u UserGatewayImpl) GetUserByPasswordResetToken(resetToken string) (user models.UserCore, err error) {
+	if err = u.postgresClient.Db.Where("password_reset_token = ?", resetToken).Take(&user).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return user, utils.ResponseError{
+				Code:    http.StatusBadRequest,
+				Message: consts.ErrNotFoundInDB,
+			}
+		}
+		return user, utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+		}
+	}
+	return user, nil
 }
