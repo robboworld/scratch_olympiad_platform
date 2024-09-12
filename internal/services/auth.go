@@ -221,8 +221,8 @@ func (a AuthServiceImpl) ForgotPassword(email string) error {
 }
 
 func (a AuthServiceImpl) ResetPassword(resetToken string) error {
-	hashedResetToken := utils.GetHashString(resetToken)
-	user, err := a.userGateway.GetUserByPasswordResetToken(hashedResetToken)
+	resetTokenHash := utils.GetHashString(resetToken)
+	user, err := a.userGateway.GetUserByPasswordResetToken(resetTokenHash)
 	if err != nil {
 		return utils.ResponseError{
 			Code:    http.StatusBadRequest,
