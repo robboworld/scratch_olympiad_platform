@@ -5053,7 +5053,7 @@ func (ec *executionContext) _Mutation_CreateApplication(ctx context.Context, fie
 			return ec.resolvers.Mutation().CreateApplication(rctx, fc.Args["input"].(models.NewApplication))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"Student"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"Student", "SuperAdmin"})
 			if err != nil {
 				return nil, err
 			}
@@ -7832,7 +7832,7 @@ func (ec *executionContext) _Query_GetAllCountries(ctx context.Context, field gr
 			return ec.resolvers.Query().GetAllCountries(rctx, fc.Args["page"].(*int), fc.Args["pageSize"].(*int))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"Student"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"Student", "SuperAdmin"})
 			if err != nil {
 				return nil, err
 			}
@@ -8112,7 +8112,7 @@ func (ec *executionContext) _Query_GetAllNominations(ctx context.Context, field 
 			return ec.resolvers.Query().GetAllNominations(rctx, fc.Args["page"].(*int), fc.Args["pageSize"].(*int))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"Student"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"Student", "SuperAdmin"})
 			if err != nil {
 				return nil, err
 			}

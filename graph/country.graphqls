@@ -11,5 +11,5 @@ type CountryHttpList {
 }
 
 extend type Query {
-    GetAllCountries(page: Int, pageSize: Int): CountryHttpList! @hasRole(roles: [Student])
+    GetAllCountries(page: Int, pageSize: Int): CountryHttpList! @hasRole(roles: [Student, SuperAdmin])
 }

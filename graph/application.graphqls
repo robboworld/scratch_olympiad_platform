@@ -29,5 +29,5 @@ input NewApplication {
 }
 
 extend type Mutation {
-    CreateApplication(input: NewApplication!): ApplicationHttp! @hasRole(roles: [Student])
+    CreateApplication(input: NewApplication!): ApplicationHttp! @hasRole(roles: [Student, SuperAdmin])
 }

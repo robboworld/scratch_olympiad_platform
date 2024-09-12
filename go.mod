@@ -9,6 +9,7 @@ require (
 	github.com/jordan-wright/email v4.0.1-0.20210109023952-943e75fe5223+incompatible
 	github.com/rs/cors v1.9.0
 	github.com/spf13/viper v1.16.0
+	github.com/thanhpk/randstr v1.0.6
 	github.com/vektah/gqlparser/v2 v2.5.3
 	go.uber.org/fx v1.20.0
 	golang.org/x/crypto v0.23.0

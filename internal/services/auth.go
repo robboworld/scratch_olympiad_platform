@@ -7,6 +7,7 @@ import (
 	"github.com/robboworld/scratch_olympiad_platform/internal/models"
 	"github.com/robboworld/scratch_olympiad_platform/pkg/utils"
 	"github.com/spf13/viper"
+	"github.com/thanhpk/randstr"
 	"net/http"
 	"time"
 )
@@ -232,13 +233,7 @@ func (a AuthServiceImpl) ResetPassword(resetToken string) error {
 			Message: consts.ErrPasswordResetTokenExpired,
 		}
 	}
-	newPassword, err := utils.GetRandomString(8)
-	if err != nil {
-		return utils.ResponseError{
-			Code:    http.StatusInternalServerError,
-			Message: err.Error(),
-		}
-	}
+	newPassword := randstr.String(8)
 	newPasswordHash := utils.HashPassword(newPassword)
 	err = a.userGateway.SetPassword(user.ID, newPasswordHash)
 	if err != nil {

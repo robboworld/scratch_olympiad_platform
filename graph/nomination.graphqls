@@ -13,5 +13,5 @@ type NominationHttpList {
 }
 
 extend type Query {
-    GetAllNominations(page: Int, pageSize: Int): NominationHttpList! @hasRole(roles: [Student])
+    GetAllNominations(page: Int, pageSize: Int): NominationHttpList! @hasRole(roles: [Student, SuperAdmin])
 }
