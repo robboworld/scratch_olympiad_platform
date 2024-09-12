@@ -28,5 +28,5 @@ extend type Mutation  {
 	RefreshToken(refreshToken: String!): SignInResponse!
 	ConfirmActivation(activationLink: String!): SignInResponse!
 	ForgotPassword(email: String!): Response!
-	ResetPassword(resetToken: String!): Response!
+	ResetPassword(resetLink: String!): Response!
 }

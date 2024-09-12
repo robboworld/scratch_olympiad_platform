@@ -118,8 +118,8 @@ func (r *mutationResolver) ForgotPassword(ctx context.Context, email string) (*m
 }
 
 // ResetPassword is the resolver for the ResetPassword field.
-func (r *mutationResolver) ResetPassword(ctx context.Context, resetToken string) (*models.Response, error) {
-	err := r.authService.ResetPassword(resetToken)
+func (r *mutationResolver) ResetPassword(ctx context.Context, resetLink string) (*models.Response, error) {
+	err := r.authService.ResetPassword(resetLink)
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
 		return &models.Response{Ok: false}, &gqlerror.Error{

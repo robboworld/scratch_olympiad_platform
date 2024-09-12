@@ -29,7 +29,7 @@ type AuthService interface {
 	Refresh(token string) (string, error)
 	ConfirmActivation(link string) (Tokens, error)
 	ForgotPassword(email string) error
-	ResetPassword(resetToken string) error
+	ResetPassword(resetLink string) error
 }
 
 type AuthServiceImpl struct {
@@ -201,16 +201,16 @@ func (a AuthServiceImpl) ForgotPassword(email string) error {
 		}
 	}
 
-	resetToken := randstr.String(20)
-	hashedResetToken := utils.GetHashString(resetToken)
-	resetTokenAt := time.Now().Add(time.Minute * viper.GetDuration("auth_reset_token_at"))
-	err = a.userGateway.SetPasswordResetToken(user.ID, hashedResetToken, resetTokenAt)
+	resetPasswordLink := randstr.String(20)
+	resetPasswordLinkHash := utils.GetHashString(resetPasswordLink)
+	resetPasswordLinkAt := time.Now().Add(time.Minute * viper.GetDuration("auth_password_reset_link_at"))
+	err = a.userGateway.SetPasswordResetLink(user.ID, resetPasswordLinkHash, resetPasswordLinkAt)
 	if err != nil {
 		return err
 	}
 
-	subject := "Ваша ссылка на сброс пароля (действует " + viper.GetString("auth_reset_token_at") + " минут)"
-	body := "<p>Ссылка для сброса пароля: " + viper.GetString("reset_password_path") + resetToken + "</p>"
+	subject := "Ваша ссылка на сброс пароля (действует " + viper.GetString("auth_password_reset_link_at") + " минут)"
+	body := "<p>Ссылка для сброса пароля: " + viper.GetString("reset_password_path") + resetPasswordLink + "</p>"
 	if err = utils.SendEmail(subject, user.Email, body); err != nil {
 		return utils.ResponseError{
 			Code:    http.StatusInternalServerError,
@@ -220,19 +220,19 @@ func (a AuthServiceImpl) ForgotPassword(email string) error {
 	return nil
 }
 
-func (a AuthServiceImpl) ResetPassword(resetToken string) error {
-	resetTokenHash := utils.GetHashString(resetToken)
-	user, err := a.userGateway.GetUserByPasswordResetToken(resetTokenHash)
+func (a AuthServiceImpl) ResetPassword(resetLink string) error {
+	resetLinkHash := utils.GetHashString(resetLink)
+	user, err := a.userGateway.GetUserByPasswordResetLink(resetLinkHash)
 	if err != nil {
 		return utils.ResponseError{
 			Code:    http.StatusBadRequest,
-			Message: consts.ErrPasswordResetTokenInvalid,
+			Message: consts.ErrPasswordResetLinkInvalid,
 		}
 	}
-	if user.PasswordResetTokenAt.Before(time.Now()) {
+	if user.PasswordResetLinkAt.Before(time.Now()) {
 		return utils.ResponseError{
 			Code:    http.StatusGone,
-			Message: consts.ErrPasswordResetTokenExpired,
+			Message: consts.ErrPasswordResetLinkExpired,
 		}
 	}
 	newPassword := randstr.String(8)
@@ -241,7 +241,7 @@ func (a AuthServiceImpl) ResetPassword(resetToken string) error {
 	if err != nil {
 		return err
 	}
-	err = a.userGateway.SetPasswordResetToken(user.ID, "", time.Time{})
+	err = a.userGateway.SetPasswordResetLink(user.ID, "", time.Time{})
 	if err != nil {
 		return err
 	}

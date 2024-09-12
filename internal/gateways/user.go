@@ -20,10 +20,10 @@ type UserGateway interface {
 	GetUserByActivationLink(link string) (user models.UserCore, err error)
 	GetUserByEmail(email string) (user models.UserCore, err error)
 	GetAllUsers(offset, limit int, isActive bool, role []models.Role) (users []models.UserCore, countRows uint, err error)
-	GetUserByPasswordResetToken(resetToken string) (user models.UserCore, err error)
+	GetUserByPasswordResetLink(resetLink string) (user models.UserCore, err error)
 	DoesExistEmail(id uint, email string) (bool, error)
 	SetIsActive(id uint, isActive bool) error
-	SetPasswordResetToken(id uint, resetToken string, resetTokenAt time.Time) error
+	SetPasswordResetLink(id uint, resetLink string, resetLinkAt time.Time) error
 	SetPassword(id uint, password string) error
 }
 
@@ -197,10 +197,10 @@ func (u UserGatewayImpl) GetAllUsers(
 	return users, uint(count), nil
 }
 
-func (u UserGatewayImpl) SetPasswordResetToken(id uint, resetToken string, resetTokenAt time.Time) error {
+func (u UserGatewayImpl) SetPasswordResetLink(id uint, resetLink string, resetLinkAt time.Time) error {
 	updateStruct := map[string]interface{}{
-		"password_reset_token":    resetToken,
-		"password_reset_token_at": resetTokenAt,
+		"password_reset_link":    resetLink,
+		"password_reset_link_at": resetLinkAt,
 	}
 	if err := u.postgresClient.Db.First(&models.UserCore{ID: id}).Updates(updateStruct).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -238,8 +238,8 @@ func (u UserGatewayImpl) SetPassword(id uint, password string) error {
 	return nil
 }
 
-func (u UserGatewayImpl) GetUserByPasswordResetToken(resetToken string) (user models.UserCore, err error) {
-	if err = u.postgresClient.Db.Where("password_reset_token = ?", resetToken).Take(&user).Error; err != nil {
+func (u UserGatewayImpl) GetUserByPasswordResetLink(resetLink string) (user models.UserCore, err error) {
+	if err = u.postgresClient.Db.Where("password_reset_link = ?", resetLink).Take(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return user, utils.ResponseError{
 				Code:    http.StatusBadRequest,

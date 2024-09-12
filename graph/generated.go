@@ -140,7 +140,7 @@ type ComplexityRoot struct {
 		DeleteUser          func(childComplexity int, id string) int
 		ForgotPassword      func(childComplexity int, email string) int
 		RefreshToken        func(childComplexity int, refreshToken string) int
-		ResetPassword       func(childComplexity int, resetToken string) int
+		ResetPassword       func(childComplexity int, resetLink string) int
 		SetActivationByLink func(childComplexity int, activationByLink bool) int
 		SetIsBanned         func(childComplexity int, projectPageID string, isBanned bool) int
 		SetUserIsActive     func(childComplexity int, id string, isActive bool) int
@@ -258,7 +258,7 @@ type MutationResolver interface {
 	RefreshToken(ctx context.Context, refreshToken string) (*models.SignInResponse, error)
 	ConfirmActivation(ctx context.Context, activationLink string) (*models.SignInResponse, error)
 	ForgotPassword(ctx context.Context, email string) (*models.Response, error)
-	ResetPassword(ctx context.Context, resetToken string) (*models.Response, error)
+	ResetPassword(ctx context.Context, resetLink string) (*models.Response, error)
 	CreateParentRel(ctx context.Context, parentID string, childID string) (*models.Response, error)
 	DeleteParentRel(ctx context.Context, parentID string, childID string) (*models.Response, error)
 	CreateProjectPage(ctx context.Context) (*models.ProjectPageHTTP, error)
@@ -816,7 +816,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.ResetPassword(childComplexity, args["resetToken"].(string)), true
+		return e.complexity.Mutation.ResetPassword(childComplexity, args["resetLink"].(string)), true
 
 	case "Mutation.SetActivationByLink":
 		if e.complexity.Mutation.SetActivationByLink == nil {
@@ -1703,14 +1703,14 @@ func (ec *executionContext) field_Mutation_ResetPassword_args(ctx context.Contex
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
-	if tmp, ok := rawArgs["resetToken"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("resetToken"))
+	if tmp, ok := rawArgs["resetLink"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("resetLink"))
 		arg0, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["resetToken"] = arg0
+	args["resetLink"] = arg0
 	return args, nil
 }
 
@@ -5459,7 +5459,7 @@ func (ec *executionContext) _Mutation_ResetPassword(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().ResetPassword(rctx, fc.Args["resetToken"].(string))
+		return ec.resolvers.Mutation().ResetPassword(rctx, fc.Args["resetLink"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
