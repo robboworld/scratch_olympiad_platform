@@ -201,9 +201,10 @@ func (a AuthServiceImpl) ForgotPassword(email string) error {
 		}
 	}
 
-	resetToken := utils.GetHashString(time.Now().String())
+	resetToken := randstr.String(20)
+	hashedResetToken := utils.GetHashString(resetToken)
 	resetTokenAt := time.Now().Add(time.Minute * viper.GetDuration("auth_reset_token_at"))
-	err = a.userGateway.SetPasswordResetToken(user.ID, resetToken, resetTokenAt)
+	err = a.userGateway.SetPasswordResetToken(user.ID, hashedResetToken, resetTokenAt)
 	if err != nil {
 		return err
 	}
@@ -220,7 +221,8 @@ func (a AuthServiceImpl) ForgotPassword(email string) error {
 }
 
 func (a AuthServiceImpl) ResetPassword(resetToken string) error {
-	user, err := a.userGateway.GetUserByPasswordResetToken(resetToken)
+	hashedResetToken := utils.GetHashString(resetToken)
+	user, err := a.userGateway.GetUserByPasswordResetToken(hashedResetToken)
 	if err != nil {
 		return utils.ResponseError{
 			Code:    http.StatusBadRequest,
