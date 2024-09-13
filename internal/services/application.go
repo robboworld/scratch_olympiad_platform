@@ -47,5 +47,9 @@ func (a ApplicationServiceImpl) CreateApplication(application models.Application
 		}
 	}
 
+	application.Author = user
+	applicationPayload := models.ApplicationPayloadHTTP{}
+	applicationPayload.FromCore(application)
+
 	return a.applicationGateway.CreateApplication(application)
 }

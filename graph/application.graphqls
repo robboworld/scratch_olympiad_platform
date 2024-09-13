@@ -15,6 +15,20 @@ type ApplicationHttp {
     note: String!
 }
 
+type ApplicationPayloadHttp {
+    author: UserHttp!
+    nomination: String!
+    algorithmicTaskLink: String!
+    algorithmicTaskFile: String!
+    creativeTaskLink: String!
+    creativeTaskFile: String!
+    engineeringTaskFile: String!
+    engineeringTaskCloudLink: String!
+    engineeringTaskVideo: String!
+    engineeringTaskVideoCloudLink: String!
+    note: String!
+}
+
 input NewApplication {
     nomination: String!
     algorithmicTaskLink: String

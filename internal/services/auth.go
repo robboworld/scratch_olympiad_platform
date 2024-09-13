@@ -203,8 +203,7 @@ func (a AuthServiceImpl) ForgotPassword(email string) error {
 
 	resetPasswordLink := randstr.String(20)
 	resetPasswordLinkHash := utils.GetHashString(resetPasswordLink)
-	resetPasswordLinkAt := time.Now().Add(time.Minute * viper.GetDuration("auth_password_reset_link_at"))
-	err = a.userGateway.SetPasswordResetLink(user.ID, resetPasswordLinkHash, resetPasswordLinkAt)
+	err = a.userGateway.SetPasswordResetLink(user.ID, resetPasswordLinkHash)
 	if err != nil {
 		return err
 	}
@@ -241,7 +240,7 @@ func (a AuthServiceImpl) ResetPassword(resetLink string) error {
 	if err != nil {
 		return err
 	}
-	err = a.userGateway.SetPasswordResetLink(user.ID, "", time.Time{})
+	err = a.userGateway.SetPasswordResetLink(user.ID, "")
 	if err != nil {
 		return err
 	}

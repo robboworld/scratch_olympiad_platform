@@ -12,7 +12,7 @@ type ApplicationCore struct {
 	UpdatedAt time.Time
 	DeletedAt gorm.DeletedAt `gorm:"index"`
 	AuthorID  uint
-	User      UserCore `gorm:"foreignKey:AuthorID"`
+	Author    UserCore `gorm:"foreignKey:AuthorID"`
 
 	Nomination                    string `gorm:"not null"`
 	AlgorithmicTaskLink           string `gorm:"size:255"`
@@ -31,6 +31,23 @@ func (a *ApplicationHTTP) FromCore(application ApplicationCore) {
 	a.CreatedAt = application.CreatedAt.Format(time.DateTime)
 	a.UpdatedAt = application.UpdatedAt.Format(time.DateTime)
 	a.AuthorID = strconv.Itoa(int(application.AuthorID))
+	a.Nomination = application.Nomination
+	a.AlgorithmicTaskLink = application.AlgorithmicTaskLink
+	a.AlgorithmicTaskFile = application.AlgorithmicTaskFile
+	a.CreativeTaskLink = application.CreativeTaskLink
+	a.CreativeTaskFile = application.CreativeTaskFile
+	a.EngineeringTaskFile = application.EngineeringTaskFile
+	a.EngineeringTaskCloudLink = application.EngineeringTaskCloudLink
+	a.EngineeringTaskVideo = application.EngineeringTaskVideo
+	a.EngineeringTaskVideoCloudLink = application.EngineeringTaskVideoCloudLink
+	a.Note = application.Note
+}
+
+func (a *ApplicationPayloadHTTP) FromCore(application ApplicationCore) {
+	authorHttp := &UserHTTP{}
+	authorHttp.FromCore(application.Author)
+
+	a.Author = authorHttp
 	a.Nomination = application.Nomination
 	a.AlgorithmicTaskLink = application.AlgorithmicTaskLink
 	a.AlgorithmicTaskFile = application.AlgorithmicTaskFile

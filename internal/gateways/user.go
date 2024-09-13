@@ -6,6 +6,7 @@ import (
 	"github.com/robboworld/scratch_olympiad_platform/internal/db"
 	"github.com/robboworld/scratch_olympiad_platform/internal/models"
 	"github.com/robboworld/scratch_olympiad_platform/pkg/utils"
+	"github.com/spf13/viper"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"net/http"
@@ -23,7 +24,7 @@ type UserGateway interface {
 	GetUserByPasswordResetLink(resetLink string) (user models.UserCore, err error)
 	DoesExistEmail(id uint, email string) (bool, error)
 	SetIsActive(id uint, isActive bool) error
-	SetPasswordResetLink(id uint, resetLink string, resetLinkAt time.Time) error
+	SetPasswordResetLink(id uint, resetLink string) error
 	SetPassword(id uint, password string) error
 }
 
@@ -197,10 +198,18 @@ func (u UserGatewayImpl) GetAllUsers(
 	return users, uint(count), nil
 }
 
-func (u UserGatewayImpl) SetPasswordResetLink(id uint, resetLink string, resetLinkAt time.Time) error {
-	updateStruct := map[string]interface{}{
-		"password_reset_link":    resetLink,
-		"password_reset_link_at": resetLinkAt,
+func (u UserGatewayImpl) SetPasswordResetLink(id uint, resetLink string) error {
+	var updateStruct map[string]interface{}
+	if resetLink == "" {
+		updateStruct = map[string]interface{}{
+			"password_reset_link":    "",
+			"password_reset_link_at": time.Time{},
+		}
+	} else {
+		updateStruct = map[string]interface{}{
+			"password_reset_link":    resetLink,
+			"password_reset_link_at": time.Now().Add(time.Minute * viper.GetDuration("auth_password_reset_link_at")),
+		}
 	}
 	if err := u.postgresClient.Db.First(&models.UserCore{ID: id}).Updates(updateStruct).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
