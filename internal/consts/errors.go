@@ -11,6 +11,7 @@ const (
 	ErrNotFoundInDB             = "not found"
 	ErrShortPassword            = "please input password, at least 8 symbols"
 	ErrPasswordResetLinkInvalid = "password reset link invalid"
+	ErrPasswordResetLinkExpired = "password reset link expired"
 )
 
 // http code 401
@@ -25,11 +26,6 @@ const (
 	ErrProjectPageIsBanned     = "the projectPage is banned. no access"
 	ErrAccessDenied            = "access denied"
 	ErrDoesNotMatchAgeCategory = "does not match the age category"
-)
-
-// ErrPasswordResetLinkExpired http code 410
-const (
-	ErrPasswordResetLinkExpired = "password reset link expired"
 )
 
 // ErrActivationLinkUnavailable have http code 503

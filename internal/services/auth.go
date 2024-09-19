@@ -49,7 +49,8 @@ func (a AuthServiceImpl) ConfirmActivation(link string) (Tokens, error) {
 			Message: consts.ErrActivationLinkUnavailable,
 		}
 	}
-	user, err := a.userGateway.GetUserByActivationLink(link)
+	activationLinkHash := utils.GetHashString(link)
+	user, err := a.userGateway.GetUserByActivationLink(activationLinkHash)
 	if err != nil {
 		return Tokens{Access: "", Refresh: ""}, err
 	}
@@ -159,9 +160,11 @@ func (a AuthServiceImpl) SignUp(newUser models.UserCore) error {
 			Message: consts.ErrCountryNotFoundInDB,
 		}
 	}
-
+	activationLink := randstr.String(20)
+	activationLinkHash := utils.GetHashString(activationLink)
 	passwordHash := utils.HashPassword(newUser.Password)
 	newUser.Password = passwordHash
+	newUser.ActivationLink = activationLinkHash
 	newUser, err = a.userGateway.CreateUser(newUser)
 	if err != nil {
 		return err
@@ -175,7 +178,7 @@ func (a AuthServiceImpl) SignUp(newUser models.UserCore) error {
 	if activationByLink {
 		subject = "Ваша ссылка активации аккаунта"
 		body = "<p>Перейдите по ссылке " + viper.GetString("activation_path") +
-			newUser.ActivationLink + " для активации вашего аккаунта.</p>"
+			activationLink + " для активации вашего аккаунта.</p>"
 	} else {
 		subject = "Активация аккаунта"
 		body = "<p>На данный момент активация по ссылке недоступна. Ждите активации от администратора.</p>"

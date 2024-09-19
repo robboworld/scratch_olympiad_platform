@@ -80,5 +80,5 @@ func (h AvatarHandler) UploadAvatar(c *gin.Context) {
 	}
 
 	c.Header("Content-Type", "application/json")
-	c.JSON(http.StatusOK, gin.H{"filename": strings.Replace(tempFile.Name(), "\\", "/", 99)})
+	c.JSON(http.StatusOK, gin.H{"filename": strings.Replace(tempFile.Name(), "\\", "/", -1)})
 }

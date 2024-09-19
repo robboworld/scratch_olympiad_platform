@@ -6,7 +6,6 @@ import (
 	"github.com/robboworld/scratch_olympiad_platform/internal/models"
 	"github.com/robboworld/scratch_olympiad_platform/internal/services"
 	"github.com/robboworld/scratch_olympiad_platform/pkg/logger"
-	"github.com/robboworld/scratch_olympiad_platform/pkg/utils"
 	"net/http"
 	"time"
 )
@@ -49,7 +48,6 @@ func (h AuthHandler) SignUp(c *gin.Context) {
 		Birthdate:      birthdate,
 		Role:           models.RoleStudent,
 		IsActive:       false,
-		ActivationLink: utils.GetHashString(time.Now().String()),
 	}
 
 	err = h.authService.SignUp(newUser)
