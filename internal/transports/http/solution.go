@@ -7,8 +7,10 @@ import (
 	"github.com/robboworld/scratch_olympiad_platform/pkg/logger"
 	"github.com/robboworld/scratch_olympiad_platform/pkg/utils"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -22,6 +24,7 @@ func (h SolutionHandler) SetupSolutionRoutes(router *gin.Engine) {
 	solutionGroup := router.Group("/solution")
 	{
 		solutionGroup.POST("/", h.UploadSolution)
+		solutionGroup.GET("/download", h.DownloadSolution)
 	}
 }
 
@@ -31,12 +34,6 @@ func (h SolutionHandler) UploadSolution(c *gin.Context) {
 	if !utils.DoesHaveRole(role, accessRoles) {
 		h.loggers.Err.Printf("%s", consts.ErrAccessDenied)
 		c.JSON(http.StatusForbidden, gin.H{"error": consts.ErrAccessDenied})
-		return
-	}
-
-	if err := c.Request.ParseMultipartForm(1 << 30); err != nil {
-		h.loggers.Err.Printf("%s", err.Error())
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -69,21 +66,6 @@ func (h SolutionHandler) UploadSolution(c *gin.Context) {
 		return
 	}
 
-	buffer := io.LimitReader(file, MaxFileSize)
-	var fileBytes []byte
-	fileBytes, err = io.ReadAll(buffer)
-	if err != nil {
-		h.loggers.Err.Printf("%s", err.Error())
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to read file"})
-		return
-	}
-
-	if len(fileBytes) >= MaxFileSize {
-		h.loggers.Err.Printf("%s", "File is too large. The maximum allowed size is 1 GB.")
-		c.JSON(http.StatusBadRequest, gin.H{"error": "File is too large. The maximum allowed size is 1 GB."})
-		return
-	}
-
 	tempFile, err := os.CreateTemp("./internal/tmp_upload", "upload-*."+filenameParts[1])
 	if err != nil {
 		h.loggers.Err.Printf("%s", err.Error())
@@ -92,9 +74,20 @@ func (h SolutionHandler) UploadSolution(c *gin.Context) {
 	}
 	defer tempFile.Close()
 
-	if _, err := io.Copy(tempFile, io.LimitReader(file, MaxFileSize)); err != nil {
+	_, err = io.Copy(tempFile, file)
+	if err != nil {
 		h.loggers.Err.Printf("%s", err.Error())
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to write file"})
+		return
+	}
+
+	if tempFileSize, err := tempFile.Seek(0, io.SeekCurrent); err != nil {
+		h.loggers.Err.Printf("%s", err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to check file size"})
+		return
+	} else if tempFileSize >= MaxFileSize {
+		h.loggers.Err.Printf("%s", "File is too large. The maximum allowed size is 1 GB.")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "File is too large. The maximum allowed size is 1 GB."})
 		return
 	}
 
@@ -105,6 +98,42 @@ func (h SolutionHandler) UploadSolution(c *gin.Context) {
 		return
 	}
 
+	uploadedFilename := filepath.Base(tempFile.Name())
 	c.Header("Content-Type", "application/json")
-	c.JSON(http.StatusOK, gin.H{"filename": strings.Replace(tempFile.Name(), "\\", "/", -1)})
+	c.JSON(http.StatusOK, gin.H{"filename": uploadedFilename})
+}
+
+func (h SolutionHandler) DownloadSolution(c *gin.Context) {
+	filename := c.Query("filename")
+	if filename == "" {
+		h.loggers.Err.Printf("%s", "filename not provided")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "filename not provided"})
+		return
+	}
+	filePath := "./internal/tmp_upload/" + filename
+
+	role := c.Value(consts.KeyRole).(models.Role)
+	accessRoles := []models.Role{models.RoleStudent, models.RoleSuperAdmin}
+	if !utils.DoesHaveRole(role, accessRoles) {
+		h.loggers.Err.Printf("%s", consts.ErrAccessDenied)
+		c.JSON(http.StatusForbidden, gin.H{"error": consts.ErrAccessDenied})
+		return
+	}
+
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		h.loggers.Err.Printf("%s", "file not found")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "file not found"})
+		return
+	}
+	buf, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		h.loggers.Err.Printf("%s", err.Error())
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.Header("Content-Type", "mp4/sb3")
+	c.Header("Content-Disposition", "attachment; filename=\""+filename+"\"")
+	c.Writer.Write(buf)
+	c.Status(http.StatusOK)
+	c.File(filename)
 }
