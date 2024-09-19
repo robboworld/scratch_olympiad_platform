@@ -15,7 +15,6 @@ import (
 	"github.com/spf13/viper"
 	"go.uber.org/fx"
 	"net/http"
-	"time"
 )
 
 func NewServer(
@@ -48,6 +47,7 @@ func NewServer(
 					handlers.ProjectHandler.SetupProjectRoutes(router)
 					handlers.AvatarHandler.SetupAvatarRoutes(router)
 					handlers.ApplicationHandler.SetupApplicationRoutes(router)
+					handlers.SolutionHandler.SetupSolutionRoutes(router)
 				case consts.Development:
 					router.GET("/", gin.WrapH(playground.Handler("GraphQL playground", "/query")))
 					router.POST("/query", gin.WrapH(srv))
@@ -55,6 +55,7 @@ func NewServer(
 					handlers.ProjectHandler.SetupProjectRoutes(router)
 					handlers.AvatarHandler.SetupAvatarRoutes(router)
 					handlers.ApplicationHandler.SetupApplicationRoutes(router)
+					handlers.SolutionHandler.SetupSolutionRoutes(router)
 				}
 
 				server := &http.Server{
@@ -67,8 +68,6 @@ func NewServer(
 							AllowedHeaders:   viper.GetStringSlice("cors.allowed_headers"),
 						},
 					).Handler(router),
-					ReadTimeout:    10 * time.Second,
-					WriteTimeout:   10 * time.Second,
 					MaxHeaderBytes: 1 << 20,
 				}
 

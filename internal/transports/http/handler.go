@@ -10,6 +10,7 @@ type Handlers struct {
 	AvatarHandler      AvatarHandler
 	AuthHandler        AuthHandler
 	ApplicationHandler ApplicationHandler
+	SolutionHandler    SolutionHandler
 }
 
 func SetupHandlers(
@@ -33,6 +34,9 @@ func SetupHandlers(
 		ApplicationHandler: ApplicationHandler{
 			loggers:            loggers,
 			applicationService: applicationService,
+		},
+		SolutionHandler: SolutionHandler{
+			loggers: loggers,
 		},
 	}
 }
