@@ -233,7 +233,6 @@ type UserHTTP struct {
 	City           string `json:"city"`
 	Birthdate      string `json:"birthdate"`
 	IsActive       bool   `json:"isActive"`
-	ActivationLink string `json:"activationLink"`
 }
 
 type UsersList struct {

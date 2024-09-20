@@ -12,6 +12,10 @@ const (
 	KeyRole = "keyRole"
 )
 
+const (
+	MaxSolutionFileSize = 1 * 1024 * 1024 * 1024
+)
+
 const EmptyProjectJson = "{\"targets\":[{\"isStage\":true,\"name\":\"Stage\",\"variables\":{\"`jEk@4|i[#Fk?(8x)AV." +
 	"-my variable\":[\"my variable\",0]},\"lists\":{},\"broadcasts\":{},\"blocks\":{},\"currentCostume\":0,\"costum" +
 	"es\":[{\"assetId\":\"cd21514d0531fdffb22204e0ec5ed84a\",\"name\":\"backdrop1\",\"md5ext\":\"cd21514d0531fdffb2" +

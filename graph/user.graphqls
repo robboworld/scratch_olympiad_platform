@@ -11,7 +11,6 @@ type UserHttp {
 	city: String!
 	birthdate: Timestamp!
 	isActive: Boolean!
-	activationLink: String!
 }
 
 enum Role {

@@ -14,8 +14,6 @@ import (
 	"strings"
 )
 
-const MaxFileSize = 1 * 1024 * 1024 * 1024
-
 type SolutionHandler struct {
 	loggers logger.Loggers
 }
@@ -41,6 +39,12 @@ func (h SolutionHandler) UploadSolution(c *gin.Context) {
 	if err != nil {
 		h.loggers.Err.Printf("%s", err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if fileHeader.Size >= consts.MaxSolutionFileSize {
+		h.loggers.Err.Printf("%s", "File is too large. The maximum allowed size is 1 GB.")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "File is too large. The maximum allowed size is 1 GB."})
 		return
 	}
 
@@ -78,16 +82,6 @@ func (h SolutionHandler) UploadSolution(c *gin.Context) {
 	if err != nil {
 		h.loggers.Err.Printf("%s", err.Error())
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to write file"})
-		return
-	}
-
-	if tempFileSize, err := tempFile.Seek(0, io.SeekCurrent); err != nil {
-		h.loggers.Err.Printf("%s", err.Error())
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to check file size"})
-		return
-	} else if tempFileSize >= MaxFileSize {
-		h.loggers.Err.Printf("%s", "File is too large. The maximum allowed size is 1 GB.")
-		c.JSON(http.StatusBadRequest, gin.H{"error": "File is too large. The maximum allowed size is 1 GB."})
 		return
 	}
 

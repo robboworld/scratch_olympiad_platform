@@ -39,7 +39,6 @@ func (u *UserHTTP) ToCore() UserCore {
 		City:           u.City,
 		Birthdate:      birthDate,
 		IsActive:       u.IsActive,
-		ActivationLink: u.ActivationLink,
 	}
 }
 
