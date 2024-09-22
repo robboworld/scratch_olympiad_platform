@@ -1,0 +1,15 @@
+type CountryHttp {
+    id: ID!
+    createdAt: Timestamp!
+    updatedAt: Timestamp!
+    name: String!
+}
+
+type CountryHttpList {
+    countries: [CountryHttp!]!
+    countRows: Int!
+}
+
+extend type Query {
+    GetAllCountries(page: Int, pageSize: Int): CountryHttpList!
+}

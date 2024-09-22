@@ -1,9 +1,9 @@
 package gateways
 
 import (
-	"github.com/skinnykaen/rpa_clone/internal/db"
-	"github.com/skinnykaen/rpa_clone/internal/models"
-	"github.com/skinnykaen/rpa_clone/pkg/utils"
+	"github.com/robboworld/scratch_olympiad_platform/internal/db"
+	"github.com/robboworld/scratch_olympiad_platform/internal/models"
+	"github.com/robboworld/scratch_olympiad_platform/pkg/utils"
 	"net/http"
 )
 
@@ -17,7 +17,7 @@ type SettingsGatewayImpl struct {
 }
 
 func (s SettingsGatewayImpl) GetActivationByLink() (activationByCode bool, err error) {
-	if err := s.postgresClient.Db.Model(&models.SettingsCore{}).Select("activation_by_link").Where("id = ? ", 1).
+	if err = s.postgresClient.Db.Model(&models.SettingsCore{}).Select("activation_by_link").Where("id = ? ", 1).
 		First(&activationByCode).Error; err != nil {
 		return false, utils.ResponseError{
 			Code:    http.StatusInternalServerError,
@@ -28,7 +28,13 @@ func (s SettingsGatewayImpl) GetActivationByLink() (activationByCode bool, err e
 }
 
 func (s SettingsGatewayImpl) SetActivationByLink(activationByCode bool) error {
-	return s.postgresClient.Db.Model(&models.SettingsCore{ID: 1}).Updates(map[string]interface{}{
+	if err := s.postgresClient.Db.Model(&models.SettingsCore{ID: 1}).Updates(map[string]interface{}{
 		"activation_by_link": activationByCode,
-	}).Error
+	}).Error; err != nil {
+		return utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+		}
+	}
+	return nil
 }

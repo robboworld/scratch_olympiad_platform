@@ -1,14 +1,18 @@
 package utils
 
 import (
+	"context"
 	"crypto/sha1"
 	"encoding/hex"
+	"github.com/gin-gonic/gin"
 	"github.com/jordan-wright/email"
-	"github.com/skinnykaen/rpa_clone/internal/models"
+	"github.com/robboworld/scratch_olympiad_platform/internal/models"
 	"github.com/spf13/viper"
 	"golang.org/x/crypto/bcrypt"
+	"net/http"
 	"net/mail"
 	"net/smtp"
+	"time"
 )
 
 func SendEmail(subject, to, body string) (err error) {
@@ -49,7 +53,7 @@ func GetOffsetAndLimit(page, pageSize *int) (offset, limit int) {
 	return
 }
 
-func DoesHaveRole(clientRole models.Role, roles []*models.Role) bool {
+func DoesHaveRole(clientRole models.Role, roles []models.Role) bool {
 	for _, role := range roles {
 		if role.String() == clientRole.String() {
 			return true
@@ -78,4 +82,33 @@ func BoolPointerToBool(p *bool) bool {
 		b = *p
 	}
 	return b
+}
+
+func CalculateUserAge(birthdate time.Time) int {
+	today := time.Now()
+	age := today.Year() - birthdate.Year()
+
+	if today.YearDay() < birthdate.YearDay() {
+		age--
+	}
+	return age
+}
+
+func GinContextFromContext(ctx context.Context) (*gin.Context, error) {
+	ginContext := ctx.Value("GinContextKey")
+	if ginContext == nil {
+		return nil, ResponseError{
+			Code:    http.StatusBadRequest,
+			Message: "Gin context not found in request context",
+		}
+	}
+
+	gc, ok := ginContext.(*gin.Context)
+	if !ok {
+		return nil, ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: "Gin context has an invalid type",
+		}
+	}
+	return gc, nil
 }

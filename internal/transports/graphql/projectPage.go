@@ -9,15 +9,24 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/skinnykaen/rpa_clone/internal/consts"
-	"github.com/skinnykaen/rpa_clone/internal/models"
-	"github.com/skinnykaen/rpa_clone/pkg/utils"
+	"github.com/robboworld/scratch_olympiad_platform/internal/consts"
+	"github.com/robboworld/scratch_olympiad_platform/internal/models"
+	"github.com/robboworld/scratch_olympiad_platform/pkg/utils"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
 // CreateProjectPage is the resolver for the CreateProjectPage field.
 func (r *mutationResolver) CreateProjectPage(ctx context.Context) (*models.ProjectPageHTTP, error) {
-	newProjectPage, err := r.projectPageService.CreateProjectPage(ctx.Value(consts.KeyId).(uint))
+	ginContext, err := utils.GinContextFromContext(ctx)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return nil, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": err,
+			},
+		}
+	}
+	newProjectPage, err := r.projectPageService.CreateProjectPage(ginContext.Value(consts.KeyId).(uint))
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
 		return nil, &gqlerror.Error{
@@ -33,6 +42,15 @@ func (r *mutationResolver) CreateProjectPage(ctx context.Context) (*models.Proje
 
 // UpdateProjectPage is the resolver for the UpdateProjectPage field.
 func (r *mutationResolver) UpdateProjectPage(ctx context.Context, input models.UpdateProjectPage) (*models.ProjectPageHTTP, error) {
+	ginContext, err := utils.GinContextFromContext(ctx)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return nil, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": err,
+			},
+		}
+	}
 	atoi, err := strconv.Atoi(input.ID)
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
@@ -52,7 +70,7 @@ func (r *mutationResolver) UpdateProjectPage(ctx context.Context, input models.U
 		Notes:       input.Notes,
 		IsShared:    input.IsShared,
 	}
-	updatedProjectPage, err := r.projectPageService.UpdateProjectPage(projectPage, ctx.Value(consts.KeyId).(uint))
+	updatedProjectPage, err := r.projectPageService.UpdateProjectPage(projectPage, ginContext.Value(consts.KeyId).(uint))
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
 		return nil, &gqlerror.Error{
@@ -68,6 +86,15 @@ func (r *mutationResolver) UpdateProjectPage(ctx context.Context, input models.U
 
 // DeleteProjectPage is the resolver for the DeleteProjectPage field.
 func (r *mutationResolver) DeleteProjectPage(ctx context.Context, id string) (*models.Response, error) {
+	ginContext, err := utils.GinContextFromContext(ctx)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return nil, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": err,
+			},
+		}
+	}
 	atoi, err := strconv.Atoi(id)
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
@@ -80,7 +107,7 @@ func (r *mutationResolver) DeleteProjectPage(ctx context.Context, id string) (*m
 			},
 		}
 	}
-	if err := r.projectPageService.DeleteProjectPage(uint(atoi), ctx.Value(consts.KeyId).(uint)); err != nil {
+	if err := r.projectPageService.DeleteProjectPage(uint(atoi), ginContext.Value(consts.KeyId).(uint)); err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
 		return nil, &gqlerror.Error{
 			Extensions: map[string]interface{}{
@@ -118,6 +145,15 @@ func (r *mutationResolver) SetIsBanned(ctx context.Context, projectPageID string
 
 // GetProjectPageByID is the resolver for the GetProjectPageById field.
 func (r *queryResolver) GetProjectPageByID(ctx context.Context, id string) (*models.ProjectPageHTTP, error) {
+	ginContext, err := utils.GinContextFromContext(ctx)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return nil, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": err,
+			},
+		}
+	}
 	atoi, err := strconv.Atoi(id)
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
@@ -130,7 +166,7 @@ func (r *queryResolver) GetProjectPageByID(ctx context.Context, id string) (*mod
 			},
 		}
 	}
-	project, err := r.projectPageService.GetProjectPageById(uint(atoi), ctx.Value(consts.KeyId).(uint), ctx.Value(consts.KeyRole).(models.Role))
+	project, err := r.projectPageService.GetProjectPageById(uint(atoi), ginContext.Value(consts.KeyId).(uint), ginContext.Value(consts.KeyRole).(models.Role))
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
 		return nil, &gqlerror.Error{
@@ -175,7 +211,16 @@ func (r *queryResolver) GetAllProjectPagesByAuthorID(ctx context.Context, id str
 
 // GetAllProjectPagesByAccessToken is the resolver for the GetAllProjectPagesByAccessToken field.
 func (r *queryResolver) GetAllProjectPagesByAccessToken(ctx context.Context, page *int, pageSize *int) (*models.ProjectPageHTTPList, error) {
-	projects, countRows, err := r.projectPageService.GetAllProjectPages(page, pageSize, ctx.Value(consts.KeyId).(uint), ctx.Value(consts.KeyRole).(models.Role))
+	ginContext, err := utils.GinContextFromContext(ctx)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return nil, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": err,
+			},
+		}
+	}
+	projects, countRows, err := r.projectPageService.GetAllProjectPages(page, pageSize, ginContext.Value(consts.KeyId).(uint), ginContext.Value(consts.KeyRole).(models.Role))
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
 		return nil, &gqlerror.Error{

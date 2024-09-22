@@ -1,9 +1,9 @@
 package db
 
 import (
-	"github.com/skinnykaen/rpa_clone/internal/consts"
-	"github.com/skinnykaen/rpa_clone/internal/models"
-	"github.com/skinnykaen/rpa_clone/pkg/logger"
+	"github.com/robboworld/scratch_olympiad_platform/internal/consts"
+	"github.com/robboworld/scratch_olympiad_platform/internal/models"
+	"github.com/robboworld/scratch_olympiad_platform/pkg/logger"
 	"github.com/spf13/viper"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -76,6 +76,9 @@ func (c *PostgresClient) Migrate() (err error) {
 		&models.ProjectCore{},
 		&models.ParentRelCore{},
 		&models.SettingsCore{},
+		&models.ApplicationCore{},
+		&models.NominationCore{},
+		&models.CountryCore{},
 	)
 	if err != nil {
 		return err

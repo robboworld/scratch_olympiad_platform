@@ -14,7 +14,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/skinnykaen/rpa_clone/internal/models"
+	"github.com/robboworld/scratch_olympiad_platform/internal/models"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -42,7 +42,7 @@ type ResolverRoot interface {
 }
 
 type DirectiveRoot struct {
-	HasRole func(ctx context.Context, obj interface{}, next graphql.Resolver, roles []*models.Role) (res interface{}, err error)
+	HasRole func(ctx context.Context, obj interface{}, next graphql.Resolver, roles []models.Role) (res interface{}, err error)
 }
 
 type ComplexityRoot struct {
@@ -50,6 +50,49 @@ type ComplexityRoot struct {
 		ID          func(childComplexity int) int
 		URI         func(childComplexity int) int
 		URIAbsolute func(childComplexity int) int
+	}
+
+	ApplicationHttp struct {
+		AlgorithmicTaskFile           func(childComplexity int) int
+		AlgorithmicTaskLink           func(childComplexity int) int
+		AuthorID                      func(childComplexity int) int
+		CreatedAt                     func(childComplexity int) int
+		CreativeTaskFile              func(childComplexity int) int
+		CreativeTaskLink              func(childComplexity int) int
+		EngineeringTaskCloudLink      func(childComplexity int) int
+		EngineeringTaskFile           func(childComplexity int) int
+		EngineeringTaskVideo          func(childComplexity int) int
+		EngineeringTaskVideoCloudLink func(childComplexity int) int
+		ID                            func(childComplexity int) int
+		Nomination                    func(childComplexity int) int
+		Note                          func(childComplexity int) int
+		UpdatedAt                     func(childComplexity int) int
+	}
+
+	ApplicationPayloadHttp struct {
+		AlgorithmicTaskFile           func(childComplexity int) int
+		AlgorithmicTaskLink           func(childComplexity int) int
+		Author                        func(childComplexity int) int
+		CreativeTaskFile              func(childComplexity int) int
+		CreativeTaskLink              func(childComplexity int) int
+		EngineeringTaskCloudLink      func(childComplexity int) int
+		EngineeringTaskFile           func(childComplexity int) int
+		EngineeringTaskVideo          func(childComplexity int) int
+		EngineeringTaskVideoCloudLink func(childComplexity int) int
+		Nomination                    func(childComplexity int) int
+		Note                          func(childComplexity int) int
+	}
+
+	CountryHttp struct {
+		CreatedAt func(childComplexity int) int
+		ID        func(childComplexity int) int
+		Name      func(childComplexity int) int
+		UpdatedAt func(childComplexity int) int
+	}
+
+	CountryHttpList struct {
+		CountRows func(childComplexity int) int
+		Countries func(childComplexity int) int
 	}
 
 	CourseAPIMediaCollectionHttp struct {
@@ -102,13 +145,16 @@ type ComplexityRoot struct {
 
 	Mutation struct {
 		ConfirmActivation   func(childComplexity int, activationLink string) int
+		CreateApplication   func(childComplexity int, input models.NewApplication) int
 		CreateParentRel     func(childComplexity int, parentID string, childID string) int
 		CreateProjectPage   func(childComplexity int) int
 		CreateUser          func(childComplexity int, input models.NewUser) int
 		DeleteParentRel     func(childComplexity int, parentID string, childID string) int
 		DeleteProjectPage   func(childComplexity int, id string) int
 		DeleteUser          func(childComplexity int, id string) int
+		ForgotPassword      func(childComplexity int, email string) int
 		RefreshToken        func(childComplexity int, refreshToken string) int
+		ResetPassword       func(childComplexity int, resetLink string) int
 		SetActivationByLink func(childComplexity int, activationByLink bool) int
 		SetIsBanned         func(childComplexity int, projectPageID string, isBanned bool) int
 		SetUserIsActive     func(childComplexity int, id string, isActive bool) int
@@ -119,12 +165,28 @@ type ComplexityRoot struct {
 	}
 
 	NewUserResponse struct {
-		Email      func(childComplexity int) int
-		Firstname  func(childComplexity int) int
-		ID         func(childComplexity int) int
-		Lastname   func(childComplexity int) int
-		Middlename func(childComplexity int) int
-		Role       func(childComplexity int) int
+		Birthdate      func(childComplexity int) int
+		City           func(childComplexity int) int
+		Country        func(childComplexity int) int
+		Email          func(childComplexity int) int
+		FullName       func(childComplexity int) int
+		FullNameNative func(childComplexity int) int
+		ID             func(childComplexity int) int
+		Role           func(childComplexity int) int
+	}
+
+	NominationHttp struct {
+		CreatedAt func(childComplexity int) int
+		ID        func(childComplexity int) int
+		MaxAge    func(childComplexity int) int
+		MinAge    func(childComplexity int) int
+		Name      func(childComplexity int) int
+		UpdatedAt func(childComplexity int) int
+	}
+
+	NominationHttpList struct {
+		CountRows   func(childComplexity int) int
+		Nominations func(childComplexity int) int
 	}
 
 	ProjectPageHttp struct {
@@ -148,6 +210,8 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
+		GetAllCountries                 func(childComplexity int, page *int, pageSize *int) int
+		GetAllNominations               func(childComplexity int, page *int, pageSize *int) int
 		GetAllProjectPagesByAccessToken func(childComplexity int, page *int, pageSize *int) int
 		GetAllProjectPagesByAuthorID    func(childComplexity int, id string, page *int, pageSize *int) int
 		GetAllUsers                     func(childComplexity int, page *int, pageSize *int, active bool, roles []models.Role) int
@@ -177,14 +241,15 @@ type ComplexityRoot struct {
 
 	UserHttp struct {
 		ActivationLink func(childComplexity int) int
+		Birthdate      func(childComplexity int) int
+		City           func(childComplexity int) int
+		Country        func(childComplexity int) int
 		CreatedAt      func(childComplexity int) int
 		Email          func(childComplexity int) int
-		Firstname      func(childComplexity int) int
+		FullName       func(childComplexity int) int
+		FullNameNative func(childComplexity int) int
 		ID             func(childComplexity int) int
 		IsActive       func(childComplexity int) int
-		Lastname       func(childComplexity int) int
-		Middlename     func(childComplexity int) int
-		Nickname       func(childComplexity int) int
 		Password       func(childComplexity int) int
 		Role           func(childComplexity int) int
 		UpdatedAt      func(childComplexity int) int
@@ -201,10 +266,13 @@ type MutationResolver interface {
 	UpdateUser(ctx context.Context, input models.UpdateUser) (*models.UserHTTP, error)
 	DeleteUser(ctx context.Context, id string) (*models.Response, error)
 	SetUserIsActive(ctx context.Context, id string, isActive bool) (*models.Response, error)
+	CreateApplication(ctx context.Context, input models.NewApplication) (*models.ApplicationHTTP, error)
 	SignUp(ctx context.Context, input models.SignUp) (*models.Response, error)
 	SignIn(ctx context.Context, input models.SignIn) (*models.SignInResponse, error)
 	RefreshToken(ctx context.Context, refreshToken string) (*models.SignInResponse, error)
 	ConfirmActivation(ctx context.Context, activationLink string) (*models.SignInResponse, error)
+	ForgotPassword(ctx context.Context, email string) (*models.Response, error)
+	ResetPassword(ctx context.Context, resetLink string) (*models.Response, error)
 	CreateParentRel(ctx context.Context, parentID string, childID string) (*models.Response, error)
 	DeleteParentRel(ctx context.Context, parentID string, childID string) (*models.Response, error)
 	CreateProjectPage(ctx context.Context) (*models.ProjectPageHTTP, error)
@@ -218,8 +286,10 @@ type QueryResolver interface {
 	GetUserByID(ctx context.Context, id string) (*models.UserHTTP, error)
 	GetAllUsers(ctx context.Context, page *int, pageSize *int, active bool, roles []models.Role) (*models.UsersList, error)
 	Me(ctx context.Context) (*models.UserHTTP, error)
+	GetAllCountries(ctx context.Context, page *int, pageSize *int) (*models.CountryHTTPList, error)
 	GetCourseByID(ctx context.Context, id string) (*models.CourseHTTP, error)
 	GetCoursesByUser(ctx context.Context) (*models.CoursesListHTTP, error)
+	GetAllNominations(ctx context.Context, page *int, pageSize *int) (*models.NominationHTTPList, error)
 	GetChildrenByParent(ctx context.Context, parentID string) (*models.UsersList, error)
 	GetParentsByChild(ctx context.Context, childID string) (*models.UsersList, error)
 	GetProjectPageByID(ctx context.Context, id string) (*models.ProjectPageHTTP, error)
@@ -263,6 +333,223 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.AbsoluteMediaHttp.URIAbsolute(childComplexity), true
+
+	case "ApplicationHttp.algorithmicTaskFile":
+		if e.complexity.ApplicationHttp.AlgorithmicTaskFile == nil {
+			break
+		}
+
+		return e.complexity.ApplicationHttp.AlgorithmicTaskFile(childComplexity), true
+
+	case "ApplicationHttp.algorithmicTaskLink":
+		if e.complexity.ApplicationHttp.AlgorithmicTaskLink == nil {
+			break
+		}
+
+		return e.complexity.ApplicationHttp.AlgorithmicTaskLink(childComplexity), true
+
+	case "ApplicationHttp.authorId":
+		if e.complexity.ApplicationHttp.AuthorID == nil {
+			break
+		}
+
+		return e.complexity.ApplicationHttp.AuthorID(childComplexity), true
+
+	case "ApplicationHttp.createdAt":
+		if e.complexity.ApplicationHttp.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.ApplicationHttp.CreatedAt(childComplexity), true
+
+	case "ApplicationHttp.creativeTaskFile":
+		if e.complexity.ApplicationHttp.CreativeTaskFile == nil {
+			break
+		}
+
+		return e.complexity.ApplicationHttp.CreativeTaskFile(childComplexity), true
+
+	case "ApplicationHttp.creativeTaskLink":
+		if e.complexity.ApplicationHttp.CreativeTaskLink == nil {
+			break
+		}
+
+		return e.complexity.ApplicationHttp.CreativeTaskLink(childComplexity), true
+
+	case "ApplicationHttp.engineeringTaskCloudLink":
+		if e.complexity.ApplicationHttp.EngineeringTaskCloudLink == nil {
+			break
+		}
+
+		return e.complexity.ApplicationHttp.EngineeringTaskCloudLink(childComplexity), true
+
+	case "ApplicationHttp.engineeringTaskFile":
+		if e.complexity.ApplicationHttp.EngineeringTaskFile == nil {
+			break
+		}
+
+		return e.complexity.ApplicationHttp.EngineeringTaskFile(childComplexity), true
+
+	case "ApplicationHttp.engineeringTaskVideo":
+		if e.complexity.ApplicationHttp.EngineeringTaskVideo == nil {
+			break
+		}
+
+		return e.complexity.ApplicationHttp.EngineeringTaskVideo(childComplexity), true
+
+	case "ApplicationHttp.engineeringTaskVideoCloudLink":
+		if e.complexity.ApplicationHttp.EngineeringTaskVideoCloudLink == nil {
+			break
+		}
+
+		return e.complexity.ApplicationHttp.EngineeringTaskVideoCloudLink(childComplexity), true
+
+	case "ApplicationHttp.id":
+		if e.complexity.ApplicationHttp.ID == nil {
+			break
+		}
+
+		return e.complexity.ApplicationHttp.ID(childComplexity), true
+
+	case "ApplicationHttp.nomination":
+		if e.complexity.ApplicationHttp.Nomination == nil {
+			break
+		}
+
+		return e.complexity.ApplicationHttp.Nomination(childComplexity), true
+
+	case "ApplicationHttp.note":
+		if e.complexity.ApplicationHttp.Note == nil {
+			break
+		}
+
+		return e.complexity.ApplicationHttp.Note(childComplexity), true
+
+	case "ApplicationHttp.updatedAt":
+		if e.complexity.ApplicationHttp.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.ApplicationHttp.UpdatedAt(childComplexity), true
+
+	case "ApplicationPayloadHttp.algorithmicTaskFile":
+		if e.complexity.ApplicationPayloadHttp.AlgorithmicTaskFile == nil {
+			break
+		}
+
+		return e.complexity.ApplicationPayloadHttp.AlgorithmicTaskFile(childComplexity), true
+
+	case "ApplicationPayloadHttp.algorithmicTaskLink":
+		if e.complexity.ApplicationPayloadHttp.AlgorithmicTaskLink == nil {
+			break
+		}
+
+		return e.complexity.ApplicationPayloadHttp.AlgorithmicTaskLink(childComplexity), true
+
+	case "ApplicationPayloadHttp.author":
+		if e.complexity.ApplicationPayloadHttp.Author == nil {
+			break
+		}
+
+		return e.complexity.ApplicationPayloadHttp.Author(childComplexity), true
+
+	case "ApplicationPayloadHttp.creativeTaskFile":
+		if e.complexity.ApplicationPayloadHttp.CreativeTaskFile == nil {
+			break
+		}
+
+		return e.complexity.ApplicationPayloadHttp.CreativeTaskFile(childComplexity), true
+
+	case "ApplicationPayloadHttp.creativeTaskLink":
+		if e.complexity.ApplicationPayloadHttp.CreativeTaskLink == nil {
+			break
+		}
+
+		return e.complexity.ApplicationPayloadHttp.CreativeTaskLink(childComplexity), true
+
+	case "ApplicationPayloadHttp.engineeringTaskCloudLink":
+		if e.complexity.ApplicationPayloadHttp.EngineeringTaskCloudLink == nil {
+			break
+		}
+
+		return e.complexity.ApplicationPayloadHttp.EngineeringTaskCloudLink(childComplexity), true
+
+	case "ApplicationPayloadHttp.engineeringTaskFile":
+		if e.complexity.ApplicationPayloadHttp.EngineeringTaskFile == nil {
+			break
+		}
+
+		return e.complexity.ApplicationPayloadHttp.EngineeringTaskFile(childComplexity), true
+
+	case "ApplicationPayloadHttp.engineeringTaskVideo":
+		if e.complexity.ApplicationPayloadHttp.EngineeringTaskVideo == nil {
+			break
+		}
+
+		return e.complexity.ApplicationPayloadHttp.EngineeringTaskVideo(childComplexity), true
+
+	case "ApplicationPayloadHttp.engineeringTaskVideoCloudLink":
+		if e.complexity.ApplicationPayloadHttp.EngineeringTaskVideoCloudLink == nil {
+			break
+		}
+
+		return e.complexity.ApplicationPayloadHttp.EngineeringTaskVideoCloudLink(childComplexity), true
+
+	case "ApplicationPayloadHttp.nomination":
+		if e.complexity.ApplicationPayloadHttp.Nomination == nil {
+			break
+		}
+
+		return e.complexity.ApplicationPayloadHttp.Nomination(childComplexity), true
+
+	case "ApplicationPayloadHttp.note":
+		if e.complexity.ApplicationPayloadHttp.Note == nil {
+			break
+		}
+
+		return e.complexity.ApplicationPayloadHttp.Note(childComplexity), true
+
+	case "CountryHttp.createdAt":
+		if e.complexity.CountryHttp.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.CountryHttp.CreatedAt(childComplexity), true
+
+	case "CountryHttp.id":
+		if e.complexity.CountryHttp.ID == nil {
+			break
+		}
+
+		return e.complexity.CountryHttp.ID(childComplexity), true
+
+	case "CountryHttp.name":
+		if e.complexity.CountryHttp.Name == nil {
+			break
+		}
+
+		return e.complexity.CountryHttp.Name(childComplexity), true
+
+	case "CountryHttp.updatedAt":
+		if e.complexity.CountryHttp.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.CountryHttp.UpdatedAt(childComplexity), true
+
+	case "CountryHttpList.countRows":
+		if e.complexity.CountryHttpList.CountRows == nil {
+			break
+		}
+
+		return e.complexity.CountryHttpList.CountRows(childComplexity), true
+
+	case "CountryHttpList.countries":
+		if e.complexity.CountryHttpList.Countries == nil {
+			break
+		}
+
+		return e.complexity.CountryHttpList.Countries(childComplexity), true
 
 	case "CourseAPIMediaCollectionHttp.banner_image":
 		if e.complexity.CourseAPIMediaCollectionHttp.BannerImage == nil {
@@ -507,6 +794,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.ConfirmActivation(childComplexity, args["activationLink"].(string)), true
 
+	case "Mutation.CreateApplication":
+		if e.complexity.Mutation.CreateApplication == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_CreateApplication_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateApplication(childComplexity, args["input"].(models.NewApplication)), true
+
 	case "Mutation.CreateParentRel":
 		if e.complexity.Mutation.CreateParentRel == nil {
 			break
@@ -574,6 +873,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.DeleteUser(childComplexity, args["id"].(string)), true
 
+	case "Mutation.ForgotPassword":
+		if e.complexity.Mutation.ForgotPassword == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_ForgotPassword_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.ForgotPassword(childComplexity, args["email"].(string)), true
+
 	case "Mutation.RefreshToken":
 		if e.complexity.Mutation.RefreshToken == nil {
 			break
@@ -585,6 +896,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.RefreshToken(childComplexity, args["refreshToken"].(string)), true
+
+	case "Mutation.ResetPassword":
+		if e.complexity.Mutation.ResetPassword == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_ResetPassword_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.ResetPassword(childComplexity, args["resetLink"].(string)), true
 
 	case "Mutation.SetActivationByLink":
 		if e.complexity.Mutation.SetActivationByLink == nil {
@@ -670,6 +993,27 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.UpdateUser(childComplexity, args["input"].(models.UpdateUser)), true
 
+	case "NewUserResponse.birthdate":
+		if e.complexity.NewUserResponse.Birthdate == nil {
+			break
+		}
+
+		return e.complexity.NewUserResponse.Birthdate(childComplexity), true
+
+	case "NewUserResponse.city":
+		if e.complexity.NewUserResponse.City == nil {
+			break
+		}
+
+		return e.complexity.NewUserResponse.City(childComplexity), true
+
+	case "NewUserResponse.country":
+		if e.complexity.NewUserResponse.Country == nil {
+			break
+		}
+
+		return e.complexity.NewUserResponse.Country(childComplexity), true
+
 	case "NewUserResponse.email":
 		if e.complexity.NewUserResponse.Email == nil {
 			break
@@ -677,12 +1021,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.NewUserResponse.Email(childComplexity), true
 
-	case "NewUserResponse.firstname":
-		if e.complexity.NewUserResponse.Firstname == nil {
+	case "NewUserResponse.fullName":
+		if e.complexity.NewUserResponse.FullName == nil {
 			break
 		}
 
-		return e.complexity.NewUserResponse.Firstname(childComplexity), true
+		return e.complexity.NewUserResponse.FullName(childComplexity), true
+
+	case "NewUserResponse.fullNameNative":
+		if e.complexity.NewUserResponse.FullNameNative == nil {
+			break
+		}
+
+		return e.complexity.NewUserResponse.FullNameNative(childComplexity), true
 
 	case "NewUserResponse.id":
 		if e.complexity.NewUserResponse.ID == nil {
@@ -691,26 +1042,68 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.NewUserResponse.ID(childComplexity), true
 
-	case "NewUserResponse.lastname":
-		if e.complexity.NewUserResponse.Lastname == nil {
-			break
-		}
-
-		return e.complexity.NewUserResponse.Lastname(childComplexity), true
-
-	case "NewUserResponse.middlename":
-		if e.complexity.NewUserResponse.Middlename == nil {
-			break
-		}
-
-		return e.complexity.NewUserResponse.Middlename(childComplexity), true
-
 	case "NewUserResponse.role":
 		if e.complexity.NewUserResponse.Role == nil {
 			break
 		}
 
 		return e.complexity.NewUserResponse.Role(childComplexity), true
+
+	case "NominationHttp.createdAt":
+		if e.complexity.NominationHttp.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.NominationHttp.CreatedAt(childComplexity), true
+
+	case "NominationHttp.id":
+		if e.complexity.NominationHttp.ID == nil {
+			break
+		}
+
+		return e.complexity.NominationHttp.ID(childComplexity), true
+
+	case "NominationHttp.maxAge":
+		if e.complexity.NominationHttp.MaxAge == nil {
+			break
+		}
+
+		return e.complexity.NominationHttp.MaxAge(childComplexity), true
+
+	case "NominationHttp.minAge":
+		if e.complexity.NominationHttp.MinAge == nil {
+			break
+		}
+
+		return e.complexity.NominationHttp.MinAge(childComplexity), true
+
+	case "NominationHttp.name":
+		if e.complexity.NominationHttp.Name == nil {
+			break
+		}
+
+		return e.complexity.NominationHttp.Name(childComplexity), true
+
+	case "NominationHttp.updatedAt":
+		if e.complexity.NominationHttp.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.NominationHttp.UpdatedAt(childComplexity), true
+
+	case "NominationHttpList.countRows":
+		if e.complexity.NominationHttpList.CountRows == nil {
+			break
+		}
+
+		return e.complexity.NominationHttpList.CountRows(childComplexity), true
+
+	case "NominationHttpList.nominations":
+		if e.complexity.NominationHttpList.Nominations == nil {
+			break
+		}
+
+		return e.complexity.NominationHttpList.Nominations(childComplexity), true
 
 	case "ProjectPageHttp.authorId":
 		if e.complexity.ProjectPageHttp.AuthorID == nil {
@@ -809,6 +1202,30 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ProjectPageHttpList.ProjectPages(childComplexity), true
+
+	case "Query.GetAllCountries":
+		if e.complexity.Query.GetAllCountries == nil {
+			break
+		}
+
+		args, err := ec.field_Query_GetAllCountries_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetAllCountries(childComplexity, args["page"].(*int), args["pageSize"].(*int)), true
+
+	case "Query.GetAllNominations":
+		if e.complexity.Query.GetAllNominations == nil {
+			break
+		}
+
+		args, err := ec.field_Query_GetAllNominations_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetAllNominations(childComplexity, args["page"].(*int), args["pageSize"].(*int)), true
 
 	case "Query.GetAllProjectPagesByAccessToken":
 		if e.complexity.Query.GetAllProjectPagesByAccessToken == nil {
@@ -969,6 +1386,27 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.UserHttp.ActivationLink(childComplexity), true
 
+	case "UserHttp.birthdate":
+		if e.complexity.UserHttp.Birthdate == nil {
+			break
+		}
+
+		return e.complexity.UserHttp.Birthdate(childComplexity), true
+
+	case "UserHttp.city":
+		if e.complexity.UserHttp.City == nil {
+			break
+		}
+
+		return e.complexity.UserHttp.City(childComplexity), true
+
+	case "UserHttp.country":
+		if e.complexity.UserHttp.Country == nil {
+			break
+		}
+
+		return e.complexity.UserHttp.Country(childComplexity), true
+
 	case "UserHttp.createdAt":
 		if e.complexity.UserHttp.CreatedAt == nil {
 			break
@@ -983,12 +1421,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.UserHttp.Email(childComplexity), true
 
-	case "UserHttp.firstname":
-		if e.complexity.UserHttp.Firstname == nil {
+	case "UserHttp.fullName":
+		if e.complexity.UserHttp.FullName == nil {
 			break
 		}
 
-		return e.complexity.UserHttp.Firstname(childComplexity), true
+		return e.complexity.UserHttp.FullName(childComplexity), true
+
+	case "UserHttp.fullNameNative":
+		if e.complexity.UserHttp.FullNameNative == nil {
+			break
+		}
+
+		return e.complexity.UserHttp.FullNameNative(childComplexity), true
 
 	case "UserHttp.id":
 		if e.complexity.UserHttp.ID == nil {
@@ -1003,27 +1448,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.UserHttp.IsActive(childComplexity), true
-
-	case "UserHttp.lastname":
-		if e.complexity.UserHttp.Lastname == nil {
-			break
-		}
-
-		return e.complexity.UserHttp.Lastname(childComplexity), true
-
-	case "UserHttp.middlename":
-		if e.complexity.UserHttp.Middlename == nil {
-			break
-		}
-
-		return e.complexity.UserHttp.Middlename(childComplexity), true
-
-	case "UserHttp.nickname":
-		if e.complexity.UserHttp.Nickname == nil {
-			break
-		}
-
-		return e.complexity.UserHttp.Nickname(childComplexity), true
 
 	case "UserHttp.password":
 		if e.complexity.UserHttp.Password == nil {
@@ -1068,6 +1492,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	rc := graphql.GetOperationContext(ctx)
 	ec := executionContext{rc, e, 0, 0, make(chan graphql.DeferredResult)}
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
+		ec.unmarshalInputNewApplication,
 		ec.unmarshalInputNewUser,
 		ec.unmarshalInputSignIn,
 		ec.unmarshalInputSignUp,
@@ -1169,7 +1594,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 	return introspection.WrapTypeFromDef(parsedSchema, parsedSchema.Types[name]), nil
 }
 
-//go:embed "auth.graphqls" "course.graphqls" "parentRel.graphqls" "projectPage.graphqls" "settings.graphqls" "user.graphqls"
+//go:embed "application.graphqls" "auth.graphqls" "country.graphqls" "course.graphqls" "nomination.graphqls" "parentRel.graphqls" "projectPage.graphqls" "settings.graphqls" "user.graphqls"
 var sourcesFS embed.FS
 
 func sourceData(filename string) string {
@@ -1181,8 +1606,11 @@ func sourceData(filename string) string {
 }
 
 var sources = []*ast.Source{
+	{Name: "application.graphqls", Input: sourceData("application.graphqls"), BuiltIn: false},
 	{Name: "auth.graphqls", Input: sourceData("auth.graphqls"), BuiltIn: false},
+	{Name: "country.graphqls", Input: sourceData("country.graphqls"), BuiltIn: false},
 	{Name: "course.graphqls", Input: sourceData("course.graphqls"), BuiltIn: false},
+	{Name: "nomination.graphqls", Input: sourceData("nomination.graphqls"), BuiltIn: false},
 	{Name: "parentRel.graphqls", Input: sourceData("parentRel.graphqls"), BuiltIn: false},
 	{Name: "projectPage.graphqls", Input: sourceData("projectPage.graphqls"), BuiltIn: false},
 	{Name: "settings.graphqls", Input: sourceData("settings.graphqls"), BuiltIn: false},
@@ -1197,10 +1625,10 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 func (ec *executionContext) dir_hasRole_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 []*models.Role
+	var arg0 []models.Role
 	if tmp, ok := rawArgs["roles"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("roles"))
-		arg0, err = ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, tmp)
+		arg0, err = ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1221,6 +1649,21 @@ func (ec *executionContext) field_Mutation_ConfirmActivation_args(ctx context.Co
 		}
 	}
 	args["activationLink"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_CreateApplication_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 models.NewApplication
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNNewApplication2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐNewApplication(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
 	return args, nil
 }
 
@@ -1254,7 +1697,7 @@ func (ec *executionContext) field_Mutation_CreateUser_args(ctx context.Context, 
 	var arg0 models.NewUser
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNNewUser2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐNewUser(ctx, tmp)
+		arg0, err = ec.unmarshalNNewUser2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐNewUser(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1317,6 +1760,21 @@ func (ec *executionContext) field_Mutation_DeleteUser_args(ctx context.Context, 
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_ForgotPassword_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["email"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["email"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_RefreshToken_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -1329,6 +1787,21 @@ func (ec *executionContext) field_Mutation_RefreshToken_args(ctx context.Context
 		}
 	}
 	args["refreshToken"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_ResetPassword_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["resetLink"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("resetLink"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["resetLink"] = arg0
 	return args, nil
 }
 
@@ -1401,7 +1874,7 @@ func (ec *executionContext) field_Mutation_SignIn_args(ctx context.Context, rawA
 	var arg0 models.SignIn
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNSignIn2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐSignIn(ctx, tmp)
+		arg0, err = ec.unmarshalNSignIn2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐSignIn(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1416,7 +1889,7 @@ func (ec *executionContext) field_Mutation_SignUp_args(ctx context.Context, rawA
 	var arg0 models.SignUp
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNSignUp2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐSignUp(ctx, tmp)
+		arg0, err = ec.unmarshalNSignUp2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐSignUp(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1431,7 +1904,7 @@ func (ec *executionContext) field_Mutation_UpdateProjectPage_args(ctx context.Co
 	var arg0 models.UpdateProjectPage
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNUpdateProjectPage2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUpdateProjectPage(ctx, tmp)
+		arg0, err = ec.unmarshalNUpdateProjectPage2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUpdateProjectPage(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1446,12 +1919,60 @@ func (ec *executionContext) field_Mutation_UpdateUser_args(ctx context.Context, 
 	var arg0 models.UpdateUser
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNUpdateUser2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUpdateUser(ctx, tmp)
+		arg0, err = ec.unmarshalNUpdateUser2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUpdateUser(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
 	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_GetAllCountries_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *int
+	if tmp, ok := rawArgs["page"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("page"))
+		arg0, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["page"] = arg0
+	var arg1 *int
+	if tmp, ok := rawArgs["pageSize"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pageSize"))
+		arg1, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["pageSize"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_GetAllNominations_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *int
+	if tmp, ok := rawArgs["page"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("page"))
+		arg0, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["page"] = arg0
+	var arg1 *int
+	if tmp, ok := rawArgs["pageSize"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pageSize"))
+		arg1, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["pageSize"] = arg1
 	return args, nil
 }
 
@@ -1545,7 +2066,7 @@ func (ec *executionContext) field_Query_GetAllUsers_args(ctx context.Context, ra
 	var arg3 []models.Role
 	if tmp, ok := rawArgs["roles"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("roles"))
-		arg3, err = ec.unmarshalNRole2ᚕgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRoleᚄ(ctx, tmp)
+		arg3, err = ec.unmarshalNRole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1814,6 +2335,1408 @@ func (ec *executionContext) fieldContext_AbsoluteMediaHttp_uri_absolute(ctx cont
 	return fc, nil
 }
 
+func (ec *executionContext) _ApplicationHttp_id(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationHttp_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationHttp_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationHttp_createdAt(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationHttp_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNTimestamp2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationHttp_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Timestamp does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationHttp_updatedAt(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationHttp_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNTimestamp2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationHttp_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Timestamp does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationHttp_authorId(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationHttp_authorId(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AuthorID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationHttp_authorId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationHttp_nomination(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationHttp_nomination(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Nomination, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationHttp_nomination(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationHttp_algorithmicTaskLink(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationHttp_algorithmicTaskLink(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AlgorithmicTaskLink, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationHttp_algorithmicTaskLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationHttp_algorithmicTaskFile(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationHttp_algorithmicTaskFile(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AlgorithmicTaskFile, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationHttp_algorithmicTaskFile(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationHttp_creativeTaskLink(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationHttp_creativeTaskLink(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreativeTaskLink, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationHttp_creativeTaskLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationHttp_creativeTaskFile(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationHttp_creativeTaskFile(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreativeTaskFile, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationHttp_creativeTaskFile(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationHttp_engineeringTaskFile(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationHttp_engineeringTaskFile(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.EngineeringTaskFile, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationHttp_engineeringTaskFile(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationHttp_engineeringTaskCloudLink(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationHttp_engineeringTaskCloudLink(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.EngineeringTaskCloudLink, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationHttp_engineeringTaskCloudLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationHttp_engineeringTaskVideo(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationHttp_engineeringTaskVideo(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.EngineeringTaskVideo, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationHttp_engineeringTaskVideo(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationHttp_engineeringTaskVideoCloudLink(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationHttp_engineeringTaskVideoCloudLink(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.EngineeringTaskVideoCloudLink, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationHttp_engineeringTaskVideoCloudLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationHttp_note(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationHttp_note(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Note, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationHttp_note(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationPayloadHttp_author(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationPayloadHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationPayloadHttp_author(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Author, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.UserHTTP)
+	fc.Result = res
+	return ec.marshalNUserHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUserHTTP(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationPayloadHttp_author(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationPayloadHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_UserHttp_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_UserHttp_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_UserHttp_updatedAt(ctx, field)
+			case "email":
+				return ec.fieldContext_UserHttp_email(ctx, field)
+			case "password":
+				return ec.fieldContext_UserHttp_password(ctx, field)
+			case "role":
+				return ec.fieldContext_UserHttp_role(ctx, field)
+			case "fullName":
+				return ec.fieldContext_UserHttp_fullName(ctx, field)
+			case "fullNameNative":
+				return ec.fieldContext_UserHttp_fullNameNative(ctx, field)
+			case "country":
+				return ec.fieldContext_UserHttp_country(ctx, field)
+			case "city":
+				return ec.fieldContext_UserHttp_city(ctx, field)
+			case "birthdate":
+				return ec.fieldContext_UserHttp_birthdate(ctx, field)
+			case "isActive":
+				return ec.fieldContext_UserHttp_isActive(ctx, field)
+			case "activationLink":
+				return ec.fieldContext_UserHttp_activationLink(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type UserHttp", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationPayloadHttp_nomination(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationPayloadHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationPayloadHttp_nomination(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Nomination, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationPayloadHttp_nomination(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationPayloadHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationPayloadHttp_algorithmicTaskLink(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationPayloadHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationPayloadHttp_algorithmicTaskLink(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AlgorithmicTaskLink, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationPayloadHttp_algorithmicTaskLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationPayloadHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationPayloadHttp_algorithmicTaskFile(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationPayloadHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationPayloadHttp_algorithmicTaskFile(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AlgorithmicTaskFile, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationPayloadHttp_algorithmicTaskFile(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationPayloadHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationPayloadHttp_creativeTaskLink(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationPayloadHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationPayloadHttp_creativeTaskLink(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreativeTaskLink, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationPayloadHttp_creativeTaskLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationPayloadHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationPayloadHttp_creativeTaskFile(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationPayloadHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationPayloadHttp_creativeTaskFile(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreativeTaskFile, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationPayloadHttp_creativeTaskFile(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationPayloadHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationPayloadHttp_engineeringTaskFile(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationPayloadHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationPayloadHttp_engineeringTaskFile(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.EngineeringTaskFile, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationPayloadHttp_engineeringTaskFile(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationPayloadHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationPayloadHttp_engineeringTaskCloudLink(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationPayloadHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationPayloadHttp_engineeringTaskCloudLink(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.EngineeringTaskCloudLink, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationPayloadHttp_engineeringTaskCloudLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationPayloadHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationPayloadHttp_engineeringTaskVideo(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationPayloadHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationPayloadHttp_engineeringTaskVideo(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.EngineeringTaskVideo, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationPayloadHttp_engineeringTaskVideo(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationPayloadHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationPayloadHttp_engineeringTaskVideoCloudLink(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationPayloadHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationPayloadHttp_engineeringTaskVideoCloudLink(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.EngineeringTaskVideoCloudLink, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationPayloadHttp_engineeringTaskVideoCloudLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationPayloadHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationPayloadHttp_note(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationPayloadHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationPayloadHttp_note(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Note, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationPayloadHttp_note(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationPayloadHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CountryHttp_id(ctx context.Context, field graphql.CollectedField, obj *models.CountryHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CountryHttp_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CountryHttp_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CountryHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CountryHttp_createdAt(ctx context.Context, field graphql.CollectedField, obj *models.CountryHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CountryHttp_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNTimestamp2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CountryHttp_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CountryHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Timestamp does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CountryHttp_updatedAt(ctx context.Context, field graphql.CollectedField, obj *models.CountryHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CountryHttp_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNTimestamp2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CountryHttp_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CountryHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Timestamp does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CountryHttp_name(ctx context.Context, field graphql.CollectedField, obj *models.CountryHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CountryHttp_name(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Name, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CountryHttp_name(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CountryHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CountryHttpList_countries(ctx context.Context, field graphql.CollectedField, obj *models.CountryHTTPList) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CountryHttpList_countries(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Countries, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*models.CountryHTTP)
+	fc.Result = res
+	return ec.marshalNCountryHttp2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCountryHTTPᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CountryHttpList_countries(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CountryHttpList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_CountryHttp_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_CountryHttp_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_CountryHttp_updatedAt(ctx, field)
+			case "name":
+				return ec.fieldContext_CountryHttp_name(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CountryHttp", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CountryHttpList_countRows(ctx context.Context, field graphql.CollectedField, obj *models.CountryHTTPList) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CountryHttpList_countRows(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CountRows, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CountryHttpList_countRows(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CountryHttpList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _CourseAPIMediaCollectionHttp_id(ctx context.Context, field graphql.CollectedField, obj *models.CourseAPIMediaCollectionHTTP) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_CourseAPIMediaCollectionHttp_id(ctx, field)
 	if err != nil {
@@ -1883,7 +3806,7 @@ func (ec *executionContext) _CourseAPIMediaCollectionHttp_banner_image(ctx conte
 	}
 	res := resTmp.(*models.AbsoluteMediaHTTP)
 	fc.Result = res
-	return ec.marshalOAbsoluteMediaHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐAbsoluteMediaHTTP(ctx, field.Selections, res)
+	return ec.marshalOAbsoluteMediaHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐAbsoluteMediaHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_CourseAPIMediaCollectionHttp_banner_image(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1932,7 +3855,7 @@ func (ec *executionContext) _CourseAPIMediaCollectionHttp_course_image(ctx conte
 	}
 	res := resTmp.(*models.MediaHTTP)
 	fc.Result = res
-	return ec.marshalOMediaHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐMediaHTTP(ctx, field.Selections, res)
+	return ec.marshalOMediaHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐMediaHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_CourseAPIMediaCollectionHttp_course_image(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1979,7 +3902,7 @@ func (ec *executionContext) _CourseAPIMediaCollectionHttp_course_video(ctx conte
 	}
 	res := resTmp.(*models.MediaHTTP)
 	fc.Result = res
-	return ec.marshalOMediaHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐMediaHTTP(ctx, field.Selections, res)
+	return ec.marshalOMediaHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐMediaHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_CourseAPIMediaCollectionHttp_course_video(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2026,7 +3949,7 @@ func (ec *executionContext) _CourseAPIMediaCollectionHttp_image(ctx context.Cont
 	}
 	res := resTmp.(*models.ImageHTTP)
 	fc.Result = res
-	return ec.marshalOImageHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐImageHTTP(ctx, field.Selections, res)
+	return ec.marshalOImageHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐImageHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_CourseAPIMediaCollectionHttp_image(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2913,7 +4836,7 @@ func (ec *executionContext) _CourseHttp_media(ctx context.Context, field graphql
 	}
 	res := resTmp.(*models.CourseAPIMediaCollectionHTTP)
 	fc.Result = res
-	return ec.marshalNCourseAPIMediaCollectionHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐCourseAPIMediaCollectionHTTP(ctx, field.Selections, res)
+	return ec.marshalNCourseAPIMediaCollectionHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCourseAPIMediaCollectionHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_CourseHttp_media(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2969,7 +4892,7 @@ func (ec *executionContext) _CoursesListHttp_courses(ctx context.Context, field 
 	}
 	res := resTmp.([]*models.CourseHTTP)
 	fc.Result = res
-	return ec.marshalNCourseHttp2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐCourseHTTPᚄ(ctx, field.Selections, res)
+	return ec.marshalNCourseHttp2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCourseHTTPᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_CoursesListHttp_courses(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3353,7 +5276,7 @@ func (ec *executionContext) _Mutation_CreateUser(ctx context.Context, field grap
 			return ec.resolvers.Mutation().CreateUser(rctx, fc.Args["input"].(models.NewUser))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "UnitAdmin"})
 			if err != nil {
 				return nil, err
 			}
@@ -3373,7 +5296,7 @@ func (ec *executionContext) _Mutation_CreateUser(ctx context.Context, field grap
 		if data, ok := tmp.(*models.UserHTTP); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.UserHTTP`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.UserHTTP`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3387,7 +5310,7 @@ func (ec *executionContext) _Mutation_CreateUser(ctx context.Context, field grap
 	}
 	res := resTmp.(*models.UserHTTP)
 	fc.Result = res
-	return ec.marshalNUserHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUserHTTP(ctx, field.Selections, res)
+	return ec.marshalNUserHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUserHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_CreateUser(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3410,14 +5333,16 @@ func (ec *executionContext) fieldContext_Mutation_CreateUser(ctx context.Context
 				return ec.fieldContext_UserHttp_password(ctx, field)
 			case "role":
 				return ec.fieldContext_UserHttp_role(ctx, field)
-			case "firstname":
-				return ec.fieldContext_UserHttp_firstname(ctx, field)
-			case "lastname":
-				return ec.fieldContext_UserHttp_lastname(ctx, field)
-			case "middlename":
-				return ec.fieldContext_UserHttp_middlename(ctx, field)
-			case "nickname":
-				return ec.fieldContext_UserHttp_nickname(ctx, field)
+			case "fullName":
+				return ec.fieldContext_UserHttp_fullName(ctx, field)
+			case "fullNameNative":
+				return ec.fieldContext_UserHttp_fullNameNative(ctx, field)
+			case "country":
+				return ec.fieldContext_UserHttp_country(ctx, field)
+			case "city":
+				return ec.fieldContext_UserHttp_city(ctx, field)
+			case "birthdate":
+				return ec.fieldContext_UserHttp_birthdate(ctx, field)
 			case "isActive":
 				return ec.fieldContext_UserHttp_isActive(ctx, field)
 			case "activationLink":
@@ -3458,7 +5383,7 @@ func (ec *executionContext) _Mutation_UpdateUser(ctx context.Context, field grap
 			return ec.resolvers.Mutation().UpdateUser(rctx, fc.Args["input"].(models.UpdateUser))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Teacher", "Parent", "Student"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Teacher", "Parent", "Student"})
 			if err != nil {
 				return nil, err
 			}
@@ -3478,7 +5403,7 @@ func (ec *executionContext) _Mutation_UpdateUser(ctx context.Context, field grap
 		if data, ok := tmp.(*models.UserHTTP); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.UserHTTP`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.UserHTTP`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3492,7 +5417,7 @@ func (ec *executionContext) _Mutation_UpdateUser(ctx context.Context, field grap
 	}
 	res := resTmp.(*models.UserHTTP)
 	fc.Result = res
-	return ec.marshalNUserHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUserHTTP(ctx, field.Selections, res)
+	return ec.marshalNUserHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUserHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_UpdateUser(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3515,14 +5440,16 @@ func (ec *executionContext) fieldContext_Mutation_UpdateUser(ctx context.Context
 				return ec.fieldContext_UserHttp_password(ctx, field)
 			case "role":
 				return ec.fieldContext_UserHttp_role(ctx, field)
-			case "firstname":
-				return ec.fieldContext_UserHttp_firstname(ctx, field)
-			case "lastname":
-				return ec.fieldContext_UserHttp_lastname(ctx, field)
-			case "middlename":
-				return ec.fieldContext_UserHttp_middlename(ctx, field)
-			case "nickname":
-				return ec.fieldContext_UserHttp_nickname(ctx, field)
+			case "fullName":
+				return ec.fieldContext_UserHttp_fullName(ctx, field)
+			case "fullNameNative":
+				return ec.fieldContext_UserHttp_fullNameNative(ctx, field)
+			case "country":
+				return ec.fieldContext_UserHttp_country(ctx, field)
+			case "city":
+				return ec.fieldContext_UserHttp_city(ctx, field)
+			case "birthdate":
+				return ec.fieldContext_UserHttp_birthdate(ctx, field)
 			case "isActive":
 				return ec.fieldContext_UserHttp_isActive(ctx, field)
 			case "activationLink":
@@ -3563,7 +5490,7 @@ func (ec *executionContext) _Mutation_DeleteUser(ctx context.Context, field grap
 			return ec.resolvers.Mutation().DeleteUser(rctx, fc.Args["id"].(string))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "UnitAdmin"})
 			if err != nil {
 				return nil, err
 			}
@@ -3583,7 +5510,7 @@ func (ec *executionContext) _Mutation_DeleteUser(ctx context.Context, field grap
 		if data, ok := tmp.(*models.Response); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.Response`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.Response`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3597,7 +5524,7 @@ func (ec *executionContext) _Mutation_DeleteUser(ctx context.Context, field grap
 	}
 	res := resTmp.(*models.Response)
 	fc.Result = res
-	return ec.marshalNResponse2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
+	return ec.marshalNResponse2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_DeleteUser(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3646,7 +5573,7 @@ func (ec *executionContext) _Mutation_SetUserIsActive(ctx context.Context, field
 			return ec.resolvers.Mutation().SetUserIsActive(rctx, fc.Args["id"].(string), fc.Args["isActive"].(bool))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "UnitAdmin"})
 			if err != nil {
 				return nil, err
 			}
@@ -3666,7 +5593,7 @@ func (ec *executionContext) _Mutation_SetUserIsActive(ctx context.Context, field
 		if data, ok := tmp.(*models.Response); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.Response`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.Response`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3680,7 +5607,7 @@ func (ec *executionContext) _Mutation_SetUserIsActive(ctx context.Context, field
 	}
 	res := resTmp.(*models.Response)
 	fc.Result = res
-	return ec.marshalNResponse2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
+	return ec.marshalNResponse2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_SetUserIsActive(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3705,6 +5632,115 @@ func (ec *executionContext) fieldContext_Mutation_SetUserIsActive(ctx context.Co
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_SetUserIsActive_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_CreateApplication(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_CreateApplication(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Mutation().CreateApplication(rctx, fc.Args["input"].(models.NewApplication))
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"Student", "SuperAdmin"})
+			if err != nil {
+				return nil, err
+			}
+			if ec.directives.HasRole == nil {
+				return nil, errors.New("directive hasRole is not implemented")
+			}
+			return ec.directives.HasRole(ctx, nil, directive0, roles)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, graphql.ErrorOnPath(ctx, err)
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(*models.ApplicationHTTP); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.ApplicationHTTP`, tmp)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.ApplicationHTTP)
+	fc.Result = res
+	return ec.marshalNApplicationHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐApplicationHTTP(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_CreateApplication(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_ApplicationHttp_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_ApplicationHttp_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_ApplicationHttp_updatedAt(ctx, field)
+			case "authorId":
+				return ec.fieldContext_ApplicationHttp_authorId(ctx, field)
+			case "nomination":
+				return ec.fieldContext_ApplicationHttp_nomination(ctx, field)
+			case "algorithmicTaskLink":
+				return ec.fieldContext_ApplicationHttp_algorithmicTaskLink(ctx, field)
+			case "algorithmicTaskFile":
+				return ec.fieldContext_ApplicationHttp_algorithmicTaskFile(ctx, field)
+			case "creativeTaskLink":
+				return ec.fieldContext_ApplicationHttp_creativeTaskLink(ctx, field)
+			case "creativeTaskFile":
+				return ec.fieldContext_ApplicationHttp_creativeTaskFile(ctx, field)
+			case "engineeringTaskFile":
+				return ec.fieldContext_ApplicationHttp_engineeringTaskFile(ctx, field)
+			case "engineeringTaskCloudLink":
+				return ec.fieldContext_ApplicationHttp_engineeringTaskCloudLink(ctx, field)
+			case "engineeringTaskVideo":
+				return ec.fieldContext_ApplicationHttp_engineeringTaskVideo(ctx, field)
+			case "engineeringTaskVideoCloudLink":
+				return ec.fieldContext_ApplicationHttp_engineeringTaskVideoCloudLink(ctx, field)
+			case "note":
+				return ec.fieldContext_ApplicationHttp_note(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ApplicationHttp", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_CreateApplication_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -3739,7 +5775,7 @@ func (ec *executionContext) _Mutation_SignUp(ctx context.Context, field graphql.
 	}
 	res := resTmp.(*models.Response)
 	fc.Result = res
-	return ec.marshalNResponse2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
+	return ec.marshalNResponse2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_SignUp(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3798,7 +5834,7 @@ func (ec *executionContext) _Mutation_SignIn(ctx context.Context, field graphql.
 	}
 	res := resTmp.(*models.SignInResponse)
 	fc.Result = res
-	return ec.marshalNSignInResponse2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐSignInResponse(ctx, field.Selections, res)
+	return ec.marshalNSignInResponse2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐSignInResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_SignIn(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3859,7 +5895,7 @@ func (ec *executionContext) _Mutation_RefreshToken(ctx context.Context, field gr
 	}
 	res := resTmp.(*models.SignInResponse)
 	fc.Result = res
-	return ec.marshalNSignInResponse2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐSignInResponse(ctx, field.Selections, res)
+	return ec.marshalNSignInResponse2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐSignInResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_RefreshToken(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3920,7 +5956,7 @@ func (ec *executionContext) _Mutation_ConfirmActivation(ctx context.Context, fie
 	}
 	res := resTmp.(*models.SignInResponse)
 	fc.Result = res
-	return ec.marshalNSignInResponse2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐSignInResponse(ctx, field.Selections, res)
+	return ec.marshalNSignInResponse2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐSignInResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_ConfirmActivation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3947,6 +5983,124 @@ func (ec *executionContext) fieldContext_Mutation_ConfirmActivation(ctx context.
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_ConfirmActivation_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_ForgotPassword(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_ForgotPassword(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().ForgotPassword(rctx, fc.Args["email"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.Response)
+	fc.Result = res
+	return ec.marshalNResponse2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_ForgotPassword(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "ok":
+				return ec.fieldContext_Response_ok(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Response", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_ForgotPassword_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_ResetPassword(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_ResetPassword(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().ResetPassword(rctx, fc.Args["resetLink"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.Response)
+	fc.Result = res
+	return ec.marshalNResponse2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_ResetPassword(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "ok":
+				return ec.fieldContext_Response_ok(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Response", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_ResetPassword_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -3981,7 +6135,7 @@ func (ec *executionContext) _Mutation_CreateParentRel(ctx context.Context, field
 	}
 	res := resTmp.(*models.Response)
 	fc.Result = res
-	return ec.marshalNResponse2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
+	return ec.marshalNResponse2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_CreateParentRel(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4040,7 +6194,7 @@ func (ec *executionContext) _Mutation_DeleteParentRel(ctx context.Context, field
 	}
 	res := resTmp.(*models.Response)
 	fc.Result = res
-	return ec.marshalNResponse2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
+	return ec.marshalNResponse2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_DeleteParentRel(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4089,7 +6243,7 @@ func (ec *executionContext) _Mutation_CreateProjectPage(ctx context.Context, fie
 			return ec.resolvers.Mutation().CreateProjectPage(rctx)
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
 			if err != nil {
 				return nil, err
 			}
@@ -4109,7 +6263,7 @@ func (ec *executionContext) _Mutation_CreateProjectPage(ctx context.Context, fie
 		if data, ok := tmp.(*models.ProjectPageHTTP); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.ProjectPageHTTP`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.ProjectPageHTTP`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4123,7 +6277,7 @@ func (ec *executionContext) _Mutation_CreateProjectPage(ctx context.Context, fie
 	}
 	res := resTmp.(*models.ProjectPageHTTP)
 	fc.Result = res
-	return ec.marshalNProjectPageHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐProjectPageHTTP(ctx, field.Selections, res)
+	return ec.marshalNProjectPageHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐProjectPageHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_CreateProjectPage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4183,7 +6337,7 @@ func (ec *executionContext) _Mutation_UpdateProjectPage(ctx context.Context, fie
 			return ec.resolvers.Mutation().UpdateProjectPage(rctx, fc.Args["input"].(models.UpdateProjectPage))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
 			if err != nil {
 				return nil, err
 			}
@@ -4203,7 +6357,7 @@ func (ec *executionContext) _Mutation_UpdateProjectPage(ctx context.Context, fie
 		if data, ok := tmp.(*models.ProjectPageHTTP); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.ProjectPageHTTP`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.ProjectPageHTTP`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4217,7 +6371,7 @@ func (ec *executionContext) _Mutation_UpdateProjectPage(ctx context.Context, fie
 	}
 	res := resTmp.(*models.ProjectPageHTTP)
 	fc.Result = res
-	return ec.marshalNProjectPageHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐProjectPageHTTP(ctx, field.Selections, res)
+	return ec.marshalNProjectPageHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐProjectPageHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_UpdateProjectPage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4288,7 +6442,7 @@ func (ec *executionContext) _Mutation_DeleteProjectPage(ctx context.Context, fie
 			return ec.resolvers.Mutation().DeleteProjectPage(rctx, fc.Args["id"].(string))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
 			if err != nil {
 				return nil, err
 			}
@@ -4308,7 +6462,7 @@ func (ec *executionContext) _Mutation_DeleteProjectPage(ctx context.Context, fie
 		if data, ok := tmp.(*models.Response); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.Response`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.Response`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4322,7 +6476,7 @@ func (ec *executionContext) _Mutation_DeleteProjectPage(ctx context.Context, fie
 	}
 	res := resTmp.(*models.Response)
 	fc.Result = res
-	return ec.marshalNResponse2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
+	return ec.marshalNResponse2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_DeleteProjectPage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4371,7 +6525,7 @@ func (ec *executionContext) _Mutation_SetIsBanned(ctx context.Context, field gra
 			return ec.resolvers.Mutation().SetIsBanned(rctx, fc.Args["projectPageId"].(string), fc.Args["isBanned"].(bool))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin"})
 			if err != nil {
 				return nil, err
 			}
@@ -4391,7 +6545,7 @@ func (ec *executionContext) _Mutation_SetIsBanned(ctx context.Context, field gra
 		if data, ok := tmp.(*models.Response); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.Response`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.Response`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4405,7 +6559,7 @@ func (ec *executionContext) _Mutation_SetIsBanned(ctx context.Context, field gra
 	}
 	res := resTmp.(*models.Response)
 	fc.Result = res
-	return ec.marshalNResponse2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
+	return ec.marshalNResponse2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_SetIsBanned(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4454,7 +6608,7 @@ func (ec *executionContext) _Mutation_SetActivationByLink(ctx context.Context, f
 			return ec.resolvers.Mutation().SetActivationByLink(rctx, fc.Args["activationByLink"].(bool))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin"})
 			if err != nil {
 				return nil, err
 			}
@@ -4474,7 +6628,7 @@ func (ec *executionContext) _Mutation_SetActivationByLink(ctx context.Context, f
 		if data, ok := tmp.(*models.Response); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.Response`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.Response`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4488,7 +6642,7 @@ func (ec *executionContext) _Mutation_SetActivationByLink(ctx context.Context, f
 	}
 	res := resTmp.(*models.Response)
 	fc.Result = res
-	return ec.marshalNResponse2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
+	return ec.marshalNResponse2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_SetActivationByLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4651,8 +6805,8 @@ func (ec *executionContext) fieldContext_NewUserResponse_role(ctx context.Contex
 	return fc, nil
 }
 
-func (ec *executionContext) _NewUserResponse_firstname(ctx context.Context, field graphql.CollectedField, obj *models.NewUserResponse) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_NewUserResponse_firstname(ctx, field)
+func (ec *executionContext) _NewUserResponse_fullName(ctx context.Context, field graphql.CollectedField, obj *models.NewUserResponse) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NewUserResponse_fullName(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -4665,7 +6819,7 @@ func (ec *executionContext) _NewUserResponse_firstname(ctx context.Context, fiel
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Firstname, nil
+		return obj.FullName, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4682,7 +6836,7 @@ func (ec *executionContext) _NewUserResponse_firstname(ctx context.Context, fiel
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_NewUserResponse_firstname(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_NewUserResponse_fullName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "NewUserResponse",
 		Field:      field,
@@ -4695,8 +6849,8 @@ func (ec *executionContext) fieldContext_NewUserResponse_firstname(ctx context.C
 	return fc, nil
 }
 
-func (ec *executionContext) _NewUserResponse_lastname(ctx context.Context, field graphql.CollectedField, obj *models.NewUserResponse) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_NewUserResponse_lastname(ctx, field)
+func (ec *executionContext) _NewUserResponse_fullNameNative(ctx context.Context, field graphql.CollectedField, obj *models.NewUserResponse) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NewUserResponse_fullNameNative(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -4709,7 +6863,7 @@ func (ec *executionContext) _NewUserResponse_lastname(ctx context.Context, field
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Lastname, nil
+		return obj.FullNameNative, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4726,7 +6880,7 @@ func (ec *executionContext) _NewUserResponse_lastname(ctx context.Context, field
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_NewUserResponse_lastname(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_NewUserResponse_fullNameNative(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "NewUserResponse",
 		Field:      field,
@@ -4739,8 +6893,8 @@ func (ec *executionContext) fieldContext_NewUserResponse_lastname(ctx context.Co
 	return fc, nil
 }
 
-func (ec *executionContext) _NewUserResponse_middlename(ctx context.Context, field graphql.CollectedField, obj *models.NewUserResponse) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_NewUserResponse_middlename(ctx, field)
+func (ec *executionContext) _NewUserResponse_country(ctx context.Context, field graphql.CollectedField, obj *models.NewUserResponse) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NewUserResponse_country(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -4753,7 +6907,7 @@ func (ec *executionContext) _NewUserResponse_middlename(ctx context.Context, fie
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Middlename, nil
+		return obj.Country, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4770,7 +6924,7 @@ func (ec *executionContext) _NewUserResponse_middlename(ctx context.Context, fie
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_NewUserResponse_middlename(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_NewUserResponse_country(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "NewUserResponse",
 		Field:      field,
@@ -4778,6 +6932,460 @@ func (ec *executionContext) fieldContext_NewUserResponse_middlename(ctx context.
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NewUserResponse_city(ctx context.Context, field graphql.CollectedField, obj *models.NewUserResponse) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NewUserResponse_city(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.City, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NewUserResponse_city(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NewUserResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NewUserResponse_birthdate(ctx context.Context, field graphql.CollectedField, obj *models.NewUserResponse) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NewUserResponse_birthdate(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Birthdate, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNTimestamp2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NewUserResponse_birthdate(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NewUserResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Timestamp does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NominationHttp_id(ctx context.Context, field graphql.CollectedField, obj *models.NominationHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NominationHttp_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NominationHttp_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NominationHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NominationHttp_createdAt(ctx context.Context, field graphql.CollectedField, obj *models.NominationHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NominationHttp_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNTimestamp2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NominationHttp_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NominationHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Timestamp does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NominationHttp_updatedAt(ctx context.Context, field graphql.CollectedField, obj *models.NominationHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NominationHttp_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNTimestamp2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NominationHttp_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NominationHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Timestamp does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NominationHttp_name(ctx context.Context, field graphql.CollectedField, obj *models.NominationHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NominationHttp_name(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Name, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NominationHttp_name(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NominationHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NominationHttp_minAge(ctx context.Context, field graphql.CollectedField, obj *models.NominationHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NominationHttp_minAge(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.MinAge, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NominationHttp_minAge(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NominationHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NominationHttp_maxAge(ctx context.Context, field graphql.CollectedField, obj *models.NominationHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NominationHttp_maxAge(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.MaxAge, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NominationHttp_maxAge(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NominationHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NominationHttpList_nominations(ctx context.Context, field graphql.CollectedField, obj *models.NominationHTTPList) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NominationHttpList_nominations(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Nominations, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*models.NominationHTTP)
+	fc.Result = res
+	return ec.marshalNNominationHttp2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐNominationHTTPᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NominationHttpList_nominations(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NominationHttpList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_NominationHttp_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_NominationHttp_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_NominationHttp_updatedAt(ctx, field)
+			case "name":
+				return ec.fieldContext_NominationHttp_name(ctx, field)
+			case "minAge":
+				return ec.fieldContext_NominationHttp_minAge(ctx, field)
+			case "maxAge":
+				return ec.fieldContext_NominationHttp_maxAge(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type NominationHttp", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NominationHttpList_countRows(ctx context.Context, field graphql.CollectedField, obj *models.NominationHTTPList) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NominationHttpList_countRows(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CountRows, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NominationHttpList_countRows(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NominationHttpList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -5339,7 +7947,7 @@ func (ec *executionContext) _ProjectPageHttpList_projectPages(ctx context.Contex
 	}
 	res := resTmp.([]*models.ProjectPageHTTP)
 	fc.Result = res
-	return ec.marshalNProjectPageHttp2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐProjectPageHTTPᚄ(ctx, field.Selections, res)
+	return ec.marshalNProjectPageHttp2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐProjectPageHTTPᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_ProjectPageHttpList_projectPages(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5443,7 +8051,7 @@ func (ec *executionContext) _Query_GetUserByAccessToken(ctx context.Context, fie
 			return ec.resolvers.Query().GetUserByAccessToken(rctx)
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Teacher", "Parent", "Student"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Teacher", "Parent", "Student"})
 			if err != nil {
 				return nil, err
 			}
@@ -5463,7 +8071,7 @@ func (ec *executionContext) _Query_GetUserByAccessToken(ctx context.Context, fie
 		if data, ok := tmp.(*models.UserHTTP); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.UserHTTP`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.UserHTTP`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5477,7 +8085,7 @@ func (ec *executionContext) _Query_GetUserByAccessToken(ctx context.Context, fie
 	}
 	res := resTmp.(*models.UserHTTP)
 	fc.Result = res
-	return ec.marshalNUserHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUserHTTP(ctx, field.Selections, res)
+	return ec.marshalNUserHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUserHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_GetUserByAccessToken(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5500,14 +8108,16 @@ func (ec *executionContext) fieldContext_Query_GetUserByAccessToken(ctx context.
 				return ec.fieldContext_UserHttp_password(ctx, field)
 			case "role":
 				return ec.fieldContext_UserHttp_role(ctx, field)
-			case "firstname":
-				return ec.fieldContext_UserHttp_firstname(ctx, field)
-			case "lastname":
-				return ec.fieldContext_UserHttp_lastname(ctx, field)
-			case "middlename":
-				return ec.fieldContext_UserHttp_middlename(ctx, field)
-			case "nickname":
-				return ec.fieldContext_UserHttp_nickname(ctx, field)
+			case "fullName":
+				return ec.fieldContext_UserHttp_fullName(ctx, field)
+			case "fullNameNative":
+				return ec.fieldContext_UserHttp_fullNameNative(ctx, field)
+			case "country":
+				return ec.fieldContext_UserHttp_country(ctx, field)
+			case "city":
+				return ec.fieldContext_UserHttp_city(ctx, field)
+			case "birthdate":
+				return ec.fieldContext_UserHttp_birthdate(ctx, field)
 			case "isActive":
 				return ec.fieldContext_UserHttp_isActive(ctx, field)
 			case "activationLink":
@@ -5537,7 +8147,7 @@ func (ec *executionContext) _Query_GetUserById(ctx context.Context, field graphq
 			return ec.resolvers.Query().GetUserByID(rctx, fc.Args["id"].(string))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Teacher", "Parent", "Student"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Teacher", "Parent", "Student"})
 			if err != nil {
 				return nil, err
 			}
@@ -5557,7 +8167,7 @@ func (ec *executionContext) _Query_GetUserById(ctx context.Context, field graphq
 		if data, ok := tmp.(*models.UserHTTP); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.UserHTTP`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.UserHTTP`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5571,7 +8181,7 @@ func (ec *executionContext) _Query_GetUserById(ctx context.Context, field graphq
 	}
 	res := resTmp.(*models.UserHTTP)
 	fc.Result = res
-	return ec.marshalNUserHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUserHTTP(ctx, field.Selections, res)
+	return ec.marshalNUserHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUserHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_GetUserById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5594,14 +8204,16 @@ func (ec *executionContext) fieldContext_Query_GetUserById(ctx context.Context, 
 				return ec.fieldContext_UserHttp_password(ctx, field)
 			case "role":
 				return ec.fieldContext_UserHttp_role(ctx, field)
-			case "firstname":
-				return ec.fieldContext_UserHttp_firstname(ctx, field)
-			case "lastname":
-				return ec.fieldContext_UserHttp_lastname(ctx, field)
-			case "middlename":
-				return ec.fieldContext_UserHttp_middlename(ctx, field)
-			case "nickname":
-				return ec.fieldContext_UserHttp_nickname(ctx, field)
+			case "fullName":
+				return ec.fieldContext_UserHttp_fullName(ctx, field)
+			case "fullNameNative":
+				return ec.fieldContext_UserHttp_fullNameNative(ctx, field)
+			case "country":
+				return ec.fieldContext_UserHttp_country(ctx, field)
+			case "city":
+				return ec.fieldContext_UserHttp_city(ctx, field)
+			case "birthdate":
+				return ec.fieldContext_UserHttp_birthdate(ctx, field)
 			case "isActive":
 				return ec.fieldContext_UserHttp_isActive(ctx, field)
 			case "activationLink":
@@ -5642,7 +8254,7 @@ func (ec *executionContext) _Query_GetAllUsers(ctx context.Context, field graphq
 			return ec.resolvers.Query().GetAllUsers(rctx, fc.Args["page"].(*int), fc.Args["pageSize"].(*int), fc.Args["active"].(bool), fc.Args["roles"].([]models.Role))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "UnitAdmin"})
 			if err != nil {
 				return nil, err
 			}
@@ -5662,7 +8274,7 @@ func (ec *executionContext) _Query_GetAllUsers(ctx context.Context, field graphq
 		if data, ok := tmp.(*models.UsersList); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.UsersList`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.UsersList`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5676,7 +8288,7 @@ func (ec *executionContext) _Query_GetAllUsers(ctx context.Context, field graphq
 	}
 	res := resTmp.(*models.UsersList)
 	fc.Result = res
-	return ec.marshalNUsersList2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUsersList(ctx, field.Selections, res)
+	return ec.marshalNUsersList2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUsersList(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_GetAllUsers(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5727,7 +8339,7 @@ func (ec *executionContext) _Query_Me(ctx context.Context, field graphql.Collect
 			return ec.resolvers.Query().Me(rctx)
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"Student", "Teacher", "Parent", "UnitAdmin", "SuperAdmin"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"Student", "Teacher", "Parent", "UnitAdmin", "SuperAdmin"})
 			if err != nil {
 				return nil, err
 			}
@@ -5747,7 +8359,7 @@ func (ec *executionContext) _Query_Me(ctx context.Context, field graphql.Collect
 		if data, ok := tmp.(*models.UserHTTP); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.UserHTTP`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.UserHTTP`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5761,7 +8373,7 @@ func (ec *executionContext) _Query_Me(ctx context.Context, field graphql.Collect
 	}
 	res := resTmp.(*models.UserHTTP)
 	fc.Result = res
-	return ec.marshalNUserHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUserHTTP(ctx, field.Selections, res)
+	return ec.marshalNUserHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUserHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_Me(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5784,14 +8396,16 @@ func (ec *executionContext) fieldContext_Query_Me(ctx context.Context, field gra
 				return ec.fieldContext_UserHttp_password(ctx, field)
 			case "role":
 				return ec.fieldContext_UserHttp_role(ctx, field)
-			case "firstname":
-				return ec.fieldContext_UserHttp_firstname(ctx, field)
-			case "lastname":
-				return ec.fieldContext_UserHttp_lastname(ctx, field)
-			case "middlename":
-				return ec.fieldContext_UserHttp_middlename(ctx, field)
-			case "nickname":
-				return ec.fieldContext_UserHttp_nickname(ctx, field)
+			case "fullName":
+				return ec.fieldContext_UserHttp_fullName(ctx, field)
+			case "fullNameNative":
+				return ec.fieldContext_UserHttp_fullNameNative(ctx, field)
+			case "country":
+				return ec.fieldContext_UserHttp_country(ctx, field)
+			case "city":
+				return ec.fieldContext_UserHttp_city(ctx, field)
+			case "birthdate":
+				return ec.fieldContext_UserHttp_birthdate(ctx, field)
 			case "isActive":
 				return ec.fieldContext_UserHttp_isActive(ctx, field)
 			case "activationLink":
@@ -5799,6 +8413,67 @@ func (ec *executionContext) fieldContext_Query_Me(ctx context.Context, field gra
 			}
 			return nil, fmt.Errorf("no field named %q was found under type UserHttp", field.Name)
 		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_GetAllCountries(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_GetAllCountries(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetAllCountries(rctx, fc.Args["page"].(*int), fc.Args["pageSize"].(*int))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.CountryHTTPList)
+	fc.Result = res
+	return ec.marshalNCountryHttpList2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCountryHTTPList(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_GetAllCountries(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "countries":
+				return ec.fieldContext_CountryHttpList_countries(ctx, field)
+			case "countRows":
+				return ec.fieldContext_CountryHttpList_countRows(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CountryHttpList", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_GetAllCountries_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -5821,7 +8496,7 @@ func (ec *executionContext) _Query_GetCourseById(ctx context.Context, field grap
 			return ec.resolvers.Query().GetCourseByID(rctx, fc.Args["id"].(string))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Teacher", "Student"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Teacher", "Student"})
 			if err != nil {
 				return nil, err
 			}
@@ -5841,7 +8516,7 @@ func (ec *executionContext) _Query_GetCourseById(ctx context.Context, field grap
 		if data, ok := tmp.(*models.CourseHTTP); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.CourseHTTP`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.CourseHTTP`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5855,7 +8530,7 @@ func (ec *executionContext) _Query_GetCourseById(ctx context.Context, field grap
 	}
 	res := resTmp.(*models.CourseHTTP)
 	fc.Result = res
-	return ec.marshalNCourseHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐCourseHTTP(ctx, field.Selections, res)
+	return ec.marshalNCourseHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCourseHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_GetCourseById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5942,7 +8617,7 @@ func (ec *executionContext) _Query_GetCoursesByUser(ctx context.Context, field g
 			return ec.resolvers.Query().GetCoursesByUser(rctx)
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Teacher", "Student"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Teacher", "Student"})
 			if err != nil {
 				return nil, err
 			}
@@ -5962,7 +8637,7 @@ func (ec *executionContext) _Query_GetCoursesByUser(ctx context.Context, field g
 		if data, ok := tmp.(*models.CoursesListHTTP); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.CoursesListHTTP`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.CoursesListHTTP`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5976,7 +8651,7 @@ func (ec *executionContext) _Query_GetCoursesByUser(ctx context.Context, field g
 	}
 	res := resTmp.(*models.CoursesListHTTP)
 	fc.Result = res
-	return ec.marshalNCoursesListHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐCoursesListHTTP(ctx, field.Selections, res)
+	return ec.marshalNCoursesListHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCoursesListHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_GetCoursesByUser(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5994,6 +8669,91 @@ func (ec *executionContext) fieldContext_Query_GetCoursesByUser(ctx context.Cont
 			}
 			return nil, fmt.Errorf("no field named %q was found under type CoursesListHttp", field.Name)
 		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_GetAllNominations(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_GetAllNominations(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Query().GetAllNominations(rctx, fc.Args["page"].(*int), fc.Args["pageSize"].(*int))
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"Student", "SuperAdmin"})
+			if err != nil {
+				return nil, err
+			}
+			if ec.directives.HasRole == nil {
+				return nil, errors.New("directive hasRole is not implemented")
+			}
+			return ec.directives.HasRole(ctx, nil, directive0, roles)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, graphql.ErrorOnPath(ctx, err)
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(*models.NominationHTTPList); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.NominationHTTPList`, tmp)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.NominationHTTPList)
+	fc.Result = res
+	return ec.marshalNNominationHttpList2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐNominationHTTPList(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_GetAllNominations(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "nominations":
+				return ec.fieldContext_NominationHttpList_nominations(ctx, field)
+			case "countRows":
+				return ec.fieldContext_NominationHttpList_countRows(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type NominationHttpList", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_GetAllNominations_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -6026,7 +8786,7 @@ func (ec *executionContext) _Query_GetChildrenByParent(ctx context.Context, fiel
 	}
 	res := resTmp.(*models.UsersList)
 	fc.Result = res
-	return ec.marshalNUsersList2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUsersList(ctx, field.Selections, res)
+	return ec.marshalNUsersList2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUsersList(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_GetChildrenByParent(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6087,7 +8847,7 @@ func (ec *executionContext) _Query_GetParentsByChild(ctx context.Context, field 
 	}
 	res := resTmp.(*models.UsersList)
 	fc.Result = res
-	return ec.marshalNUsersList2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUsersList(ctx, field.Selections, res)
+	return ec.marshalNUsersList2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUsersList(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_GetParentsByChild(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6138,7 +8898,7 @@ func (ec *executionContext) _Query_GetProjectPageById(ctx context.Context, field
 			return ec.resolvers.Query().GetProjectPageByID(rctx, fc.Args["id"].(string))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
 			if err != nil {
 				return nil, err
 			}
@@ -6158,7 +8918,7 @@ func (ec *executionContext) _Query_GetProjectPageById(ctx context.Context, field
 		if data, ok := tmp.(*models.ProjectPageHTTP); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.ProjectPageHTTP`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.ProjectPageHTTP`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6172,7 +8932,7 @@ func (ec *executionContext) _Query_GetProjectPageById(ctx context.Context, field
 	}
 	res := resTmp.(*models.ProjectPageHTTP)
 	fc.Result = res
-	return ec.marshalNProjectPageHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐProjectPageHTTP(ctx, field.Selections, res)
+	return ec.marshalNProjectPageHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐProjectPageHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_GetProjectPageById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6243,7 +9003,7 @@ func (ec *executionContext) _Query_GetAllProjectPagesByAuthorId(ctx context.Cont
 			return ec.resolvers.Query().GetAllProjectPagesByAuthorID(rctx, fc.Args["id"].(string), fc.Args["page"].(*int), fc.Args["pageSize"].(*int))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
 			if err != nil {
 				return nil, err
 			}
@@ -6263,7 +9023,7 @@ func (ec *executionContext) _Query_GetAllProjectPagesByAuthorId(ctx context.Cont
 		if data, ok := tmp.(*models.ProjectPageHTTPList); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.ProjectPageHTTPList`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.ProjectPageHTTPList`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6277,7 +9037,7 @@ func (ec *executionContext) _Query_GetAllProjectPagesByAuthorId(ctx context.Cont
 	}
 	res := resTmp.(*models.ProjectPageHTTPList)
 	fc.Result = res
-	return ec.marshalNProjectPageHttpList2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐProjectPageHTTPList(ctx, field.Selections, res)
+	return ec.marshalNProjectPageHttpList2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐProjectPageHTTPList(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_GetAllProjectPagesByAuthorId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6328,7 +9088,7 @@ func (ec *executionContext) _Query_GetAllProjectPagesByAccessToken(ctx context.C
 			return ec.resolvers.Query().GetAllProjectPagesByAccessToken(rctx, fc.Args["page"].(*int), fc.Args["pageSize"].(*int))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "UnitAdmin", "Student", "Teacher"})
 			if err != nil {
 				return nil, err
 			}
@@ -6348,7 +9108,7 @@ func (ec *executionContext) _Query_GetAllProjectPagesByAccessToken(ctx context.C
 		if data, ok := tmp.(*models.ProjectPageHTTPList); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.ProjectPageHTTPList`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.ProjectPageHTTPList`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6362,7 +9122,7 @@ func (ec *executionContext) _Query_GetAllProjectPagesByAccessToken(ctx context.C
 	}
 	res := resTmp.(*models.ProjectPageHTTPList)
 	fc.Result = res
-	return ec.marshalNProjectPageHttpList2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐProjectPageHTTPList(ctx, field.Selections, res)
+	return ec.marshalNProjectPageHttpList2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐProjectPageHTTPList(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_GetAllProjectPagesByAccessToken(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6413,7 +9173,7 @@ func (ec *executionContext) _Query_GetSettings(ctx context.Context, field graphq
 			return ec.resolvers.Query().GetSettings(rctx)
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, []interface{}{"SuperAdmin"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin"})
 			if err != nil {
 				return nil, err
 			}
@@ -6433,7 +9193,7 @@ func (ec *executionContext) _Query_GetSettings(ctx context.Context, field graphq
 		if data, ok := tmp.(*models.Settings); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/skinnykaen/rpa_clone/internal/models.Settings`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.Settings`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6447,7 +9207,7 @@ func (ec *executionContext) _Query_GetSettings(ctx context.Context, field graphq
 	}
 	res := resTmp.(*models.Settings)
 	fc.Result = res
-	return ec.marshalNSettings2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐSettings(ctx, field.Selections, res)
+	return ec.marshalNSettings2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐSettings(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_GetSettings(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -7020,7 +9780,7 @@ func (ec *executionContext) _UserHttp_role(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.(models.Role)
 	fc.Result = res
-	return ec.marshalNRole2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, field.Selections, res)
+	return ec.marshalNRole2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_UserHttp_role(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -7036,8 +9796,8 @@ func (ec *executionContext) fieldContext_UserHttp_role(ctx context.Context, fiel
 	return fc, nil
 }
 
-func (ec *executionContext) _UserHttp_firstname(ctx context.Context, field graphql.CollectedField, obj *models.UserHTTP) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_UserHttp_firstname(ctx, field)
+func (ec *executionContext) _UserHttp_fullName(ctx context.Context, field graphql.CollectedField, obj *models.UserHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserHttp_fullName(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -7050,7 +9810,7 @@ func (ec *executionContext) _UserHttp_firstname(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Firstname, nil
+		return obj.FullName, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -7067,7 +9827,7 @@ func (ec *executionContext) _UserHttp_firstname(ctx context.Context, field graph
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_UserHttp_firstname(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_UserHttp_fullName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "UserHttp",
 		Field:      field,
@@ -7080,8 +9840,8 @@ func (ec *executionContext) fieldContext_UserHttp_firstname(ctx context.Context,
 	return fc, nil
 }
 
-func (ec *executionContext) _UserHttp_lastname(ctx context.Context, field graphql.CollectedField, obj *models.UserHTTP) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_UserHttp_lastname(ctx, field)
+func (ec *executionContext) _UserHttp_fullNameNative(ctx context.Context, field graphql.CollectedField, obj *models.UserHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserHttp_fullNameNative(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -7094,7 +9854,7 @@ func (ec *executionContext) _UserHttp_lastname(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Lastname, nil
+		return obj.FullNameNative, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -7111,7 +9871,7 @@ func (ec *executionContext) _UserHttp_lastname(ctx context.Context, field graphq
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_UserHttp_lastname(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_UserHttp_fullNameNative(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "UserHttp",
 		Field:      field,
@@ -7124,8 +9884,8 @@ func (ec *executionContext) fieldContext_UserHttp_lastname(ctx context.Context, 
 	return fc, nil
 }
 
-func (ec *executionContext) _UserHttp_middlename(ctx context.Context, field graphql.CollectedField, obj *models.UserHTTP) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_UserHttp_middlename(ctx, field)
+func (ec *executionContext) _UserHttp_country(ctx context.Context, field graphql.CollectedField, obj *models.UserHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserHttp_country(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -7138,7 +9898,7 @@ func (ec *executionContext) _UserHttp_middlename(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Middlename, nil
+		return obj.Country, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -7155,7 +9915,7 @@ func (ec *executionContext) _UserHttp_middlename(ctx context.Context, field grap
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_UserHttp_middlename(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_UserHttp_country(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "UserHttp",
 		Field:      field,
@@ -7168,8 +9928,8 @@ func (ec *executionContext) fieldContext_UserHttp_middlename(ctx context.Context
 	return fc, nil
 }
 
-func (ec *executionContext) _UserHttp_nickname(ctx context.Context, field graphql.CollectedField, obj *models.UserHTTP) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_UserHttp_nickname(ctx, field)
+func (ec *executionContext) _UserHttp_city(ctx context.Context, field graphql.CollectedField, obj *models.UserHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserHttp_city(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -7182,7 +9942,7 @@ func (ec *executionContext) _UserHttp_nickname(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Nickname, nil
+		return obj.City, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -7199,7 +9959,7 @@ func (ec *executionContext) _UserHttp_nickname(ctx context.Context, field graphq
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_UserHttp_nickname(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_UserHttp_city(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "UserHttp",
 		Field:      field,
@@ -7207,6 +9967,50 @@ func (ec *executionContext) fieldContext_UserHttp_nickname(ctx context.Context, 
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _UserHttp_birthdate(ctx context.Context, field graphql.CollectedField, obj *models.UserHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserHttp_birthdate(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Birthdate, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNTimestamp2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_UserHttp_birthdate(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "UserHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Timestamp does not have child fields")
 		},
 	}
 	return fc, nil
@@ -7328,7 +10132,7 @@ func (ec *executionContext) _UsersList_users(ctx context.Context, field graphql.
 	}
 	res := resTmp.([]*models.UserHTTP)
 	fc.Result = res
-	return ec.marshalNUserHttp2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUserHTTPᚄ(ctx, field.Selections, res)
+	return ec.marshalNUserHttp2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUserHTTPᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_UsersList_users(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -7351,14 +10155,16 @@ func (ec *executionContext) fieldContext_UsersList_users(ctx context.Context, fi
 				return ec.fieldContext_UserHttp_password(ctx, field)
 			case "role":
 				return ec.fieldContext_UserHttp_role(ctx, field)
-			case "firstname":
-				return ec.fieldContext_UserHttp_firstname(ctx, field)
-			case "lastname":
-				return ec.fieldContext_UserHttp_lastname(ctx, field)
-			case "middlename":
-				return ec.fieldContext_UserHttp_middlename(ctx, field)
-			case "nickname":
-				return ec.fieldContext_UserHttp_nickname(ctx, field)
+			case "fullName":
+				return ec.fieldContext_UserHttp_fullName(ctx, field)
+			case "fullNameNative":
+				return ec.fieldContext_UserHttp_fullNameNative(ctx, field)
+			case "country":
+				return ec.fieldContext_UserHttp_country(ctx, field)
+			case "city":
+				return ec.fieldContext_UserHttp_city(ctx, field)
+			case "birthdate":
+				return ec.fieldContext_UserHttp_birthdate(ctx, field)
 			case "isActive":
 				return ec.fieldContext_UserHttp_isActive(ctx, field)
 			case "activationLink":
@@ -9187,6 +11993,116 @@ func (ec *executionContext) fieldContext___Type_specifiedByURL(ctx context.Conte
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputNewApplication(ctx context.Context, obj interface{}) (models.NewApplication, error) {
+	var it models.NewApplication
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"nomination", "algorithmicTaskLink", "algorithmicTaskFile", "creativeTaskLink", "creativeTaskFile", "engineeringTaskFile", "engineeringTaskCloudLink", "engineeringTaskVideo", "engineeringTaskVideoCloudLink", "note"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "nomination":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nomination"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Nomination = data
+		case "algorithmicTaskLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("algorithmicTaskLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AlgorithmicTaskLink = data
+		case "algorithmicTaskFile":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("algorithmicTaskFile"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AlgorithmicTaskFile = data
+		case "creativeTaskLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("creativeTaskLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreativeTaskLink = data
+		case "creativeTaskFile":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("creativeTaskFile"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreativeTaskFile = data
+		case "engineeringTaskFile":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("engineeringTaskFile"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EngineeringTaskFile = data
+		case "engineeringTaskCloudLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("engineeringTaskCloudLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EngineeringTaskCloudLink = data
+		case "engineeringTaskVideo":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("engineeringTaskVideo"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EngineeringTaskVideo = data
+		case "engineeringTaskVideoCloudLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("engineeringTaskVideoCloudLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EngineeringTaskVideoCloudLink = data
+		case "note":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("note"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Note = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputNewUser(ctx context.Context, obj interface{}) (models.NewUser, error) {
 	var it models.NewUser
 	asMap := map[string]interface{}{}
@@ -9194,7 +12110,7 @@ func (ec *executionContext) unmarshalInputNewUser(ctx context.Context, obj inter
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"email", "password", "role", "firstname", "lastname", "middlename", "nickname"}
+	fieldsInOrder := [...]string{"email", "password", "role", "fullName", "fullNameNative", "country", "city", "birthdate"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -9223,47 +12139,56 @@ func (ec *executionContext) unmarshalInputNewUser(ctx context.Context, obj inter
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("role"))
-			data, err := ec.unmarshalNRole2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, v)
+			data, err := ec.unmarshalNRole2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.Role = data
-		case "firstname":
+		case "fullName":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstname"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fullName"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Firstname = data
-		case "lastname":
+			it.FullName = data
+		case "fullNameNative":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastname"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fullNameNative"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Lastname = data
-		case "middlename":
+			it.FullNameNative = data
+		case "country":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("middlename"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Middlename = data
-		case "nickname":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nickname"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("country"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Nickname = data
+			it.Country = data
+		case "city":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("city"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.City = data
+		case "birthdate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("birthdate"))
+			data, err := ec.unmarshalNTimestamp2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Birthdate = data
 		}
 	}
 
@@ -9315,7 +12240,7 @@ func (ec *executionContext) unmarshalInputSignUp(ctx context.Context, obj interf
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"email", "password", "nickname", "firstname", "lastname", "middlename"}
+	fieldsInOrder := [...]string{"email", "password", "fullName", "fullNameNative", "country", "city", "birthdate"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -9340,42 +12265,51 @@ func (ec *executionContext) unmarshalInputSignUp(ctx context.Context, obj interf
 				return it, err
 			}
 			it.Password = data
-		case "nickname":
+		case "fullName":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nickname"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fullName"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Nickname = data
-		case "firstname":
+			it.FullName = data
+		case "fullNameNative":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstname"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fullNameNative"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Firstname = data
-		case "lastname":
+			it.FullNameNative = data
+		case "country":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastname"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("country"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Lastname = data
-		case "middlename":
+			it.Country = data
+		case "city":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("middlename"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("city"))
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Middlename = data
+			it.City = data
+		case "birthdate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("birthdate"))
+			data, err := ec.unmarshalNTimestamp2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Birthdate = data
 		}
 	}
 
@@ -9454,7 +12388,7 @@ func (ec *executionContext) unmarshalInputUpdateUser(ctx context.Context, obj in
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"id", "email", "firstname", "lastname", "middlename", "nickname"}
+	fieldsInOrder := [...]string{"id", "email", "fullName", "fullNameNative", "country", "city", "birthdate"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -9479,42 +12413,51 @@ func (ec *executionContext) unmarshalInputUpdateUser(ctx context.Context, obj in
 				return it, err
 			}
 			it.Email = data
-		case "firstname":
+		case "fullName":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstname"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fullName"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Firstname = data
-		case "lastname":
+			it.FullName = data
+		case "fullNameNative":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastname"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fullNameNative"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Lastname = data
-		case "middlename":
+			it.FullNameNative = data
+		case "country":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("middlename"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("country"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Middlename = data
-		case "nickname":
+			it.Country = data
+		case "city":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nickname"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("city"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Nickname = data
+			it.City = data
+		case "birthdate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("birthdate"))
+			data, err := ec.unmarshalNTimestamp2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Birthdate = data
 		}
 	}
 
@@ -9552,6 +12495,297 @@ func (ec *executionContext) _AbsoluteMediaHttp(ctx context.Context, sel ast.Sele
 			}
 		case "uri_absolute":
 			out.Values[i] = ec._AbsoluteMediaHttp_uri_absolute(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var applicationHttpImplementors = []string{"ApplicationHttp"}
+
+func (ec *executionContext) _ApplicationHttp(ctx context.Context, sel ast.SelectionSet, obj *models.ApplicationHTTP) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, applicationHttpImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ApplicationHttp")
+		case "id":
+			out.Values[i] = ec._ApplicationHttp_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._ApplicationHttp_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._ApplicationHttp_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "authorId":
+			out.Values[i] = ec._ApplicationHttp_authorId(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "nomination":
+			out.Values[i] = ec._ApplicationHttp_nomination(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "algorithmicTaskLink":
+			out.Values[i] = ec._ApplicationHttp_algorithmicTaskLink(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "algorithmicTaskFile":
+			out.Values[i] = ec._ApplicationHttp_algorithmicTaskFile(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "creativeTaskLink":
+			out.Values[i] = ec._ApplicationHttp_creativeTaskLink(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "creativeTaskFile":
+			out.Values[i] = ec._ApplicationHttp_creativeTaskFile(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "engineeringTaskFile":
+			out.Values[i] = ec._ApplicationHttp_engineeringTaskFile(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "engineeringTaskCloudLink":
+			out.Values[i] = ec._ApplicationHttp_engineeringTaskCloudLink(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "engineeringTaskVideo":
+			out.Values[i] = ec._ApplicationHttp_engineeringTaskVideo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "engineeringTaskVideoCloudLink":
+			out.Values[i] = ec._ApplicationHttp_engineeringTaskVideoCloudLink(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "note":
+			out.Values[i] = ec._ApplicationHttp_note(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var applicationPayloadHttpImplementors = []string{"ApplicationPayloadHttp"}
+
+func (ec *executionContext) _ApplicationPayloadHttp(ctx context.Context, sel ast.SelectionSet, obj *models.ApplicationPayloadHTTP) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, applicationPayloadHttpImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ApplicationPayloadHttp")
+		case "author":
+			out.Values[i] = ec._ApplicationPayloadHttp_author(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "nomination":
+			out.Values[i] = ec._ApplicationPayloadHttp_nomination(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "algorithmicTaskLink":
+			out.Values[i] = ec._ApplicationPayloadHttp_algorithmicTaskLink(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "algorithmicTaskFile":
+			out.Values[i] = ec._ApplicationPayloadHttp_algorithmicTaskFile(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "creativeTaskLink":
+			out.Values[i] = ec._ApplicationPayloadHttp_creativeTaskLink(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "creativeTaskFile":
+			out.Values[i] = ec._ApplicationPayloadHttp_creativeTaskFile(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "engineeringTaskFile":
+			out.Values[i] = ec._ApplicationPayloadHttp_engineeringTaskFile(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "engineeringTaskCloudLink":
+			out.Values[i] = ec._ApplicationPayloadHttp_engineeringTaskCloudLink(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "engineeringTaskVideo":
+			out.Values[i] = ec._ApplicationPayloadHttp_engineeringTaskVideo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "engineeringTaskVideoCloudLink":
+			out.Values[i] = ec._ApplicationPayloadHttp_engineeringTaskVideoCloudLink(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "note":
+			out.Values[i] = ec._ApplicationPayloadHttp_note(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var countryHttpImplementors = []string{"CountryHttp"}
+
+func (ec *executionContext) _CountryHttp(ctx context.Context, sel ast.SelectionSet, obj *models.CountryHTTP) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, countryHttpImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CountryHttp")
+		case "id":
+			out.Values[i] = ec._CountryHttp_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._CountryHttp_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._CountryHttp_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "name":
+			out.Values[i] = ec._CountryHttp_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var countryHttpListImplementors = []string{"CountryHttpList"}
+
+func (ec *executionContext) _CountryHttpList(ctx context.Context, sel ast.SelectionSet, obj *models.CountryHTTPList) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, countryHttpListImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CountryHttpList")
+		case "countries":
+			out.Values[i] = ec._CountryHttpList_countries(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "countRows":
+			out.Values[i] = ec._CountryHttpList_countRows(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -9945,6 +13179,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "CreateApplication":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_CreateApplication(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "SignUp":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_SignUp(ctx, field)
@@ -9969,6 +13210,20 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "ConfirmActivation":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_ConfirmActivation(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "ForgotPassword":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_ForgotPassword(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "ResetPassword":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_ResetPassword(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -10071,18 +13326,136 @@ func (ec *executionContext) _NewUserResponse(ctx context.Context, sel ast.Select
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "firstname":
-			out.Values[i] = ec._NewUserResponse_firstname(ctx, field, obj)
+		case "fullName":
+			out.Values[i] = ec._NewUserResponse_fullName(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "lastname":
-			out.Values[i] = ec._NewUserResponse_lastname(ctx, field, obj)
+		case "fullNameNative":
+			out.Values[i] = ec._NewUserResponse_fullNameNative(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "middlename":
-			out.Values[i] = ec._NewUserResponse_middlename(ctx, field, obj)
+		case "country":
+			out.Values[i] = ec._NewUserResponse_country(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "city":
+			out.Values[i] = ec._NewUserResponse_city(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "birthdate":
+			out.Values[i] = ec._NewUserResponse_birthdate(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var nominationHttpImplementors = []string{"NominationHttp"}
+
+func (ec *executionContext) _NominationHttp(ctx context.Context, sel ast.SelectionSet, obj *models.NominationHTTP) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, nominationHttpImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("NominationHttp")
+		case "id":
+			out.Values[i] = ec._NominationHttp_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._NominationHttp_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._NominationHttp_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "name":
+			out.Values[i] = ec._NominationHttp_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "minAge":
+			out.Values[i] = ec._NominationHttp_minAge(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "maxAge":
+			out.Values[i] = ec._NominationHttp_maxAge(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var nominationHttpListImplementors = []string{"NominationHttpList"}
+
+func (ec *executionContext) _NominationHttpList(ctx context.Context, sel ast.SelectionSet, obj *models.NominationHTTPList) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, nominationHttpListImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("NominationHttpList")
+		case "nominations":
+			out.Values[i] = ec._NominationHttpList_nominations(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "countRows":
+			out.Values[i] = ec._NominationHttpList_countRows(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -10354,6 +13727,28 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "GetAllCountries":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_GetAllCountries(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
 		case "GetCourseById":
 			field := field
 
@@ -10386,6 +13781,28 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_GetCoursesByUser(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "GetAllNominations":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_GetAllNominations(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -10724,23 +14141,28 @@ func (ec *executionContext) _UserHttp(ctx context.Context, sel ast.SelectionSet,
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "firstname":
-			out.Values[i] = ec._UserHttp_firstname(ctx, field, obj)
+		case "fullName":
+			out.Values[i] = ec._UserHttp_fullName(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "lastname":
-			out.Values[i] = ec._UserHttp_lastname(ctx, field, obj)
+		case "fullNameNative":
+			out.Values[i] = ec._UserHttp_fullNameNative(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "middlename":
-			out.Values[i] = ec._UserHttp_middlename(ctx, field, obj)
+		case "country":
+			out.Values[i] = ec._UserHttp_country(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "nickname":
-			out.Values[i] = ec._UserHttp_nickname(ctx, field, obj)
+		case "city":
+			out.Values[i] = ec._UserHttp_city(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "birthdate":
+			out.Values[i] = ec._UserHttp_birthdate(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -11147,6 +14569,20 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
+func (ec *executionContext) marshalNApplicationHttp2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐApplicationHTTP(ctx context.Context, sel ast.SelectionSet, v models.ApplicationHTTP) graphql.Marshaler {
+	return ec._ApplicationHttp(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNApplicationHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐApplicationHTTP(ctx context.Context, sel ast.SelectionSet, v *models.ApplicationHTTP) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ApplicationHttp(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalNBoolean2bool(ctx context.Context, v interface{}) (bool, error) {
 	res, err := graphql.UnmarshalBoolean(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -11162,21 +14598,7 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) marshalNCourseAPIMediaCollectionHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐCourseAPIMediaCollectionHTTP(ctx context.Context, sel ast.SelectionSet, v *models.CourseAPIMediaCollectionHTTP) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._CourseAPIMediaCollectionHttp(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNCourseHttp2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐCourseHTTP(ctx context.Context, sel ast.SelectionSet, v models.CourseHTTP) graphql.Marshaler {
-	return ec._CourseHttp(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNCourseHttp2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐCourseHTTPᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.CourseHTTP) graphql.Marshaler {
+func (ec *executionContext) marshalNCountryHttp2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCountryHTTPᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.CountryHTTP) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -11200,7 +14622,7 @@ func (ec *executionContext) marshalNCourseHttp2ᚕᚖgithubᚗcomᚋskinnykaen�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNCourseHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐCourseHTTP(ctx, sel, v[i])
+			ret[i] = ec.marshalNCountryHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCountryHTTP(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -11220,7 +14642,89 @@ func (ec *executionContext) marshalNCourseHttp2ᚕᚖgithubᚗcomᚋskinnykaen�
 	return ret
 }
 
-func (ec *executionContext) marshalNCourseHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐCourseHTTP(ctx context.Context, sel ast.SelectionSet, v *models.CourseHTTP) graphql.Marshaler {
+func (ec *executionContext) marshalNCountryHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCountryHTTP(ctx context.Context, sel ast.SelectionSet, v *models.CountryHTTP) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._CountryHttp(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNCountryHttpList2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCountryHTTPList(ctx context.Context, sel ast.SelectionSet, v models.CountryHTTPList) graphql.Marshaler {
+	return ec._CountryHttpList(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNCountryHttpList2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCountryHTTPList(ctx context.Context, sel ast.SelectionSet, v *models.CountryHTTPList) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._CountryHttpList(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNCourseAPIMediaCollectionHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCourseAPIMediaCollectionHTTP(ctx context.Context, sel ast.SelectionSet, v *models.CourseAPIMediaCollectionHTTP) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._CourseAPIMediaCollectionHttp(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNCourseHttp2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCourseHTTP(ctx context.Context, sel ast.SelectionSet, v models.CourseHTTP) graphql.Marshaler {
+	return ec._CourseHttp(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNCourseHttp2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCourseHTTPᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.CourseHTTP) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNCourseHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCourseHTTP(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNCourseHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCourseHTTP(ctx context.Context, sel ast.SelectionSet, v *models.CourseHTTP) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -11230,11 +14734,11 @@ func (ec *executionContext) marshalNCourseHttp2ᚖgithubᚗcomᚋskinnykaenᚋrp
 	return ec._CourseHttp(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNCoursesListHttp2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐCoursesListHTTP(ctx context.Context, sel ast.SelectionSet, v models.CoursesListHTTP) graphql.Marshaler {
+func (ec *executionContext) marshalNCoursesListHttp2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCoursesListHTTP(ctx context.Context, sel ast.SelectionSet, v models.CoursesListHTTP) graphql.Marshaler {
 	return ec._CoursesListHttp(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNCoursesListHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐCoursesListHTTP(ctx context.Context, sel ast.SelectionSet, v *models.CoursesListHTTP) graphql.Marshaler {
+func (ec *executionContext) marshalNCoursesListHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCoursesListHTTP(ctx context.Context, sel ast.SelectionSet, v *models.CoursesListHTTP) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -11274,16 +14778,17 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 	return res
 }
 
-func (ec *executionContext) unmarshalNNewUser2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐNewUser(ctx context.Context, v interface{}) (models.NewUser, error) {
+func (ec *executionContext) unmarshalNNewApplication2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐNewApplication(ctx context.Context, v interface{}) (models.NewApplication, error) {
+	res, err := ec.unmarshalInputNewApplication(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNNewUser2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐNewUser(ctx context.Context, v interface{}) (models.NewUser, error) {
 	res, err := ec.unmarshalInputNewUser(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNProjectPageHttp2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐProjectPageHTTP(ctx context.Context, sel ast.SelectionSet, v models.ProjectPageHTTP) graphql.Marshaler {
-	return ec._ProjectPageHttp(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNProjectPageHttp2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐProjectPageHTTPᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.ProjectPageHTTP) graphql.Marshaler {
+func (ec *executionContext) marshalNNominationHttp2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐNominationHTTPᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.NominationHTTP) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -11307,7 +14812,7 @@ func (ec *executionContext) marshalNProjectPageHttp2ᚕᚖgithubᚗcomᚋskinnyk
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNProjectPageHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐProjectPageHTTP(ctx, sel, v[i])
+			ret[i] = ec.marshalNNominationHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐNominationHTTP(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -11327,7 +14832,79 @@ func (ec *executionContext) marshalNProjectPageHttp2ᚕᚖgithubᚗcomᚋskinnyk
 	return ret
 }
 
-func (ec *executionContext) marshalNProjectPageHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐProjectPageHTTP(ctx context.Context, sel ast.SelectionSet, v *models.ProjectPageHTTP) graphql.Marshaler {
+func (ec *executionContext) marshalNNominationHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐNominationHTTP(ctx context.Context, sel ast.SelectionSet, v *models.NominationHTTP) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._NominationHttp(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNNominationHttpList2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐNominationHTTPList(ctx context.Context, sel ast.SelectionSet, v models.NominationHTTPList) graphql.Marshaler {
+	return ec._NominationHttpList(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNNominationHttpList2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐNominationHTTPList(ctx context.Context, sel ast.SelectionSet, v *models.NominationHTTPList) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._NominationHttpList(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNProjectPageHttp2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐProjectPageHTTP(ctx context.Context, sel ast.SelectionSet, v models.ProjectPageHTTP) graphql.Marshaler {
+	return ec._ProjectPageHttp(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNProjectPageHttp2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐProjectPageHTTPᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.ProjectPageHTTP) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNProjectPageHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐProjectPageHTTP(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNProjectPageHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐProjectPageHTTP(ctx context.Context, sel ast.SelectionSet, v *models.ProjectPageHTTP) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -11337,11 +14914,11 @@ func (ec *executionContext) marshalNProjectPageHttp2ᚖgithubᚗcomᚋskinnykaen
 	return ec._ProjectPageHttp(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNProjectPageHttpList2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐProjectPageHTTPList(ctx context.Context, sel ast.SelectionSet, v models.ProjectPageHTTPList) graphql.Marshaler {
+func (ec *executionContext) marshalNProjectPageHttpList2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐProjectPageHTTPList(ctx context.Context, sel ast.SelectionSet, v models.ProjectPageHTTPList) graphql.Marshaler {
 	return ec._ProjectPageHttpList(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNProjectPageHttpList2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐProjectPageHTTPList(ctx context.Context, sel ast.SelectionSet, v *models.ProjectPageHTTPList) graphql.Marshaler {
+func (ec *executionContext) marshalNProjectPageHttpList2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐProjectPageHTTPList(ctx context.Context, sel ast.SelectionSet, v *models.ProjectPageHTTPList) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -11351,11 +14928,11 @@ func (ec *executionContext) marshalNProjectPageHttpList2ᚖgithubᚗcomᚋskinny
 	return ec._ProjectPageHttpList(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNResponse2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐResponse(ctx context.Context, sel ast.SelectionSet, v models.Response) graphql.Marshaler {
+func (ec *executionContext) marshalNResponse2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐResponse(ctx context.Context, sel ast.SelectionSet, v models.Response) graphql.Marshaler {
 	return ec._Response(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNResponse2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐResponse(ctx context.Context, sel ast.SelectionSet, v *models.Response) graphql.Marshaler {
+func (ec *executionContext) marshalNResponse2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐResponse(ctx context.Context, sel ast.SelectionSet, v *models.Response) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -11365,17 +14942,17 @@ func (ec *executionContext) marshalNResponse2ᚖgithubᚗcomᚋskinnykaenᚋrpa_
 	return ec._Response(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNRole2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx context.Context, v interface{}) (models.Role, error) {
+func (ec *executionContext) unmarshalNRole2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx context.Context, v interface{}) (models.Role, error) {
 	var res models.Role
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNRole2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx context.Context, sel ast.SelectionSet, v models.Role) graphql.Marshaler {
+func (ec *executionContext) marshalNRole2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx context.Context, sel ast.SelectionSet, v models.Role) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalNRole2ᚕgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRoleᚄ(ctx context.Context, v interface{}) ([]models.Role, error) {
+func (ec *executionContext) unmarshalNRole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx context.Context, v interface{}) ([]models.Role, error) {
 	var vSlice []interface{}
 	if v != nil {
 		vSlice = graphql.CoerceList(v)
@@ -11384,7 +14961,7 @@ func (ec *executionContext) unmarshalNRole2ᚕgithubᚗcomᚋskinnykaenᚋrpa_cl
 	res := make([]models.Role, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNRole2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNRole2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -11392,7 +14969,7 @@ func (ec *executionContext) unmarshalNRole2ᚕgithubᚗcomᚋskinnykaenᚋrpa_cl
 	return res, nil
 }
 
-func (ec *executionContext) marshalNRole2ᚕgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRoleᚄ(ctx context.Context, sel ast.SelectionSet, v []models.Role) graphql.Marshaler {
+func (ec *executionContext) marshalNRole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx context.Context, sel ast.SelectionSet, v []models.Role) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -11416,7 +14993,7 @@ func (ec *executionContext) marshalNRole2ᚕgithubᚗcomᚋskinnykaenᚋrpa_clon
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNRole2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, sel, v[i])
+			ret[i] = ec.marshalNRole2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -11436,11 +15013,11 @@ func (ec *executionContext) marshalNRole2ᚕgithubᚗcomᚋskinnykaenᚋrpa_clon
 	return ret
 }
 
-func (ec *executionContext) marshalNSettings2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐSettings(ctx context.Context, sel ast.SelectionSet, v models.Settings) graphql.Marshaler {
+func (ec *executionContext) marshalNSettings2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐSettings(ctx context.Context, sel ast.SelectionSet, v models.Settings) graphql.Marshaler {
 	return ec._Settings(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNSettings2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐSettings(ctx context.Context, sel ast.SelectionSet, v *models.Settings) graphql.Marshaler {
+func (ec *executionContext) marshalNSettings2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐSettings(ctx context.Context, sel ast.SelectionSet, v *models.Settings) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -11450,16 +15027,16 @@ func (ec *executionContext) marshalNSettings2ᚖgithubᚗcomᚋskinnykaenᚋrpa_
 	return ec._Settings(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNSignIn2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐSignIn(ctx context.Context, v interface{}) (models.SignIn, error) {
+func (ec *executionContext) unmarshalNSignIn2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐSignIn(ctx context.Context, v interface{}) (models.SignIn, error) {
 	res, err := ec.unmarshalInputSignIn(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNSignInResponse2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐSignInResponse(ctx context.Context, sel ast.SelectionSet, v models.SignInResponse) graphql.Marshaler {
+func (ec *executionContext) marshalNSignInResponse2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐSignInResponse(ctx context.Context, sel ast.SelectionSet, v models.SignInResponse) graphql.Marshaler {
 	return ec._SignInResponse(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNSignInResponse2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐSignInResponse(ctx context.Context, sel ast.SelectionSet, v *models.SignInResponse) graphql.Marshaler {
+func (ec *executionContext) marshalNSignInResponse2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐSignInResponse(ctx context.Context, sel ast.SelectionSet, v *models.SignInResponse) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -11469,7 +15046,7 @@ func (ec *executionContext) marshalNSignInResponse2ᚖgithubᚗcomᚋskinnykaen�
 	return ec._SignInResponse(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNSignUp2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐSignUp(ctx context.Context, v interface{}) (models.SignUp, error) {
+func (ec *executionContext) unmarshalNSignUp2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐSignUp(ctx context.Context, v interface{}) (models.SignUp, error) {
 	res, err := ec.unmarshalInputSignUp(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
@@ -11504,21 +15081,21 @@ func (ec *executionContext) marshalNTimestamp2string(ctx context.Context, sel as
 	return res
 }
 
-func (ec *executionContext) unmarshalNUpdateProjectPage2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUpdateProjectPage(ctx context.Context, v interface{}) (models.UpdateProjectPage, error) {
+func (ec *executionContext) unmarshalNUpdateProjectPage2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUpdateProjectPage(ctx context.Context, v interface{}) (models.UpdateProjectPage, error) {
 	res, err := ec.unmarshalInputUpdateProjectPage(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNUpdateUser2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUpdateUser(ctx context.Context, v interface{}) (models.UpdateUser, error) {
+func (ec *executionContext) unmarshalNUpdateUser2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUpdateUser(ctx context.Context, v interface{}) (models.UpdateUser, error) {
 	res, err := ec.unmarshalInputUpdateUser(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNUserHttp2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUserHTTP(ctx context.Context, sel ast.SelectionSet, v models.UserHTTP) graphql.Marshaler {
+func (ec *executionContext) marshalNUserHttp2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUserHTTP(ctx context.Context, sel ast.SelectionSet, v models.UserHTTP) graphql.Marshaler {
 	return ec._UserHttp(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNUserHttp2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUserHTTPᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.UserHTTP) graphql.Marshaler {
+func (ec *executionContext) marshalNUserHttp2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUserHTTPᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.UserHTTP) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -11542,7 +15119,7 @@ func (ec *executionContext) marshalNUserHttp2ᚕᚖgithubᚗcomᚋskinnykaenᚋr
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNUserHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUserHTTP(ctx, sel, v[i])
+			ret[i] = ec.marshalNUserHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUserHTTP(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -11562,7 +15139,7 @@ func (ec *executionContext) marshalNUserHttp2ᚕᚖgithubᚗcomᚋskinnykaenᚋr
 	return ret
 }
 
-func (ec *executionContext) marshalNUserHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUserHTTP(ctx context.Context, sel ast.SelectionSet, v *models.UserHTTP) graphql.Marshaler {
+func (ec *executionContext) marshalNUserHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUserHTTP(ctx context.Context, sel ast.SelectionSet, v *models.UserHTTP) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -11572,11 +15149,11 @@ func (ec *executionContext) marshalNUserHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_
 	return ec._UserHttp(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNUsersList2githubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUsersList(ctx context.Context, sel ast.SelectionSet, v models.UsersList) graphql.Marshaler {
+func (ec *executionContext) marshalNUsersList2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUsersList(ctx context.Context, sel ast.SelectionSet, v models.UsersList) graphql.Marshaler {
 	return ec._UsersList(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNUsersList2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐUsersList(ctx context.Context, sel ast.SelectionSet, v *models.UsersList) graphql.Marshaler {
+func (ec *executionContext) marshalNUsersList2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUsersList(ctx context.Context, sel ast.SelectionSet, v *models.UsersList) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -11839,7 +15416,7 @@ func (ec *executionContext) marshalN__TypeKind2string(ctx context.Context, sel a
 	return res
 }
 
-func (ec *executionContext) marshalOAbsoluteMediaHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐAbsoluteMediaHTTP(ctx context.Context, sel ast.SelectionSet, v *models.AbsoluteMediaHTTP) graphql.Marshaler {
+func (ec *executionContext) marshalOAbsoluteMediaHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐAbsoluteMediaHTTP(ctx context.Context, sel ast.SelectionSet, v *models.AbsoluteMediaHTTP) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -11872,7 +15449,7 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
-func (ec *executionContext) marshalOImageHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐImageHTTP(ctx context.Context, sel ast.SelectionSet, v *models.ImageHTTP) graphql.Marshaler {
+func (ec *executionContext) marshalOImageHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐImageHTTP(ctx context.Context, sel ast.SelectionSet, v *models.ImageHTTP) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -11895,14 +15472,14 @@ func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.Sele
 	return res
 }
 
-func (ec *executionContext) marshalOMediaHttp2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐMediaHTTP(ctx context.Context, sel ast.SelectionSet, v *models.MediaHTTP) graphql.Marshaler {
+func (ec *executionContext) marshalOMediaHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐMediaHTTP(ctx context.Context, sel ast.SelectionSet, v *models.MediaHTTP) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._MediaHttp(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx context.Context, v interface{}) ([]*models.Role, error) {
+func (ec *executionContext) unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx context.Context, v interface{}) ([]models.Role, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -11911,10 +15488,10 @@ func (ec *executionContext) unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa
 		vSlice = graphql.CoerceList(v)
 	}
 	var err error
-	res := make([]*models.Role, len(vSlice))
+	res := make([]models.Role, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalORole2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNRole2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -11922,7 +15499,7 @@ func (ec *executionContext) unmarshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa
 	return res, nil
 }
 
-func (ec *executionContext) marshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx context.Context, sel ast.SelectionSet, v []*models.Role) graphql.Marshaler {
+func (ec *executionContext) marshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx context.Context, sel ast.SelectionSet, v []models.Role) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -11949,7 +15526,7 @@ func (ec *executionContext) marshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_c
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalORole2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx, sel, v[i])
+			ret[i] = ec.marshalNRole2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRole(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -11960,23 +15537,13 @@ func (ec *executionContext) marshalORole2ᚕᚖgithubᚗcomᚋskinnykaenᚋrpa_c
 	}
 	wg.Wait()
 
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
 	return ret
-}
-
-func (ec *executionContext) unmarshalORole2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx context.Context, v interface{}) (*models.Role, error) {
-	if v == nil {
-		return nil, nil
-	}
-	var res = new(models.Role)
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalORole2ᚖgithubᚗcomᚋskinnykaenᚋrpa_cloneᚋinternalᚋmodelsᚐRole(ctx context.Context, sel ast.SelectionSet, v *models.Role) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return v
 }
 
 func (ec *executionContext) unmarshalOString2ᚖstring(ctx context.Context, v interface{}) (*string, error) {

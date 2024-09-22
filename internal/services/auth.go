@@ -2,11 +2,12 @@ package services
 
 import (
 	"github.com/dgrijalva/jwt-go/v4"
-	"github.com/skinnykaen/rpa_clone/internal/consts"
-	"github.com/skinnykaen/rpa_clone/internal/gateways"
-	"github.com/skinnykaen/rpa_clone/internal/models"
-	"github.com/skinnykaen/rpa_clone/pkg/utils"
+	"github.com/robboworld/scratch_olympiad_platform/internal/consts"
+	"github.com/robboworld/scratch_olympiad_platform/internal/gateways"
+	"github.com/robboworld/scratch_olympiad_platform/internal/models"
+	"github.com/robboworld/scratch_olympiad_platform/pkg/utils"
 	"github.com/spf13/viper"
+	"github.com/thanhpk/randstr"
 	"net/http"
 	"time"
 )
@@ -27,20 +28,20 @@ type AuthService interface {
 	SignIn(email, password string) (Tokens, error)
 	Refresh(token string) (string, error)
 	ConfirmActivation(link string) (Tokens, error)
+	ForgotPassword(email string) error
+	ResetPassword(resetLink string) error
 }
 
 type AuthServiceImpl struct {
 	userGateway     gateways.UserGateway
+	countryGateway  gateways.CountryGateway
 	settingsGateway gateways.SettingsGateway
 }
 
 func (a AuthServiceImpl) ConfirmActivation(link string) (Tokens, error) {
 	activationByLink, err := a.settingsGateway.GetActivationByLink()
 	if err != nil {
-		return Tokens{Access: "", Refresh: ""}, utils.ResponseError{
-			Code:    http.StatusInternalServerError,
-			Message: err.Error(),
-		}
+		return Tokens{Access: "", Refresh: ""}, err
 	}
 	if !activationByLink {
 		return Tokens{Access: "", Refresh: ""}, utils.ResponseError{
@@ -48,18 +49,13 @@ func (a AuthServiceImpl) ConfirmActivation(link string) (Tokens, error) {
 			Message: consts.ErrActivationLinkUnavailable,
 		}
 	}
-	user, err := a.userGateway.GetUserByActivationLink(link)
+	activationLinkHash := utils.GetHashString(link)
+	user, err := a.userGateway.GetUserByActivationLink(activationLinkHash)
 	if err != nil {
-		return Tokens{Access: "", Refresh: ""}, utils.ResponseError{
-			Code:    http.StatusInternalServerError,
-			Message: err.Error(),
-		}
+		return Tokens{Access: "", Refresh: ""}, err
 	}
-	if err := a.userGateway.SetIsActive(user.ID, true); err != nil {
-		return Tokens{Access: "", Refresh: ""}, utils.ResponseError{
-			Code:    http.StatusInternalServerError,
-			Message: err.Error(),
-		}
+	if err = a.userGateway.SetIsActive(user.ID, true); err != nil {
+		return Tokens{Access: "", Refresh: ""}, err
 	}
 	access, err := generateToken(user, viper.GetDuration("auth_access_token_ttl"), []byte(viper.GetString("auth_access_signing_key")))
 	if err != nil {
@@ -109,11 +105,10 @@ func (a AuthServiceImpl) SignIn(email, password string) (Tokens, error) {
 		}
 	}
 	if !user.IsActive {
-		return Tokens{},
-			utils.ResponseError{
-				Code:    http.StatusForbidden,
-				Message: consts.ErrUserIsNotActive,
-			}
+		return Tokens{}, utils.ResponseError{
+			Code:    http.StatusForbidden,
+			Message: consts.ErrUserIsNotActive,
+		}
 	}
 	access, err := generateToken(user, viper.GetDuration("auth_access_token_ttl"), []byte(viper.GetString("auth_access_signing_key")))
 	if err != nil {
@@ -149,40 +144,113 @@ func (a AuthServiceImpl) SignUp(newUser models.UserCore) error {
 			Message: consts.ErrEmailAlreadyInUse,
 		}
 	}
-	if len(newUser.Password) < 6 {
+	if len(newUser.Password) < 8 {
 		return utils.ResponseError{
 			Code:    http.StatusBadRequest,
 			Message: consts.ErrShortPassword,
 		}
 	}
-
+	exist, err = a.countryGateway.DoesExistName(0, newUser.Country)
+	if err != nil {
+		return err
+	}
+	if !exist {
+		return utils.ResponseError{
+			Code:    http.StatusBadRequest,
+			Message: consts.ErrCountryNotFoundInDB,
+		}
+	}
+	activationLink := randstr.String(20)
+	activationLinkHash := utils.GetHashString(activationLink)
 	passwordHash := utils.HashPassword(newUser.Password)
 	newUser.Password = passwordHash
+	newUser.ActivationLink = activationLinkHash
 	newUser, err = a.userGateway.CreateUser(newUser)
 	if err != nil {
-		return utils.ResponseError{
-			Code:    http.StatusInternalServerError,
-			Message: err.Error(),
-		}
+		return err
 	}
 
 	activationByLink, err := a.settingsGateway.GetActivationByLink()
 	if err != nil {
+		return err
+	}
+	var subject, body string
+	if activationByLink {
+		subject = "Ваша ссылка активации аккаунта"
+		body = "<p>Перейдите по ссылке " + viper.GetString("activation_path") +
+			activationLink + " для активации вашего аккаунта.</p>"
+	} else {
+		subject = "Активация аккаунта"
+		body = "<p>На данный момент активация по ссылке недоступна. Ждите активации от администратора.</p>"
+	}
+	if err = utils.SendEmail(subject, newUser.Email, body); err != nil {
 		return utils.ResponseError{
 			Code:    http.StatusInternalServerError,
 			Message: err.Error(),
 		}
 	}
-	var subject, body string
-	if activationByLink {
-		subject = "Ваша ссылка активации аккаунта"
-		body = "<p>Перейдите по ссылке" + viper.GetString("activation_path") +
-			newUser.ActivationLink + " для активации вашего аккаунта.</p>"
-	} else {
-		subject = "Активация аккаунта"
-		body = "<p>На данный момент активация по ссылке недоступна. Ждите активации от администратора.</p>"
+	return nil
+}
+
+func (a AuthServiceImpl) ForgotPassword(email string) error {
+	user, err := a.userGateway.GetUserByEmail(email)
+	if err != nil {
+		return err
 	}
-	if err := utils.SendEmail(subject, newUser.Email, body); err != nil {
+	if !user.IsActive {
+		return utils.ResponseError{
+			Code:    http.StatusForbidden,
+			Message: consts.ErrUserIsNotActive,
+		}
+	}
+
+	resetPasswordLink := randstr.String(20)
+	resetPasswordLinkHash := utils.GetHashString(resetPasswordLink)
+	err = a.userGateway.SetPasswordResetLink(user.ID, resetPasswordLinkHash)
+	if err != nil {
+		return err
+	}
+
+	subject := "Ваша ссылка на сброс пароля (действует " + viper.GetString("auth_password_reset_link_at") + " минут)"
+	body := "<p>Ссылка для сброса пароля: " + viper.GetString("reset_password_path") + resetPasswordLink + "</p>"
+	if err = utils.SendEmail(subject, user.Email, body); err != nil {
+		return utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+		}
+	}
+	return nil
+}
+
+func (a AuthServiceImpl) ResetPassword(resetLink string) error {
+	resetLinkHash := utils.GetHashString(resetLink)
+	user, err := a.userGateway.GetUserByPasswordResetLink(resetLinkHash)
+	if err != nil {
+		return utils.ResponseError{
+			Code:    http.StatusBadRequest,
+			Message: consts.ErrPasswordResetLinkInvalid,
+		}
+	}
+	if user.PasswordResetLinkAt.Before(time.Now()) {
+		return utils.ResponseError{
+			Code:    http.StatusGone,
+			Message: consts.ErrPasswordResetLinkExpired,
+		}
+	}
+	newPassword := randstr.String(8)
+	newPasswordHash := utils.HashPassword(newPassword)
+	err = a.userGateway.SetPassword(user.ID, newPasswordHash)
+	if err != nil {
+		return err
+	}
+	err = a.userGateway.SetPasswordResetLink(user.ID, "")
+	if err != nil {
+		return err
+	}
+
+	subject := "Ваш новый пароль"
+	body := "<p>Новый пароль: " + newPassword + "</p>"
+	if err = utils.SendEmail(subject, user.Email, body); err != nil {
 		return utils.ResponseError{
 			Code:    http.StatusInternalServerError,
 			Message: err.Error(),

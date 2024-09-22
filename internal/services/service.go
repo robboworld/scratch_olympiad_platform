@@ -1,7 +1,7 @@
 package services
 
 import (
-	"github.com/skinnykaen/rpa_clone/internal/gateways"
+	"github.com/robboworld/scratch_olympiad_platform/internal/gateways"
 	"go.uber.org/fx"
 )
 
@@ -12,6 +12,9 @@ type Services struct {
 	ProjectService     ProjectService
 	ProjectPageService ProjectPageService
 	SettingsService    SettingsService
+	ApplicationService ApplicationService
+	NominationService  NominationService
+	CountryService     CountryService
 }
 
 func SetupServices(
@@ -19,13 +22,18 @@ func SetupServices(
 	projectGateway gateways.ProjectGateway,
 	projectPageGateway gateways.ProjectPageGateway,
 	settingsGateway gateways.SettingsGateway,
+	applicationGateway gateways.ApplicationGateway,
+	nominationGateway gateways.NominationGateway,
+	countryGateway gateways.CountryGateway,
 ) Services {
 	return Services{
 		UserService: &UserServiceImpl{
-			userGateway: userGateway,
+			userGateway:    userGateway,
+			countryGateway: countryGateway,
 		},
 		AuthService: &AuthServiceImpl{
 			userGateway:     userGateway,
+			countryGateway:  countryGateway,
 			settingsGateway: settingsGateway,
 		},
 		ProjectService: &ProjectServiceImpl{
@@ -37,6 +45,17 @@ func SetupServices(
 		},
 		SettingsService: &SettingsServiceImpl{
 			settingsGateway: settingsGateway,
+		},
+		ApplicationService: &ApplicationServiceImpl{
+			applicationGateway: applicationGateway,
+			nominationGateway:  nominationGateway,
+			userGateway:        userGateway,
+		},
+		NominationService: &NominationServiceImpl{
+			nominationGateway: nominationGateway,
+		},
+		CountryService: &CountryServiceImpl{
+			countryGateway: countryGateway,
 		},
 	}
 }

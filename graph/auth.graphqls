@@ -1,10 +1,11 @@
 input SignUp {
 	email: String!
 	password: String!
-	nickname: String!
-	firstname: String!
-	lastname: String!
-	middlename: String
+	fullName: String!
+	fullNameNative: String!
+	country: String!
+	city: String!
+	birthdate: Timestamp!
 }
 
 input SignIn {
@@ -26,4 +27,6 @@ extend type Mutation  {
 	SignIn(input: SignIn!): SignInResponse!
 	RefreshToken(refreshToken: String!): SignInResponse!
 	ConfirmActivation(activationLink: String!): SignInResponse!
+	ForgotPassword(email: String!): Response!
+	ResetPassword(resetLink: String!): Response!
 }

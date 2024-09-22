@@ -14,6 +14,49 @@ type AbsoluteMediaHTTP struct {
 	URIAbsolute string `json:"uri_absolute"`
 }
 
+type ApplicationHTTP struct {
+	ID                            string `json:"id"`
+	CreatedAt                     string `json:"createdAt"`
+	UpdatedAt                     string `json:"updatedAt"`
+	AuthorID                      string `json:"authorId"`
+	Nomination                    string `json:"nomination"`
+	AlgorithmicTaskLink           string `json:"algorithmicTaskLink"`
+	AlgorithmicTaskFile           string `json:"algorithmicTaskFile"`
+	CreativeTaskLink              string `json:"creativeTaskLink"`
+	CreativeTaskFile              string `json:"creativeTaskFile"`
+	EngineeringTaskFile           string `json:"engineeringTaskFile"`
+	EngineeringTaskCloudLink      string `json:"engineeringTaskCloudLink"`
+	EngineeringTaskVideo          string `json:"engineeringTaskVideo"`
+	EngineeringTaskVideoCloudLink string `json:"engineeringTaskVideoCloudLink"`
+	Note                          string `json:"note"`
+}
+
+type ApplicationPayloadHTTP struct {
+	Author                        *UserHTTP `json:"author"`
+	Nomination                    string    `json:"nomination"`
+	AlgorithmicTaskLink           string    `json:"algorithmicTaskLink"`
+	AlgorithmicTaskFile           string    `json:"algorithmicTaskFile"`
+	CreativeTaskLink              string    `json:"creativeTaskLink"`
+	CreativeTaskFile              string    `json:"creativeTaskFile"`
+	EngineeringTaskFile           string    `json:"engineeringTaskFile"`
+	EngineeringTaskCloudLink      string    `json:"engineeringTaskCloudLink"`
+	EngineeringTaskVideo          string    `json:"engineeringTaskVideo"`
+	EngineeringTaskVideoCloudLink string    `json:"engineeringTaskVideoCloudLink"`
+	Note                          string    `json:"note"`
+}
+
+type CountryHTTP struct {
+	ID        string `json:"id"`
+	CreatedAt string `json:"createdAt"`
+	UpdatedAt string `json:"updatedAt"`
+	Name      string `json:"name"`
+}
+
+type CountryHTTPList struct {
+	Countries []*CountryHTTP `json:"countries"`
+	CountRows int            `json:"countRows"`
+}
+
 type CourseAPIMediaCollectionHTTP struct {
 	ID          string             `json:"id"`
 	BannerImage *AbsoluteMediaHTTP `json:"banner_image,omitempty"`
@@ -62,23 +105,53 @@ type MediaHTTP struct {
 	URI string `json:"uri"`
 }
 
+type NewApplication struct {
+	Nomination                    string  `json:"nomination"`
+	AlgorithmicTaskLink           *string `json:"algorithmicTaskLink,omitempty"`
+	AlgorithmicTaskFile           *string `json:"algorithmicTaskFile,omitempty"`
+	CreativeTaskLink              *string `json:"creativeTaskLink,omitempty"`
+	CreativeTaskFile              *string `json:"creativeTaskFile,omitempty"`
+	EngineeringTaskFile           *string `json:"engineeringTaskFile,omitempty"`
+	EngineeringTaskCloudLink      *string `json:"engineeringTaskCloudLink,omitempty"`
+	EngineeringTaskVideo          *string `json:"engineeringTaskVideo,omitempty"`
+	EngineeringTaskVideoCloudLink *string `json:"engineeringTaskVideoCloudLink,omitempty"`
+	Note                          *string `json:"note,omitempty"`
+}
+
 type NewUser struct {
-	Email      string  `json:"email"`
-	Password   string  `json:"password"`
-	Role       Role    `json:"role"`
-	Firstname  string  `json:"firstname"`
-	Lastname   string  `json:"lastname"`
-	Middlename *string `json:"middlename,omitempty"`
-	Nickname   string  `json:"nickname"`
+	Email          string `json:"email"`
+	Password       string `json:"password"`
+	Role           Role   `json:"role"`
+	FullName       string `json:"fullName"`
+	FullNameNative string `json:"fullNameNative"`
+	Country        string `json:"country"`
+	City           string `json:"city"`
+	Birthdate      string `json:"birthdate"`
 }
 
 type NewUserResponse struct {
-	ID         string `json:"id"`
-	Email      string `json:"email"`
-	Role       int    `json:"role"`
-	Firstname  string `json:"firstname"`
-	Lastname   string `json:"lastname"`
-	Middlename string `json:"middlename"`
+	ID             string `json:"id"`
+	Email          string `json:"email"`
+	Role           int    `json:"role"`
+	FullName       string `json:"fullName"`
+	FullNameNative string `json:"fullNameNative"`
+	Country        string `json:"country"`
+	City           string `json:"city"`
+	Birthdate      string `json:"birthdate"`
+}
+
+type NominationHTTP struct {
+	ID        string `json:"id"`
+	CreatedAt string `json:"createdAt"`
+	UpdatedAt string `json:"updatedAt"`
+	Name      string `json:"name"`
+	MinAge    int    `json:"minAge"`
+	MaxAge    int    `json:"maxAge"`
+}
+
+type NominationHTTPList struct {
+	Nominations []*NominationHTTP `json:"nominations"`
+	CountRows   int               `json:"countRows"`
 }
 
 type ProjectPageHTTP struct {
@@ -120,12 +193,13 @@ type SignInResponse struct {
 }
 
 type SignUp struct {
-	Email      string  `json:"email"`
-	Password   string  `json:"password"`
-	Nickname   string  `json:"nickname"`
-	Firstname  string  `json:"firstname"`
-	Lastname   string  `json:"lastname"`
-	Middlename *string `json:"middlename,omitempty"`
+	Email          string `json:"email"`
+	Password       string `json:"password"`
+	FullName       string `json:"fullName"`
+	FullNameNative string `json:"fullNameNative"`
+	Country        string `json:"country"`
+	City           string `json:"city"`
+	Birthdate      string `json:"birthdate"`
 }
 
 type UpdateProjectPage struct {
@@ -137,12 +211,13 @@ type UpdateProjectPage struct {
 }
 
 type UpdateUser struct {
-	ID         string `json:"id"`
-	Email      string `json:"email"`
-	Firstname  string `json:"firstname"`
-	Lastname   string `json:"lastname"`
-	Middlename string `json:"middlename"`
-	Nickname   string `json:"nickname"`
+	ID             string `json:"id"`
+	Email          string `json:"email"`
+	FullName       string `json:"fullName"`
+	FullNameNative string `json:"fullNameNative"`
+	Country        string `json:"country"`
+	City           string `json:"city"`
+	Birthdate      string `json:"birthdate"`
 }
 
 type UserHTTP struct {
@@ -152,12 +227,12 @@ type UserHTTP struct {
 	Email          string `json:"email"`
 	Password       string `json:"password"`
 	Role           Role   `json:"role"`
-	Firstname      string `json:"firstname"`
-	Lastname       string `json:"lastname"`
-	Middlename     string `json:"middlename"`
-	Nickname       string `json:"nickname"`
+	FullName       string `json:"fullName"`
+	FullNameNative string `json:"fullNameNative"`
+	Country        string `json:"country"`
+	City           string `json:"city"`
+	Birthdate      string `json:"birthdate"`
 	IsActive       bool   `json:"isActive"`
-	ActivationLink string `json:"activationLink"`
 }
 
 type UsersList struct {

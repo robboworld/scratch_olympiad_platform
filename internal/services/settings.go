@@ -1,6 +1,6 @@
 package services
 
-import "github.com/skinnykaen/rpa_clone/internal/gateways"
+import "github.com/robboworld/scratch_olympiad_platform/internal/gateways"
 
 type SettingsService interface {
 	SetActivationByLink(activationByCode bool) error

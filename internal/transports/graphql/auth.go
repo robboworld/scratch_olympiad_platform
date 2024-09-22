@@ -6,33 +6,42 @@ package resolvers
 
 import (
 	"context"
+	"net/http"
 	"time"
 
-	"github.com/skinnykaen/rpa_clone/internal/consts"
-	"github.com/skinnykaen/rpa_clone/internal/models"
-	"github.com/skinnykaen/rpa_clone/pkg/utils"
+	"github.com/robboworld/scratch_olympiad_platform/internal/consts"
+	"github.com/robboworld/scratch_olympiad_platform/internal/models"
+	"github.com/robboworld/scratch_olympiad_platform/pkg/utils"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
 // SignUp is the resolver for the SignUp field.
 func (r *mutationResolver) SignUp(ctx context.Context, input models.SignUp) (*models.Response, error) {
-	// middlename не обязательное поле и может быть nil
-	var middlename string
-	if input.Middlename != nil {
-		middlename = *input.Middlename
+	birthdate, err := time.Parse(time.DateOnly, input.Birthdate)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return nil, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": utils.ResponseError{
+					Code:    http.StatusBadRequest,
+					Message: consts.ErrTimeParse,
+				},
+			},
+		}
 	}
 	newUser := models.UserCore{
 		Email:          input.Email,
 		Password:       input.Password,
-		Firstname:      input.Firstname,
-		Lastname:       input.Lastname,
-		Middlename:     middlename,
-		Nickname:       input.Nickname,
+		FullName:       input.FullName,
+		FullNameNative: input.FullNameNative,
+		Country:        input.Country,
+		City:           input.City,
+		Birthdate:      birthdate,
 		Role:           models.RoleStudent,
 		IsActive:       false,
 		ActivationLink: utils.GetHashString(time.Now().String()),
 	}
-	err := r.authService.SignUp(newUser)
+	err = r.authService.SignUp(newUser)
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
 		return &models.Response{Ok: false}, &gqlerror.Error{
@@ -94,9 +103,46 @@ func (r *mutationResolver) ConfirmActivation(ctx context.Context, activationLink
 	}, nil
 }
 
+// ForgotPassword is the resolver for the ForgotPassword field.
+func (r *mutationResolver) ForgotPassword(ctx context.Context, email string) (*models.Response, error) {
+	err := r.authService.ForgotPassword(email)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return &models.Response{Ok: false}, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": err,
+			},
+		}
+	}
+	return &models.Response{Ok: true}, nil
+}
+
+// ResetPassword is the resolver for the ResetPassword field.
+func (r *mutationResolver) ResetPassword(ctx context.Context, resetLink string) (*models.Response, error) {
+	err := r.authService.ResetPassword(resetLink)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return &models.Response{Ok: false}, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": err,
+			},
+		}
+	}
+	return &models.Response{Ok: true}, nil
+}
+
 // Me is the resolver for the Me field.
 func (r *queryResolver) Me(ctx context.Context) (*models.UserHTTP, error) {
-	user, err := r.userService.GetUserById(ctx.Value(consts.KeyId).(uint), ctx.Value(consts.KeyRole).(models.Role))
+	ginContext, err := utils.GinContextFromContext(ctx)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return nil, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": err,
+			},
+		}
+	}
+	user, err := r.userService.GetUserById(ginContext.Value(consts.KeyId).(uint), ginContext.Value(consts.KeyRole).(models.Role))
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
 		return nil, &gqlerror.Error{

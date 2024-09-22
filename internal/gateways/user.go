@@ -2,13 +2,15 @@ package gateways
 
 import (
 	"errors"
-	"github.com/skinnykaen/rpa_clone/internal/consts"
-	"github.com/skinnykaen/rpa_clone/internal/db"
-	"github.com/skinnykaen/rpa_clone/internal/models"
-	"github.com/skinnykaen/rpa_clone/pkg/utils"
+	"github.com/robboworld/scratch_olympiad_platform/internal/consts"
+	"github.com/robboworld/scratch_olympiad_platform/internal/db"
+	"github.com/robboworld/scratch_olympiad_platform/internal/models"
+	"github.com/robboworld/scratch_olympiad_platform/pkg/utils"
+	"github.com/spf13/viper"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"net/http"
+	"time"
 )
 
 type UserGateway interface {
@@ -19,8 +21,11 @@ type UserGateway interface {
 	GetUserByActivationLink(link string) (user models.UserCore, err error)
 	GetUserByEmail(email string) (user models.UserCore, err error)
 	GetAllUsers(offset, limit int, isActive bool, role []models.Role) (users []models.UserCore, countRows uint, err error)
+	GetUserByPasswordResetLink(resetLink string) (user models.UserCore, err error)
 	DoesExistEmail(id uint, email string) (bool, error)
 	SetIsActive(id uint, isActive bool) error
+	SetPasswordResetLink(id uint, resetLink string) error
+	SetPassword(id uint, password string) error
 }
 
 type UserGatewayImpl struct {
@@ -29,7 +34,16 @@ type UserGatewayImpl struct {
 
 func (u UserGatewayImpl) GetUserByActivationLink(link string) (user models.UserCore, err error) {
 	if err = u.postgresClient.Db.Where("activation_link = ?", link).Take(&user).Error; err != nil {
-		return user, err
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return user, utils.ResponseError{
+				Code:    http.StatusBadRequest,
+				Message: consts.ErrNotFoundInDB,
+			}
+		}
+		return user, utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+		}
 	}
 	return user, nil
 }
@@ -62,49 +76,78 @@ func (u UserGatewayImpl) SetIsActive(id uint, isActive bool) error {
 			"is_active": isActive,
 		}
 	}
-	return u.postgresClient.Db.First(&models.UserCore{ID: id}).Updates(updateStruct).Error
+	if err := u.postgresClient.Db.First(&models.UserCore{ID: id}).Updates(updateStruct).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return utils.ResponseError{
+				Code:    http.StatusBadRequest,
+				Message: consts.ErrNotFoundInDB,
+			}
+		}
+		return utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+		}
+	}
+	return nil
 }
 
 func (u UserGatewayImpl) DoesExistEmail(id uint, email string) (bool, error) {
-	result := u.postgresClient.Db.Where("id != ? AND email = ?", id, email).
-		Take(&models.UserCore{})
-	if result.Error != nil {
-		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+	if err := u.postgresClient.Db.Where("id != ? AND email = ?", id, email).
+		Take(&models.UserCore{}).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return false, nil
 		}
 		return false, utils.ResponseError{
 			Code:    http.StatusInternalServerError,
-			Message: result.Error.Error(),
+			Message: err.Error(),
 		}
 	}
 	return true, nil
 }
 
 func (u UserGatewayImpl) CreateUser(user models.UserCore) (newUser models.UserCore, err error) {
-	result := u.postgresClient.Db.Create(&user).Clauses(clause.Returning{})
-	if result.Error != nil {
+	if err = u.postgresClient.Db.Create(&user).Clauses(clause.Returning{}).Error; err != nil {
 		return models.UserCore{}, utils.ResponseError{
 			Code:    http.StatusInternalServerError,
-			Message: result.Error.Error(),
+			Message: err.Error(),
 		}
 	}
 	return user, nil
 }
 
 func (u UserGatewayImpl) DeleteUser(id uint) (err error) {
-	return u.postgresClient.Db.Delete(&models.UserCore{}, id).Error
+	if err = u.postgresClient.Db.Take(&models.UserCore{}, id).Delete(&models.UserCore{}, id).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return utils.ResponseError{
+				Code:    http.StatusBadRequest,
+				Message: consts.ErrNotFoundInDB,
+			}
+		}
+		return utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+		}
+	}
+	return
 }
 
 func (u UserGatewayImpl) UpdateUser(user models.UserCore) (models.UserCore, error) {
 	if err := u.postgresClient.Db.Model(&user).Clauses(clause.Returning{}).
 		Take(&models.UserCore{}, user.ID).
 		Updates(map[string]interface{}{
-			"email":      user.Email,
-			"firstname":  user.Firstname,
-			"lastname":   user.Lastname,
-			"middlename": user.Middlename,
-			"nickname":   user.Nickname,
+			"email":            user.Email,
+			"full_name":        user.FullName,
+			"full_name_native": user.FullNameNative,
+			"country":          user.Country,
+			"city":             user.City,
+			"birthdate":        user.Birthdate,
 		}).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return models.UserCore{}, utils.ResponseError{
+				Code:    http.StatusBadRequest,
+				Message: consts.ErrNotFoundInDB,
+			}
+		}
 		return models.UserCore{}, utils.ResponseError{
 			Code:    http.StatusInternalServerError,
 			Message: err.Error(),
@@ -114,7 +157,13 @@ func (u UserGatewayImpl) UpdateUser(user models.UserCore) (models.UserCore, erro
 }
 
 func (u UserGatewayImpl) GetUserById(id uint) (user models.UserCore, err error) {
-	if err := u.postgresClient.Db.First(&user, id).Error; err != nil {
+	if err = u.postgresClient.Db.First(&user, id).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return models.UserCore{}, utils.ResponseError{
+				Code:    http.StatusBadRequest,
+				Message: consts.ErrNotFoundInDB,
+			}
+		}
 		return models.UserCore{}, utils.ResponseError{
 			Code:    http.StatusInternalServerError,
 			Message: err.Error(),
@@ -146,5 +195,70 @@ func (u UserGatewayImpl) GetAllUsers(
 		}
 	}
 	result.Count(&count)
-	return users, uint(count), result.Error
+	return users, uint(count), nil
+}
+
+func (u UserGatewayImpl) SetPasswordResetLink(id uint, resetLink string) error {
+	var updateStruct map[string]interface{}
+	if resetLink == "" {
+		updateStruct = map[string]interface{}{
+			"password_reset_link":    "",
+			"password_reset_link_at": time.Time{},
+		}
+	} else {
+		updateStruct = map[string]interface{}{
+			"password_reset_link":    resetLink,
+			"password_reset_link_at": time.Now().Add(time.Minute * viper.GetDuration("auth_password_reset_link_at")),
+		}
+	}
+	if err := u.postgresClient.Db.First(&models.UserCore{ID: id}).Updates(updateStruct).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return utils.ResponseError{
+				Code:    http.StatusBadRequest,
+				Message: consts.ErrNotFoundInDB,
+			}
+		}
+		return utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+		}
+	}
+	return nil
+}
+
+func (u UserGatewayImpl) SetPassword(id uint, password string) error {
+	var updateStruct map[string]interface{}
+	updateStruct = map[string]interface{}{
+		"password": password,
+	}
+
+	if err := u.postgresClient.Db.First(&models.UserCore{ID: id}).Updates(updateStruct).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return utils.ResponseError{
+				Code:    http.StatusBadRequest,
+				Message: consts.ErrNotFoundInDB,
+			}
+		}
+		return utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+		}
+	}
+	return nil
+}
+
+func (u UserGatewayImpl) GetUserByPasswordResetLink(resetLink string) (user models.UserCore, err error) {
+	if err = u.postgresClient.Db.Where("password_reset_link = ?", resetLink).Take(&user).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return user, utils.ResponseError{
+				Code:    http.StatusBadRequest,
+				Message: consts.ErrNotFoundInDB,
+			}
+		}
+		return user, utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+		}
+	}
+	return user, nil
 }

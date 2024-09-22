@@ -1,8 +1,8 @@
 package gateways
 
 import (
-	"github.com/skinnykaen/rpa_clone/internal/db"
-	"github.com/skinnykaen/rpa_clone/internal/models"
+	"github.com/robboworld/scratch_olympiad_platform/internal/db"
+	"github.com/robboworld/scratch_olympiad_platform/internal/models"
 	"gorm.io/gorm/clause"
 )
 

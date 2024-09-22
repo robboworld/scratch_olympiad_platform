@@ -8,7 +8,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/skinnykaen/rpa_clone/internal/models"
+	"github.com/robboworld/scratch_olympiad_platform/internal/models"
 )
 
 // GetCourseByID is the resolver for the GetCourseById field.

@@ -1,8 +1,8 @@
 package resolvers
 
 import (
-	"github.com/skinnykaen/rpa_clone/internal/services"
-	"github.com/skinnykaen/rpa_clone/pkg/logger"
+	"github.com/robboworld/scratch_olympiad_platform/internal/services"
+	"github.com/robboworld/scratch_olympiad_platform/pkg/logger"
 )
 
 type Resolver struct {
@@ -11,6 +11,9 @@ type Resolver struct {
 	authService        services.AuthService
 	projectPageService services.ProjectPageService
 	settingsService    services.SettingsService
+	applicationService services.ApplicationService
+	nominationService  services.NominationService
+	countryService     services.CountryService
 }
 
 func SetupResolvers(
@@ -19,6 +22,9 @@ func SetupResolvers(
 	authService services.AuthService,
 	projectPageService services.ProjectPageService,
 	settingsService services.SettingsService,
+	applicationService services.ApplicationService,
+	nominationService services.NominationService,
+	countryService services.CountryService,
 ) Resolver {
 	return Resolver{
 		loggers:            loggers,
@@ -26,5 +32,8 @@ func SetupResolvers(
 		authService:        authService,
 		projectPageService: projectPageService,
 		settingsService:    settingsService,
+		applicationService: applicationService,
+		nominationService:  nominationService,
+		countryService:     countryService,
 	}
 }

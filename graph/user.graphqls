@@ -5,12 +5,12 @@ type UserHttp {
 	email: String!
 	password: String!
 	role: Role!
-	firstname: String!
-	lastname: String!
-	middlename: String!
-	nickname: String!
+	fullName: String!
+	fullNameNative: String!
+	country: String!
+	city: String!
+	birthdate: Timestamp!
 	isActive: Boolean!
-	activationLink: String!
 }
 
 enum Role {
@@ -26,28 +26,32 @@ input NewUser {
 	email: String!
 	password: String!
 	role: Role!
-	firstname: String!
-	lastname: String!
-	middlename: String
-	nickname: String!
+	fullName: String!
+	fullNameNative: String!
+	country: String!
+	city: String!
+	birthdate: Timestamp!
 }
 
 input UpdateUser {
 	id: ID!
 	email: String!
-	firstname: String!
-	lastname: String!
-	middlename: String!
-	nickname: String!
+	fullName: String!
+	fullNameNative: String!
+	country: String!
+	city: String!
+	birthdate: Timestamp!
 }
 
 type NewUserResponse {
 	id: ID!
 	email: String!
 	role: Int!
-	firstname: String!
-	lastname: String!
-	middlename: String!
+	fullName: String!
+	fullNameNative: String!
+	country: String!
+	city: String!
+	birthdate: Timestamp!
 }
 
 type UsersList {
@@ -72,5 +76,5 @@ type Query {
 	GetAllUsers(page: Int, pageSize: Int, active: Boolean!, roles: [Role!]!): UsersList! @hasRole(roles: [SuperAdmin, UnitAdmin])
 }
 
-directive  @hasRole(roles: [Role]) on FIELD_DEFINITION
+directive @hasRole(roles: [Role!]) on FIELD_DEFINITION
 scalar Timestamp
