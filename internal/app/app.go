@@ -1,6 +1,7 @@
 package app
 
 import (
+	"github.com/robboworld/scratch_olympiad_platform/internal/api"
 	"github.com/robboworld/scratch_olympiad_platform/internal/configs"
 	"github.com/robboworld/scratch_olympiad_platform/internal/consts"
 	"github.com/robboworld/scratch_olympiad_platform/internal/db"
@@ -24,6 +25,7 @@ func InvokeWith(m consts.Mode, options ...fx.Option) *fx.App {
 		fx.Provide(logger.InitLogger),
 		fx.Provide(db.InitPostgresClient),
 		fx.Provide(gateways.SetupGateways),
+		fx.Provide(api.SetupAPI),
 		fx.Provide(services.SetupServices),
 		fx.Provide(resolvers.SetupResolvers),
 		fx.Provide(http.SetupHandlers),

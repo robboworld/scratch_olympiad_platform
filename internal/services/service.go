@@ -1,6 +1,7 @@
 package services
 
 import (
+	"github.com/robboworld/scratch_olympiad_platform/internal/api"
 	"github.com/robboworld/scratch_olympiad_platform/internal/gateways"
 	"go.uber.org/fx"
 )
@@ -25,6 +26,7 @@ func SetupServices(
 	applicationGateway gateways.ApplicationGateway,
 	nominationGateway gateways.NominationGateway,
 	countryGateway gateways.CountryGateway,
+	applicationAPI api.ApplicationAPI,
 ) Services {
 	return Services{
 		UserService: &UserServiceImpl{
@@ -50,6 +52,7 @@ func SetupServices(
 			applicationGateway: applicationGateway,
 			nominationGateway:  nominationGateway,
 			userGateway:        userGateway,
+			applicationAPI:     applicationAPI,
 		},
 		NominationService: &NominationServiceImpl{
 			nominationGateway: nominationGateway,

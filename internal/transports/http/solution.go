@@ -7,7 +7,6 @@ import (
 	"github.com/robboworld/scratch_olympiad_platform/pkg/logger"
 	"github.com/robboworld/scratch_olympiad_platform/pkg/utils"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -119,7 +118,7 @@ func (h SolutionHandler) DownloadSolution(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "file not found"})
 		return
 	}
-	buf, err := ioutil.ReadFile(filePath)
+	buf, err := os.ReadFile(filePath)
 	if err != nil {
 		h.loggers.Err.Printf("%s", err.Error())
 		c.JSON(http.StatusInternalServerError, err.Error())

@@ -22,6 +22,7 @@ api_urls:
   login: "https://edx-test.ru/api/user/v1/account/login_session/"
   getLogin: "https://edx-test.ru/login"
   getRegistration: "https://edx-test.ru/register?next=%2F"
+  create_application: "https://script.google.com/macros/s/AKfycbxsTNFg4n-q2vYxAMZ5JWef2BEuF5SPMkt3n56mNmrYOqn9SEqoGlCC2jixIShpSFO0HA/exec"
 
 cors:
   allowed_origins: [
