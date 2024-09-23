@@ -88,7 +88,7 @@ func CalculateUserAge(birthdate time.Time) int {
 	today := time.Now()
 	age := today.Year() - birthdate.Year()
 
-	if today.YearDay() < birthdate.YearDay() {
+	if today.Month() < birthdate.Month() || (today.Month() == birthdate.Month() && today.Day() <= birthdate.Day()) {
 		age--
 	}
 	return age
