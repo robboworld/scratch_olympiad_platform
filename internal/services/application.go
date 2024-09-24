@@ -1,6 +1,7 @@
 package services
 
 import (
+	"github.com/robboworld/scratch_olympiad_platform/internal/api"
 	"github.com/robboworld/scratch_olympiad_platform/internal/consts"
 	"github.com/robboworld/scratch_olympiad_platform/internal/gateways"
 	"github.com/robboworld/scratch_olympiad_platform/internal/models"
@@ -16,6 +17,7 @@ type ApplicationServiceImpl struct {
 	applicationGateway gateways.ApplicationGateway
 	nominationGateway  gateways.NominationGateway
 	userGateway        gateways.UserGateway
+	applicationAPI     api.ApplicationAPI
 }
 
 func (a ApplicationServiceImpl) CreateApplication(application models.ApplicationCore) (models.ApplicationCore, error) {
@@ -48,8 +50,10 @@ func (a ApplicationServiceImpl) CreateApplication(application models.Application
 	}
 
 	application.Author = user
-	applicationPayload := models.ApplicationPayloadHTTP{}
-	applicationPayload.FromCore(application)
+	err = a.applicationAPI.CreateApplication(application)
+	if err != nil {
+		return models.ApplicationCore{}, err
+	}
 
 	return a.applicationGateway.CreateApplication(application)
 }
