@@ -3,6 +3,7 @@ package utils
 import (
 	"context"
 	"crypto/sha1"
+	"crypto/tls"
 	"encoding/hex"
 	"github.com/gin-gonic/gin"
 	"github.com/jordan-wright/email"
@@ -25,7 +26,10 @@ func SendEmail(subject, to, body string) (err error) {
 	e.HTML = []byte(body)
 
 	auth := smtp.PlainAuth("", from, pass, viper.GetString("smtp_server_host"))
-	return e.Send(viper.GetString("smtp_server_address"), auth)
+	tlsConfig := &tls.Config{
+		ServerName: viper.GetString("smtp_server_host"),
+	}
+	return e.SendWithTLS(viper.GetString("smtp_server_address"), auth, tlsConfig)
 }
 
 func HashPassword(s string) string {
