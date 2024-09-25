@@ -4,17 +4,15 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/robboworld/scratch_olympiad_platform/internal/consts"
 	"github.com/robboworld/scratch_olympiad_platform/internal/models"
+	"github.com/robboworld/scratch_olympiad_platform/internal/services"
 	"github.com/robboworld/scratch_olympiad_platform/pkg/logger"
 	"github.com/robboworld/scratch_olympiad_platform/pkg/utils"
-	"io"
 	"net/http"
-	"os"
-	"path/filepath"
-	"strings"
 )
 
 type SolutionHandler struct {
-	loggers logger.Loggers
+	loggers         logger.Loggers
+	solutionService services.SolutionService
 }
 
 func (h SolutionHandler) SetupSolutionRoutes(router *gin.Engine) {
@@ -41,59 +39,15 @@ func (h SolutionHandler) UploadSolution(c *gin.Context) {
 		return
 	}
 
-	if fileHeader.Size >= consts.MaxSolutionFileSize {
-		h.loggers.Err.Printf("%s", "File is too large. The maximum allowed size is 1 GB.")
-		c.JSON(http.StatusBadRequest, gin.H{"error": "File is too large. The maximum allowed size is 1 GB."})
-		return
-	}
-
-	file, err := fileHeader.Open()
+	link, err := h.solutionService.CreateSolution(fileHeader)
 	if err != nil {
 		h.loggers.Err.Printf("%s", err.Error())
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	defer file.Close()
 
-	filenameParts := strings.Split(fileHeader.Filename, ".")
-	if len(filenameParts) != 2 {
-		h.loggers.Err.Printf("%s", "incorrect filename")
-		c.JSON(http.StatusBadRequest, gin.H{"error": "incorrect filename"})
-		return
-	}
-
-	allowedFormats := map[string]bool{"mp4": true, "sb3": true}
-	if !allowedFormats[filenameParts[1]] {
-		h.loggers.Err.Printf("%s", "incorrect file format")
-		c.JSON(http.StatusBadRequest, gin.H{"error": "incorrect file format"})
-		return
-	}
-
-	tempFile, err := os.CreateTemp("./internal/tmp_upload", "upload-*."+filenameParts[1])
-	if err != nil {
-		h.loggers.Err.Printf("%s", err.Error())
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create temporary file"})
-		return
-	}
-	defer tempFile.Close()
-
-	_, err = io.Copy(tempFile, file)
-	if err != nil {
-		h.loggers.Err.Printf("%s", err.Error())
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to write file"})
-		return
-	}
-
-	err = os.Chmod(tempFile.Name(), 0644)
-	if err != nil {
-		h.loggers.Err.Printf("%s", err.Error())
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to chmod file"})
-		return
-	}
-
-	uploadedFilename := filepath.Base(tempFile.Name())
 	c.Header("Content-Type", "application/json")
-	c.JSON(http.StatusOK, gin.H{"filename": uploadedFilename})
+	c.JSON(http.StatusOK, gin.H{"file_link": link})
 }
 
 func (h SolutionHandler) DownloadSolution(c *gin.Context) {
@@ -103,30 +57,23 @@ func (h SolutionHandler) DownloadSolution(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "filename not provided"})
 		return
 	}
-	filePath := "./internal/tmp_upload/" + filename
 
-	role := c.Value(consts.KeyRole).(models.Role)
-	accessRoles := []models.Role{models.RoleStudent, models.RoleSuperAdmin}
-	if !utils.DoesHaveRole(role, accessRoles) {
-		h.loggers.Err.Printf("%s", consts.ErrAccessDenied)
-		c.JSON(http.StatusForbidden, gin.H{"error": consts.ErrAccessDenied})
+	accessLink := c.Query("access_link")
+	if accessLink == "" {
+		h.loggers.Err.Printf("%s", "access link not provided")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "access link not provided"})
 		return
 	}
 
-	if _, err := os.Stat(filePath); os.IsNotExist(err) {
-		h.loggers.Err.Printf("%s", "file not found")
-		c.JSON(http.StatusBadRequest, gin.H{"error": "file not found"})
-		return
-	}
-	buf, err := os.ReadFile(filePath)
+	buf, err := h.solutionService.DownloadSolution(filename, accessLink)
 	if err != nil {
 		h.loggers.Err.Printf("%s", err.Error())
-		c.JSON(http.StatusInternalServerError, err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
 	c.Header("Content-Type", "mp4/sb3")
 	c.Header("Content-Disposition", "attachment; filename=\""+filename+"\"")
 	c.Writer.Write(buf)
 	c.Status(http.StatusOK)
-	c.File(filename)
 }
