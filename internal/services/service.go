@@ -64,6 +64,7 @@ func SetupServices(
 		},
 		SolutionService: SolutionServiceImpl{
 			solutionGateway: solutionGateway,
+			userGateway:     userGateway,
 		},
 	}
 }
