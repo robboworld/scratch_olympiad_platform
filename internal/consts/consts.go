@@ -13,7 +13,7 @@ const (
 )
 
 const (
-	MaxSolutionFileSize = 1 * 1024 * 1024 * 1024
+	MaxSolutionFileSize = 100 * 1024 * 1024 // 100 MB
 )
 
 const EmptyProjectJson = "{\"targets\":[{\"isStage\":true,\"name\":\"Stage\",\"variables\":{\"`jEk@4|i[#Fk?(8x)AV." +

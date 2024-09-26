@@ -18,6 +18,7 @@ func SetupHandlers(
 	projectService services.ProjectService,
 	authService services.AuthService,
 	applicationService services.ApplicationService,
+	solutionService services.SolutionService,
 ) Handlers {
 	return Handlers{
 		ProjectHandler: ProjectHandler{
@@ -36,7 +37,8 @@ func SetupHandlers(
 			applicationService: applicationService,
 		},
 		SolutionHandler: SolutionHandler{
-			loggers: loggers,
+			loggers:         loggers,
+			solutionService: solutionService,
 		},
 	}
 }
