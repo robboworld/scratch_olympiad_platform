@@ -62,8 +62,8 @@ func (s SolutionServiceImpl) CreateSolution(userID uint, fileHeader *multipart.F
 	if err != nil {
 		return "", err
 	}
-
-	tempFile, err := os.CreateTemp("./internal/tmp_upload", user.FullName+" *."+filenameParts[1])
+	filenamePrefix := strings.Replace(user.FullName, " ", "_", -1)
+	tempFile, err := os.CreateTemp("./internal/tmp_upload", filenamePrefix+"_*."+filenameParts[1])
 	if err != nil {
 		return "", utils.ResponseError{
 			Code:    http.StatusInternalServerError,
