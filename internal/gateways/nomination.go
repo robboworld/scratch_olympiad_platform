@@ -12,7 +12,6 @@ import (
 
 type NominationGateway interface {
 	GetAllNominations(offset, limit int) (nominations []models.NominationCore, countRows uint, err error)
-	DoesExistName(id uint, name string) (bool, error)
 	GetNominationByName(name string) (nomination models.NominationCore, err error)
 }
 
@@ -31,20 +30,6 @@ func (n NominationGatewayImpl) GetAllNominations(offset, limit int) (nominations
 	}
 	result.Count(&count)
 	return nominations, uint(count), result.Error
-}
-
-func (n NominationGatewayImpl) DoesExistName(id uint, name string) (bool, error) {
-	if err := n.postgresClient.Db.Where("id != ? AND name = ?", id, name).
-		Take(&models.NominationCore{}).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return false, nil
-		}
-		return false, utils.ResponseError{
-			Code:    http.StatusInternalServerError,
-			Message: err.Error(),
-		}
-	}
-	return true, nil
 }
 
 func (n NominationGatewayImpl) GetNominationByName(name string) (nomination models.NominationCore, err error) {

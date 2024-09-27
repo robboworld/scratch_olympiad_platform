@@ -21,28 +21,28 @@ type ApplicationServiceImpl struct {
 }
 
 func (a ApplicationServiceImpl) CreateApplication(application models.ApplicationCore) (models.ApplicationCore, error) {
-	exist, err := a.nominationGateway.DoesExistName(0, application.Nomination)
-	if err != nil {
-		return models.ApplicationCore{}, err
-	}
-	if !exist {
-		return models.ApplicationCore{}, utils.ResponseError{
-			Code:    http.StatusBadRequest,
-			Message: consts.ErrNominationNotFoundInDB,
-		}
-	}
 	user, err := a.userGateway.GetUserById(application.AuthorID)
 	if err != nil {
 		return models.ApplicationCore{}, err
 	}
-
 	nomination, err := a.nominationGateway.GetNominationByName(application.Nomination)
 	if err != nil {
 		return models.ApplicationCore{}, err
 	}
 
+	exist, err := a.applicationGateway.DoesExistApplication(application.AuthorID, application.Nomination)
+	if err != nil {
+		return models.ApplicationCore{}, err
+	}
+	if exist {
+		return models.ApplicationCore{}, utils.ResponseError{
+			Code:    http.StatusBadRequest,
+			Message: consts.ErrApplicationAlreadySubmitted,
+		}
+	}
+
 	userAge := uint(utils.CalculateUserAge(user.Birthdate))
-	if userAge < nomination.MinAge || userAge > nomination.MaxAge {
+	if userAge < nomination.MinAge {
 		return models.ApplicationCore{}, utils.ResponseError{
 			Code:    http.StatusForbidden,
 			Message: consts.ErrDoesNotMatchAgeCategory,
