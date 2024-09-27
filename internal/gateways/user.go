@@ -53,7 +53,7 @@ func (u UserGatewayImpl) GetUserByEmail(email string) (user models.UserCore, err
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return user, utils.ResponseError{
 				Code:    http.StatusBadRequest,
-				Message: consts.ErrIncorrectPasswordOrEmail,
+				Message: consts.ErrUserWithEmailNotFound,
 			}
 		}
 		return user, utils.ResponseError{

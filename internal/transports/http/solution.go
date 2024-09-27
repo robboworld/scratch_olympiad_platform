@@ -24,6 +24,7 @@ func (h SolutionHandler) SetupSolutionRoutes(router *gin.Engine) {
 }
 
 func (h SolutionHandler) UploadSolution(c *gin.Context) {
+	userID := c.Value(consts.KeyId).(uint)
 	role := c.Value(consts.KeyRole).(models.Role)
 	accessRoles := []models.Role{models.RoleStudent, models.RoleSuperAdmin}
 	if !utils.DoesHaveRole(role, accessRoles) {
@@ -39,7 +40,7 @@ func (h SolutionHandler) UploadSolution(c *gin.Context) {
 		return
 	}
 
-	link, err := h.solutionService.CreateSolution(fileHeader)
+	link, err := h.solutionService.CreateSolution(userID, fileHeader)
 	if err != nil {
 		h.loggers.Err.Printf("%s", err.Error())
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

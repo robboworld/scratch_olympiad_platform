@@ -16,15 +16,16 @@ import (
 )
 
 type SolutionService interface {
-	CreateSolution(fileHeader *multipart.FileHeader) (string, error)
+	CreateSolution(userID uint, fileHeader *multipart.FileHeader) (string, error)
 	DownloadSolution(filename, accessLink string) ([]byte, error)
 }
 
 type SolutionServiceImpl struct {
 	solutionGateway gateways.SolutionGateway
+	userGateway     gateways.UserGateway
 }
 
-func (s SolutionServiceImpl) CreateSolution(fileHeader *multipart.FileHeader) (string, error) {
+func (s SolutionServiceImpl) CreateSolution(userID uint, fileHeader *multipart.FileHeader) (string, error) {
 	if fileHeader.Size >= consts.MaxSolutionFileSize {
 		return "", utils.ResponseError{
 			Code:    http.StatusBadRequest,
@@ -57,7 +58,12 @@ func (s SolutionServiceImpl) CreateSolution(fileHeader *multipart.FileHeader) (s
 		}
 	}
 
-	tempFile, err := os.CreateTemp("./internal/tmp_upload", "upload-*."+filenameParts[1])
+	user, err := s.userGateway.GetUserById(userID)
+	if err != nil {
+		return "", err
+	}
+	filenamePrefix := strings.Replace(user.FullName, " ", "_", -1)
+	tempFile, err := os.CreateTemp("./internal/tmp_upload", filenamePrefix+"_*."+filenameParts[1])
 	if err != nil {
 		return "", utils.ResponseError{
 			Code:    http.StatusInternalServerError,
