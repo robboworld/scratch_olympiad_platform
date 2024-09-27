@@ -176,12 +176,19 @@ func (a AuthServiceImpl) SignUp(newUser models.UserCore) error {
 	}
 	var subject, body string
 	if activationByLink {
-		subject = "Ваша ссылка активации аккаунта"
-		body = "<p>Перейдите по ссылке " + viper.GetString("activation_path") +
-			activationLink + " для активации вашего аккаунта.</p>"
+		subject = "Scratch Olympiad account activation"
+		body = "<p>Please follow this link to activate your Scratch Olympiad account:</p>" +
+			"<p><a href='" + viper.GetString("activation_path") + activationLink + "'>" +
+			viper.GetString("activation_path") + activationLink + "</a></p><br>" +
+			"<p>Organizing committee of the International Scratch Creative Programming Olympiad</p>" +
+			"<p><a href='mailto:scratch@creativeprogramming.org'>scratch@creativeprogramming.org</a></p>" +
+			"<p><a href='https://creativeprogramming.org'>creativeprogramming.org</a></p>"
 	} else {
-		subject = "Активация аккаунта"
-		body = "<p>На данный момент активация по ссылке недоступна. Ждите активации от администратора.</p>"
+		subject = "Scratch Olympiad account activation"
+		body = "<p>Activation via the link is not available at the moment. Wait for activation from the administrator</p>" + "<br>" +
+			"<p>Organizing committee of the International Scratch Creative Programming Olympiad</p>" +
+			"<p>scratch@creativeprogramming.org</p>" +
+			"<p>creativeprogramming.org</p>"
 	}
 	if err = utils.SendEmail(subject, newUser.Email, body); err != nil {
 		return utils.ResponseError{
@@ -210,9 +217,18 @@ func (a AuthServiceImpl) ForgotPassword(email string) error {
 	if err != nil {
 		return err
 	}
+	viper.GetString("auth_password_reset_link_at")
+	subject := "Request to reset your Scratch Olympiad account password"
+	body := "<p>We have received a request to reset your account password.</p>" +
+		"<p>If you did it, please follow this link (the link is active for " +
+		viper.GetString("auth_password_reset_link_at") + " minutes):</p>" +
+		"<p><a href='" + viper.GetString("reset_password_path") + resetPasswordLink + "'>" +
+		viper.GetString("reset_password_path") + resetPasswordLink + "</a></p><br>" +
+		"<p>If you did not do this, please just ignore this email.</p><br>" +
+		"<p>Organizing committee of the International Scratch Creative Programming Olympiad</p>" +
+		"<p><a href='mailto:scratch@creativeprogramming.org'>scratch@creativeprogramming.org</a></p>" +
+		"<p><a href='https://creativeprogramming.org'>creativeprogramming.org</a></p>"
 
-	subject := "Ваша ссылка на сброс пароля (действует " + viper.GetString("auth_password_reset_link_at") + " минут)"
-	body := "<p>Ссылка для сброса пароля: " + viper.GetString("reset_password_path") + resetPasswordLink + "</p>"
 	if err = utils.SendEmail(subject, user.Email, body); err != nil {
 		return utils.ResponseError{
 			Code:    http.StatusInternalServerError,
@@ -248,8 +264,12 @@ func (a AuthServiceImpl) ResetPassword(resetLink string) error {
 		return err
 	}
 
-	subject := "Ваш новый пароль"
-	body := "<p>Новый пароль: " + newPassword + "</p>"
+	subject := "Your new Scratch Olympiad account password"
+	body := "<p>Your new password:</p>" +
+		"<p>" + newPassword + "</p><br>" +
+		"<p>Organizing committee of the International Scratch Creative Programming Olympiad</p>" +
+		"<p><a href='mailto:scratch@creativeprogramming.org'>scratch@creativeprogramming.org</a></p>" +
+		"<p><a href='https://creativeprogramming.org'>creativeprogramming.org</a></p>"
 	if err = utils.SendEmail(subject, user.Email, body); err != nil {
 		return utils.ResponseError{
 			Code:    http.StatusInternalServerError,

@@ -20,7 +20,7 @@ func SendEmail(subject, to, body string) (err error) {
 	from := viper.GetString("mail_username")
 	pass := viper.GetString("mail_password")
 	e := email.NewEmail()
-	e.From = "Robbo <" + from + ">"
+	e.From = "Scratch Olympiad <" + from + ">"
 	e.To = []string{to}
 	e.Subject = subject
 	e.HTML = []byte(body)
