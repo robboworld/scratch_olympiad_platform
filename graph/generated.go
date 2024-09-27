@@ -69,6 +69,11 @@ type ComplexityRoot struct {
 		UpdatedAt                     func(childComplexity int) int
 	}
 
+	ApplicationHttpList struct {
+		Applications func(childComplexity int) int
+		CountRows    func(childComplexity int) int
+	}
+
 	ApplicationPayloadHttp struct {
 		AlgorithmicTaskFile           func(childComplexity int) int
 		AlgorithmicTaskLink           func(childComplexity int) int
@@ -215,6 +220,7 @@ type ComplexityRoot struct {
 		GetAllProjectPagesByAccessToken func(childComplexity int, page *int, pageSize *int) int
 		GetAllProjectPagesByAuthorID    func(childComplexity int, id string, page *int, pageSize *int) int
 		GetAllUsers                     func(childComplexity int, page *int, pageSize *int, active bool, roles []models.Role) int
+		GetApplicationsByAuthorID       func(childComplexity int, id string, page *int, pageSize *int) int
 		GetChildrenByParent             func(childComplexity int, parentID string) int
 		GetCourseByID                   func(childComplexity int, id string) int
 		GetCoursesByUser                func(childComplexity int) int
@@ -284,6 +290,7 @@ type QueryResolver interface {
 	GetUserByAccessToken(ctx context.Context) (*models.UserHTTP, error)
 	GetUserByID(ctx context.Context, id string) (*models.UserHTTP, error)
 	GetAllUsers(ctx context.Context, page *int, pageSize *int, active bool, roles []models.Role) (*models.UsersList, error)
+	GetApplicationsByAuthorID(ctx context.Context, id string, page *int, pageSize *int) (*models.ApplicationHTTPList, error)
 	Me(ctx context.Context) (*models.UserHTTP, error)
 	GetAllCountries(ctx context.Context, page *int, pageSize *int) (*models.CountryHTTPList, error)
 	GetCourseByID(ctx context.Context, id string) (*models.CourseHTTP, error)
@@ -430,6 +437,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ApplicationHttp.UpdatedAt(childComplexity), true
+
+	case "ApplicationHttpList.applications":
+		if e.complexity.ApplicationHttpList.Applications == nil {
+			break
+		}
+
+		return e.complexity.ApplicationHttpList.Applications(childComplexity), true
+
+	case "ApplicationHttpList.countRows":
+		if e.complexity.ApplicationHttpList.CountRows == nil {
+			break
+		}
+
+		return e.complexity.ApplicationHttpList.CountRows(childComplexity), true
 
 	case "ApplicationPayloadHttp.algorithmicTaskFile":
 		if e.complexity.ApplicationPayloadHttp.AlgorithmicTaskFile == nil {
@@ -1262,6 +1283,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.GetAllUsers(childComplexity, args["page"].(*int), args["pageSize"].(*int), args["active"].(bool), args["roles"].([]models.Role)), true
 
+	case "Query.GetApplicationsByAuthorId":
+		if e.complexity.Query.GetApplicationsByAuthorID == nil {
+			break
+		}
+
+		args, err := ec.field_Query_GetApplicationsByAuthorId_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetApplicationsByAuthorID(childComplexity, args["id"].(string), args["page"].(*int), args["pageSize"].(*int)), true
+
 	case "Query.GetChildrenByParent":
 		if e.complexity.Query.GetChildrenByParent == nil {
 			break
@@ -2064,6 +2097,39 @@ func (ec *executionContext) field_Query_GetAllUsers_args(ctx context.Context, ra
 		}
 	}
 	args["roles"] = arg3
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_GetApplicationsByAuthorId_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 *int
+	if tmp, ok := rawArgs["page"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("page"))
+		arg1, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["page"] = arg1
+	var arg2 *int
+	if tmp, ok := rawArgs["pageSize"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pageSize"))
+		arg2, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["pageSize"] = arg2
 	return args, nil
 }
 
@@ -2938,6 +3004,124 @@ func (ec *executionContext) fieldContext_ApplicationHttp_note(ctx context.Contex
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationHttpList_applications(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationHTTPList) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationHttpList_applications(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Applications, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*models.ApplicationHTTP)
+	fc.Result = res
+	return ec.marshalNApplicationHttp2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐApplicationHTTPᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationHttpList_applications(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationHttpList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_ApplicationHttp_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_ApplicationHttp_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_ApplicationHttp_updatedAt(ctx, field)
+			case "authorId":
+				return ec.fieldContext_ApplicationHttp_authorId(ctx, field)
+			case "nomination":
+				return ec.fieldContext_ApplicationHttp_nomination(ctx, field)
+			case "algorithmicTaskLink":
+				return ec.fieldContext_ApplicationHttp_algorithmicTaskLink(ctx, field)
+			case "algorithmicTaskFile":
+				return ec.fieldContext_ApplicationHttp_algorithmicTaskFile(ctx, field)
+			case "creativeTaskLink":
+				return ec.fieldContext_ApplicationHttp_creativeTaskLink(ctx, field)
+			case "creativeTaskFile":
+				return ec.fieldContext_ApplicationHttp_creativeTaskFile(ctx, field)
+			case "engineeringTaskFile":
+				return ec.fieldContext_ApplicationHttp_engineeringTaskFile(ctx, field)
+			case "engineeringTaskCloudLink":
+				return ec.fieldContext_ApplicationHttp_engineeringTaskCloudLink(ctx, field)
+			case "engineeringTaskVideo":
+				return ec.fieldContext_ApplicationHttp_engineeringTaskVideo(ctx, field)
+			case "engineeringTaskVideoCloudLink":
+				return ec.fieldContext_ApplicationHttp_engineeringTaskVideoCloudLink(ctx, field)
+			case "note":
+				return ec.fieldContext_ApplicationHttp_note(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ApplicationHttp", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ApplicationHttpList_countRows(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationHTTPList) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ApplicationHttpList_countRows(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CountRows, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ApplicationHttpList_countRows(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ApplicationHttpList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -8303,6 +8487,91 @@ func (ec *executionContext) fieldContext_Query_GetAllUsers(ctx context.Context, 
 	return fc, nil
 }
 
+func (ec *executionContext) _Query_GetApplicationsByAuthorId(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_GetApplicationsByAuthorId(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Query().GetApplicationsByAuthorID(rctx, fc.Args["id"].(string), fc.Args["page"].(*int), fc.Args["pageSize"].(*int))
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"Student", "SuperAdmin"})
+			if err != nil {
+				return nil, err
+			}
+			if ec.directives.HasRole == nil {
+				return nil, errors.New("directive hasRole is not implemented")
+			}
+			return ec.directives.HasRole(ctx, nil, directive0, roles)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, graphql.ErrorOnPath(ctx, err)
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(*models.ApplicationHTTPList); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.ApplicationHTTPList`, tmp)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.ApplicationHTTPList)
+	fc.Result = res
+	return ec.marshalNApplicationHttpList2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐApplicationHTTPList(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_GetApplicationsByAuthorId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "applications":
+				return ec.fieldContext_ApplicationHttpList_applications(ctx, field)
+			case "countRows":
+				return ec.fieldContext_ApplicationHttpList_countRows(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ApplicationHttpList", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_GetApplicationsByAuthorId_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_Me(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Query_Me(ctx, field)
 	if err != nil {
@@ -12559,6 +12828,50 @@ func (ec *executionContext) _ApplicationHttp(ctx context.Context, sel ast.Select
 	return out
 }
 
+var applicationHttpListImplementors = []string{"ApplicationHttpList"}
+
+func (ec *executionContext) _ApplicationHttpList(ctx context.Context, sel ast.SelectionSet, obj *models.ApplicationHTTPList) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, applicationHttpListImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ApplicationHttpList")
+		case "applications":
+			out.Values[i] = ec._ApplicationHttpList_applications(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "countRows":
+			out.Values[i] = ec._ApplicationHttpList_countRows(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var applicationPayloadHttpImplementors = []string{"ApplicationPayloadHttp"}
 
 func (ec *executionContext) _ApplicationPayloadHttp(ctx context.Context, sel ast.SelectionSet, obj *models.ApplicationPayloadHTTP) graphql.Marshaler {
@@ -13639,6 +13952,28 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "GetApplicationsByAuthorId":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_GetApplicationsByAuthorId(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
 		case "Me":
 			field := field
 
@@ -14502,6 +14837,50 @@ func (ec *executionContext) marshalNApplicationHttp2githubᚗcomᚋrobboworldᚋ
 	return ec._ApplicationHttp(ctx, sel, &v)
 }
 
+func (ec *executionContext) marshalNApplicationHttp2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐApplicationHTTPᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.ApplicationHTTP) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNApplicationHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐApplicationHTTP(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
 func (ec *executionContext) marshalNApplicationHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐApplicationHTTP(ctx context.Context, sel ast.SelectionSet, v *models.ApplicationHTTP) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -14510,6 +14889,20 @@ func (ec *executionContext) marshalNApplicationHttp2ᚖgithubᚗcomᚋrobboworld
 		return graphql.Null
 	}
 	return ec._ApplicationHttp(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNApplicationHttpList2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐApplicationHTTPList(ctx context.Context, sel ast.SelectionSet, v models.ApplicationHTTPList) graphql.Marshaler {
+	return ec._ApplicationHttpList(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNApplicationHttpList2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐApplicationHTTPList(ctx context.Context, sel ast.SelectionSet, v *models.ApplicationHTTPList) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ApplicationHttpList(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNBoolean2bool(ctx context.Context, v interface{}) (bool, error) {

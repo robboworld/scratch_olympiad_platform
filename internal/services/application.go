@@ -11,6 +11,7 @@ import (
 
 type ApplicationService interface {
 	CreateApplication(newApplication models.ApplicationCore) (models.ApplicationCore, error)
+	GetApplicationsByAuthorId(id, clientId uint, clientRole models.Role, page, pageSize *int) (applications []models.ApplicationCore, countRows uint, err error)
 }
 
 type ApplicationServiceImpl struct {
@@ -55,30 +56,18 @@ func (a ApplicationServiceImpl) CreateApplication(application models.Application
 		return models.ApplicationCore{}, err
 	}
 
-	subject := "Your submitted Scratch Olympiad application"
+	subject := "You have applied for the Final stage of the Scratch Olympiad 2024"
 	body := "<p>Application details:</p>" +
 		"<p>Nomination: " + application.Nomination + "</p>"
 
 	if application.AlgorithmicTaskLink != "" {
 		body += "<p>Algorithmic task link: " + application.AlgorithmicTaskLink + "</p>"
 	}
-	if application.AlgorithmicTaskFile != "" {
-		body += "<p>Algorithmic task file: " + application.AlgorithmicTaskFile + "</p>"
-	}
 	if application.CreativeTaskLink != "" {
 		body += "<p>Creative task link: " + application.CreativeTaskLink + "</p>"
 	}
-	if application.CreativeTaskFile != "" {
-		body += "<p>Creative task file: " + application.CreativeTaskFile + "</p>"
-	}
-	if application.EngineeringTaskFile != "" {
-		body += "<p>Engineering task file: " + application.EngineeringTaskFile + "</p>"
-	}
 	if application.EngineeringTaskCloudLink != "" {
 		body += "<p>Engineering task cloud link: " + application.EngineeringTaskCloudLink + "</p>"
-	}
-	if application.EngineeringTaskVideo != "" {
-		body += "<p>Engineering task video: " + application.EngineeringTaskVideo + "</p>"
 	}
 	if application.EngineeringTaskVideoCloudLink != "" {
 		body += "<p>Engineering task video cloud link: " + application.EngineeringTaskVideoCloudLink + "</p>"
@@ -86,6 +75,10 @@ func (a ApplicationServiceImpl) CreateApplication(application models.Application
 	if application.Note != "" {
 		body += "<p>Note: " + application.Note + "</p>"
 	}
+	body += "<br><p>Congratulations! We have received your application for the Final stage of the International " +
+		"Scratch Creative Programming Olympiad 2024. " +
+		"Please expect the preliminary results to be published on " +
+		"<a href='https://creativeprogramming.org'>creativeprogramming.org</a> on October 28."
 
 	body += "<br><p>Organizing committee of the International Scratch Creative Programming Olympiad</p>" +
 		"<p><a href='mailto:scratch@creativeprogramming.org'>scratch@creativeprogramming.org</a></p>" +
@@ -99,4 +92,18 @@ func (a ApplicationServiceImpl) CreateApplication(application models.Application
 	}
 
 	return a.applicationGateway.CreateApplication(application)
+}
+
+func (a ApplicationServiceImpl) GetApplicationsByAuthorId(id, clientId uint, clientRole models.Role, page, pageSize *int) (applications []models.ApplicationCore, countRows uint, err error) {
+	offset, limit := utils.GetOffsetAndLimit(page, pageSize)
+	if clientRole.String() != models.RoleSuperAdmin.String() {
+		if id != clientId {
+			return nil, 0, utils.ResponseError{
+				Code:    http.StatusForbidden,
+				Message: consts.ErrAccessDenied,
+			}
+		}
+		return a.applicationGateway.GetApplicationsByAuthorId(id, offset, limit)
+	}
+	return a.applicationGateway.GetApplicationsByAuthorId(id, offset, limit)
 }
