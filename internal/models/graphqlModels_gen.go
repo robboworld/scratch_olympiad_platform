@@ -31,6 +31,11 @@ type ApplicationHTTP struct {
 	Note                          string `json:"note"`
 }
 
+type ApplicationHTTPList struct {
+	Applications []*ApplicationHTTP `json:"applications"`
+	CountRows    int                `json:"countRows"`
+}
+
 type ApplicationPayloadHTTP struct {
 	Author                        *UserHTTP `json:"author"`
 	Nomination                    string    `json:"nomination"`

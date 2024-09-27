@@ -42,6 +42,15 @@ input NewApplication {
     note: String
 }
 
+type ApplicationHttpList {
+    applications: [ApplicationHttp!]!
+    countRows: Int!
+}
+
 extend type Mutation {
     CreateApplication(input: NewApplication!): ApplicationHttp! @hasRole(roles: [Student, SuperAdmin])
+}
+
+extend type Query {
+    GetApplicationsByAuthorId(id: ID!, page: Int, pageSize: Int): ApplicationHttpList! @hasRole(roles: [Student, SuperAdmin])
 }

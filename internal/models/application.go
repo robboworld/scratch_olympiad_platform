@@ -59,3 +59,12 @@ func (a *ApplicationPayloadHTTP) FromCore(application ApplicationCore) {
 	a.EngineeringTaskVideoCloudLink = application.EngineeringTaskVideoCloudLink
 	a.Note = application.Note
 }
+
+func FromApplicationsCore(applicationsCore []ApplicationCore) (applicationsHttp []*ApplicationHTTP) {
+	for _, applicationCore := range applicationsCore {
+		var tmpApplicationHttp ApplicationHTTP
+		tmpApplicationHttp.FromCore(applicationCore)
+		applicationsHttp = append(applicationsHttp, &tmpApplicationHttp)
+	}
+	return
+}
