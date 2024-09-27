@@ -56,7 +56,7 @@ func (a ApplicationServiceImpl) CreateApplication(application models.Application
 		return models.ApplicationCore{}, err
 	}
 
-	subject := "Your submitted Scratch Olympiad application"
+	subject := "You have applied for the Final stage of the Scratch Olympiad 2024"
 	body := "<p>Application details:</p>" +
 		"<p>Nomination: " + application.Nomination + "</p>"
 
