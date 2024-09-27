@@ -213,6 +213,8 @@ func (a AuthServiceImpl) ForgotPassword(email string) error {
 
 	resetPasswordLink := randstr.String(20)
 	resetPasswordLinkHash := utils.GetHashString(resetPasswordLink)
+
+	// TODO: The date of the record change should not be changed
 	err = a.userGateway.SetPasswordResetLink(user.ID, resetPasswordLinkHash)
 	if err != nil {
 		return err
@@ -255,6 +257,8 @@ func (a AuthServiceImpl) ResetPassword(resetLink string) error {
 	}
 	newPassword := randstr.String(8)
 	newPasswordHash := utils.HashPassword(newPassword)
+
+	// TODO: The date of the record change should not be changed
 	err = a.userGateway.SetPassword(user.ID, newPasswordHash)
 	if err != nil {
 		return err
