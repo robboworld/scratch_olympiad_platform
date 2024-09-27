@@ -55,5 +55,48 @@ func (a ApplicationServiceImpl) CreateApplication(application models.Application
 		return models.ApplicationCore{}, err
 	}
 
+	subject := "Your submitted Scratch Olympiad application"
+	body := "<p>Application details:</p>" +
+		"<p>Nomination: " + application.Nomination + "</p>"
+
+	if application.AlgorithmicTaskLink != "" {
+		body += "<p>Algorithmic task link: " + application.AlgorithmicTaskLink + "</p>"
+	}
+	if application.AlgorithmicTaskFile != "" {
+		body += "<p>Algorithmic task file: " + application.AlgorithmicTaskFile + "</p>"
+	}
+	if application.CreativeTaskLink != "" {
+		body += "<p>Creative task link: " + application.CreativeTaskLink + "</p>"
+	}
+	if application.CreativeTaskFile != "" {
+		body += "<p>Creative task file: " + application.CreativeTaskFile + "</p>"
+	}
+	if application.EngineeringTaskFile != "" {
+		body += "<p>Engineering task file: " + application.EngineeringTaskFile + "</p>"
+	}
+	if application.EngineeringTaskCloudLink != "" {
+		body += "<p>Engineering task cloud link: " + application.EngineeringTaskCloudLink + "</p>"
+	}
+	if application.EngineeringTaskVideo != "" {
+		body += "<p>Engineering task video: " + application.EngineeringTaskVideo + "</p>"
+	}
+	if application.EngineeringTaskVideoCloudLink != "" {
+		body += "<p>Engineering task video cloud link: " + application.EngineeringTaskVideoCloudLink + "</p>"
+	}
+	if application.Note != "" {
+		body += "<p>Note: " + application.Note + "</p>"
+	}
+
+	body += "<br><p>Organizing committee of the International Scratch Creative Programming Olympiad</p>" +
+		"<p><a href='mailto:scratch@creativeprogramming.org'>scratch@creativeprogramming.org</a></p>" +
+		"<p><a href='https://creativeprogramming.org'>creativeprogramming.org</a></p>"
+
+	if err = utils.SendEmail(subject, user.Email, body); err != nil {
+		return models.ApplicationCore{}, utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+		}
+	}
+
 	return a.applicationGateway.CreateApplication(application)
 }
