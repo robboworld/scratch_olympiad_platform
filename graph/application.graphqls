@@ -52,5 +52,5 @@ extend type Mutation {
 }
 
 extend type Query {
-    GetApplicationsByAuthorId(id: ID!, page: Int, pageSize: Int): ApplicationHttpList! @hasRole(roles: [Student, SuperAdmin])
+    GetAllApplications(page: Int, pageSize: Int): ApplicationHttpList! @hasRole(roles: [Student, SuperAdmin])
 }

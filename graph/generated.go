@@ -215,12 +215,12 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
+		GetAllApplications              func(childComplexity int, page *int, pageSize *int) int
 		GetAllCountries                 func(childComplexity int, page *int, pageSize *int) int
 		GetAllNominations               func(childComplexity int, page *int, pageSize *int) int
 		GetAllProjectPagesByAccessToken func(childComplexity int, page *int, pageSize *int) int
 		GetAllProjectPagesByAuthorID    func(childComplexity int, id string, page *int, pageSize *int) int
 		GetAllUsers                     func(childComplexity int, page *int, pageSize *int, active bool, roles []models.Role) int
-		GetApplicationsByAuthorID       func(childComplexity int, id string, page *int, pageSize *int) int
 		GetChildrenByParent             func(childComplexity int, parentID string) int
 		GetCourseByID                   func(childComplexity int, id string) int
 		GetCoursesByUser                func(childComplexity int) int
@@ -290,7 +290,7 @@ type QueryResolver interface {
 	GetUserByAccessToken(ctx context.Context) (*models.UserHTTP, error)
 	GetUserByID(ctx context.Context, id string) (*models.UserHTTP, error)
 	GetAllUsers(ctx context.Context, page *int, pageSize *int, active bool, roles []models.Role) (*models.UsersList, error)
-	GetApplicationsByAuthorID(ctx context.Context, id string, page *int, pageSize *int) (*models.ApplicationHTTPList, error)
+	GetAllApplications(ctx context.Context, page *int, pageSize *int) (*models.ApplicationHTTPList, error)
 	Me(ctx context.Context) (*models.UserHTTP, error)
 	GetAllCountries(ctx context.Context, page *int, pageSize *int) (*models.CountryHTTPList, error)
 	GetCourseByID(ctx context.Context, id string) (*models.CourseHTTP, error)
@@ -1223,6 +1223,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ProjectPageHttpList.ProjectPages(childComplexity), true
 
+	case "Query.GetAllApplications":
+		if e.complexity.Query.GetAllApplications == nil {
+			break
+		}
+
+		args, err := ec.field_Query_GetAllApplications_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetAllApplications(childComplexity, args["page"].(*int), args["pageSize"].(*int)), true
+
 	case "Query.GetAllCountries":
 		if e.complexity.Query.GetAllCountries == nil {
 			break
@@ -1282,18 +1294,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.GetAllUsers(childComplexity, args["page"].(*int), args["pageSize"].(*int), args["active"].(bool), args["roles"].([]models.Role)), true
-
-	case "Query.GetApplicationsByAuthorId":
-		if e.complexity.Query.GetApplicationsByAuthorID == nil {
-			break
-		}
-
-		args, err := ec.field_Query_GetApplicationsByAuthorId_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.GetApplicationsByAuthorID(childComplexity, args["id"].(string), args["page"].(*int), args["pageSize"].(*int)), true
 
 	case "Query.GetChildrenByParent":
 		if e.complexity.Query.GetChildrenByParent == nil {
@@ -1953,6 +1953,30 @@ func (ec *executionContext) field_Mutation_UpdateUser_args(ctx context.Context, 
 	return args, nil
 }
 
+func (ec *executionContext) field_Query_GetAllApplications_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *int
+	if tmp, ok := rawArgs["page"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("page"))
+		arg0, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["page"] = arg0
+	var arg1 *int
+	if tmp, ok := rawArgs["pageSize"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pageSize"))
+		arg1, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["pageSize"] = arg1
+	return args, nil
+}
+
 func (ec *executionContext) field_Query_GetAllCountries_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -2097,39 +2121,6 @@ func (ec *executionContext) field_Query_GetAllUsers_args(ctx context.Context, ra
 		}
 	}
 	args["roles"] = arg3
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_GetApplicationsByAuthorId_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["id"] = arg0
-	var arg1 *int
-	if tmp, ok := rawArgs["page"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("page"))
-		arg1, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["page"] = arg1
-	var arg2 *int
-	if tmp, ok := rawArgs["pageSize"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pageSize"))
-		arg2, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["pageSize"] = arg2
 	return args, nil
 }
 
@@ -8487,8 +8478,8 @@ func (ec *executionContext) fieldContext_Query_GetAllUsers(ctx context.Context, 
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_GetApplicationsByAuthorId(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_GetApplicationsByAuthorId(ctx, field)
+func (ec *executionContext) _Query_GetAllApplications(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_GetAllApplications(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -8502,7 +8493,7 @@ func (ec *executionContext) _Query_GetApplicationsByAuthorId(ctx context.Context
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		directive0 := func(rctx context.Context) (interface{}, error) {
 			ctx = rctx // use context from middleware stack in children
-			return ec.resolvers.Query().GetApplicationsByAuthorID(rctx, fc.Args["id"].(string), fc.Args["page"].(*int), fc.Args["pageSize"].(*int))
+			return ec.resolvers.Query().GetAllApplications(rctx, fc.Args["page"].(*int), fc.Args["pageSize"].(*int))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
 			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"Student", "SuperAdmin"})
@@ -8542,7 +8533,7 @@ func (ec *executionContext) _Query_GetApplicationsByAuthorId(ctx context.Context
 	return ec.marshalNApplicationHttpList2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐApplicationHTTPList(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_GetApplicationsByAuthorId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Query_GetAllApplications(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Query",
 		Field:      field,
@@ -8565,7 +8556,7 @@ func (ec *executionContext) fieldContext_Query_GetApplicationsByAuthorId(ctx con
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_GetApplicationsByAuthorId_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Query_GetAllApplications_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -13952,7 +13943,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
-		case "GetApplicationsByAuthorId":
+		case "GetAllApplications":
 			field := field
 
 			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
@@ -13961,7 +13952,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_GetApplicationsByAuthorId(ctx, field)
+				res = ec._Query_GetAllApplications(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}

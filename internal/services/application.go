@@ -11,7 +11,7 @@ import (
 
 type ApplicationService interface {
 	CreateApplication(newApplication models.ApplicationCore) (models.ApplicationCore, error)
-	GetApplicationsByAuthorId(id, clientId uint, clientRole models.Role, page, pageSize *int) (applications []models.ApplicationCore, countRows uint, err error)
+	GetAllApplications(page, pageSize *int, userId uint, clientRole models.Role) (applications []models.ApplicationCore, countRows uint, err error)
 }
 
 type ApplicationServiceImpl struct {
@@ -94,16 +94,10 @@ func (a ApplicationServiceImpl) CreateApplication(application models.Application
 	return a.applicationGateway.CreateApplication(application)
 }
 
-func (a ApplicationServiceImpl) GetApplicationsByAuthorId(id, clientId uint, clientRole models.Role, page, pageSize *int) (applications []models.ApplicationCore, countRows uint, err error) {
+func (a ApplicationServiceImpl) GetAllApplications(page, pageSize *int, userId uint, clientRole models.Role) (applications []models.ApplicationCore, countRows uint, err error) {
 	offset, limit := utils.GetOffsetAndLimit(page, pageSize)
 	if clientRole.String() != models.RoleSuperAdmin.String() {
-		if id != clientId {
-			return nil, 0, utils.ResponseError{
-				Code:    http.StatusForbidden,
-				Message: consts.ErrAccessDenied,
-			}
-		}
-		return a.applicationGateway.GetApplicationsByAuthorId(id, offset, limit)
+		return a.applicationGateway.GetApplicationsByAuthorId(userId, offset, limit)
 	}
-	return a.applicationGateway.GetApplicationsByAuthorId(id, offset, limit)
+	return a.applicationGateway.GetAllApplications(offset, limit)
 }

@@ -14,6 +14,7 @@ type ApplicationGateway interface {
 	CreateApplication(application models.ApplicationCore) (newApplication models.ApplicationCore, err error)
 	DoesExistApplication(userId uint, nomination string) (bool, error)
 	GetApplicationsByAuthorId(id uint, offset, limit int) (applications []models.ApplicationCore, countRows uint, err error)
+	GetAllApplications(offset, limit int) (applications []models.ApplicationCore, countRows uint, err error)
 }
 
 type ApplicationGatewayImpl struct {
@@ -48,6 +49,18 @@ func (a ApplicationGatewayImpl) GetApplicationsByAuthorId(id uint, offset, limit
 	var count int64
 	result := a.postgresClient.Db.Limit(limit).Offset(offset).Where("author_id = ?", id).
 		Find(&applications)
+	if result.Error != nil {
+		return []models.ApplicationCore{}, 0, utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: result.Error.Error(),
+		}
+	}
+	result.Count(&count)
+	return applications, uint(count), result.Error
+}
+func (a ApplicationGatewayImpl) GetAllApplications(offset, limit int) (applications []models.ApplicationCore, countRows uint, err error) {
+	var count int64
+	result := a.postgresClient.Db.Limit(limit).Offset(offset).Find(&applications)
 	if result.Error != nil {
 		return []models.ApplicationCore{}, 0, utils.ResponseError{
 			Code:    http.StatusInternalServerError,
