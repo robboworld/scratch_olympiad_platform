@@ -150,7 +150,7 @@ func (a AuthServiceImpl) SignUp(newUser models.UserCore) error {
 			Message: consts.ErrShortPassword,
 		}
 	}
-	exist, err = a.countryGateway.DoesExistName(0, newUser.Country)
+	exist, err = a.countryGateway.DoesExistCountry(0, newUser.Country)
 	if err != nil {
 		return err
 	}
@@ -161,15 +161,6 @@ func (a AuthServiceImpl) SignUp(newUser models.UserCore) error {
 		}
 	}
 	activationLink := randstr.String(20)
-	activationLinkHash := utils.GetHashString(activationLink)
-	passwordHash := utils.HashPassword(newUser.Password)
-	newUser.Password = passwordHash
-	newUser.ActivationLink = activationLinkHash
-	newUser, err = a.userGateway.CreateUser(newUser)
-	if err != nil {
-		return err
-	}
-
 	activationByLink, err := a.settingsGateway.GetActivationByLink()
 	if err != nil {
 		return err
@@ -196,6 +187,15 @@ func (a AuthServiceImpl) SignUp(newUser models.UserCore) error {
 			Message: err.Error(),
 		}
 	}
+
+	activationLinkHash := utils.GetHashString(activationLink)
+	passwordHash := utils.HashPassword(newUser.Password)
+	newUser.Password = passwordHash
+	newUser.ActivationLink = activationLinkHash
+	_, err = a.userGateway.CreateUser(newUser)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -212,14 +212,6 @@ func (a AuthServiceImpl) ForgotPassword(email string) error {
 	}
 
 	resetPasswordLink := randstr.String(20)
-	resetPasswordLinkHash := utils.GetHashString(resetPasswordLink)
-
-	// TODO: The date of the record change should not be changed
-	err = a.userGateway.SetPasswordResetLink(user.ID, resetPasswordLinkHash)
-	if err != nil {
-		return err
-	}
-	viper.GetString("auth_password_reset_link_at")
 	subject := "Request to reset your Scratch Olympiad account password"
 	body := "<p>We have received a request to reset your account password.</p>" +
 		"<p>If you did it, please follow this link (the link is active for " +
@@ -237,6 +229,13 @@ func (a AuthServiceImpl) ForgotPassword(email string) error {
 			Message: err.Error(),
 		}
 	}
+
+	resetPasswordLinkHash := utils.GetHashString(resetPasswordLink)
+	// TODO: The date of the record change should not be changed
+	err = a.userGateway.SetPasswordResetLink(user.ID, resetPasswordLinkHash)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -251,23 +250,11 @@ func (a AuthServiceImpl) ResetPassword(resetLink string) error {
 	}
 	if user.PasswordResetLinkAt.Before(time.Now()) {
 		return utils.ResponseError{
-			Code:    http.StatusGone,
+			Code:    http.StatusBadRequest,
 			Message: consts.ErrPasswordResetLinkExpired,
 		}
 	}
 	newPassword := randstr.String(8)
-	newPasswordHash := utils.HashPassword(newPassword)
-
-	// TODO: The date of the record change should not be changed
-	err = a.userGateway.SetPassword(user.ID, newPasswordHash)
-	if err != nil {
-		return err
-	}
-	err = a.userGateway.SetPasswordResetLink(user.ID, "")
-	if err != nil {
-		return err
-	}
-
 	subject := "Your new Scratch Olympiad account password"
 	body := "<p>Your new password:</p>" +
 		"<p>" + newPassword + "</p><br>" +
@@ -279,6 +266,17 @@ func (a AuthServiceImpl) ResetPassword(resetLink string) error {
 			Code:    http.StatusInternalServerError,
 			Message: err.Error(),
 		}
+	}
+
+	newPasswordHash := utils.HashPassword(newPassword)
+	// TODO: The date of the record change should not be changed
+	err = a.userGateway.SetPassword(user.ID, newPasswordHash)
+	if err != nil {
+		return err
+	}
+	err = a.userGateway.SetPasswordResetLink(user.ID, "")
+	if err != nil {
+		return err
 	}
 	return nil
 }

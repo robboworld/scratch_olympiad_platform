@@ -55,7 +55,7 @@ func (u UserServiceImpl) CreateUser(user models.UserCore, clientRole models.Role
 			Message: consts.ErrShortPassword,
 		}
 	}
-	exist, err = u.countryGateway.DoesExistName(0, user.Country)
+	exist, err = u.countryGateway.DoesExistCountry(0, user.Country)
 	if err != nil {
 		return models.UserCore{}, err
 	}
@@ -122,7 +122,7 @@ func (u UserServiceImpl) UpdateUser(user models.UserCore, clientRole models.Role
 			Message: consts.ErrEmailAlreadyInUse,
 		}
 	}
-	exist, err = u.countryGateway.DoesExistName(0, user.Country)
+	exist, err = u.countryGateway.DoesExistCountry(0, user.Country)
 	if err != nil {
 		return models.UserCore{}, err
 	}
