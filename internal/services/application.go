@@ -11,7 +11,7 @@ import (
 
 type ApplicationService interface {
 	CreateApplication(newApplication models.ApplicationCore) (models.ApplicationCore, error)
-	GetAllApplications(page, pageSize *int, userId uint, clientRole models.Role) (applications []models.ApplicationCore, countRows uint, err error)
+	GetAllApplications(page, pageSize *int, clientId uint, clientRole models.Role) (applications []models.ApplicationCore, countRows uint, err error)
 }
 
 type ApplicationServiceImpl struct {
@@ -43,7 +43,7 @@ func (a ApplicationServiceImpl) CreateApplication(application models.Application
 	}
 
 	userAge := uint(utils.CalculateUserAge(user.Birthdate))
-	if userAge < nomination.MinAge {
+	if userAge > nomination.MaxAge {
 		return models.ApplicationCore{}, utils.ResponseError{
 			Code:    http.StatusForbidden,
 			Message: consts.ErrDoesNotMatchAgeCategory,
@@ -94,10 +94,10 @@ func (a ApplicationServiceImpl) CreateApplication(application models.Application
 	return a.applicationGateway.CreateApplication(application)
 }
 
-func (a ApplicationServiceImpl) GetAllApplications(page, pageSize *int, userId uint, clientRole models.Role) (applications []models.ApplicationCore, countRows uint, err error) {
+func (a ApplicationServiceImpl) GetAllApplications(page, pageSize *int, clientId uint, clientRole models.Role) (applications []models.ApplicationCore, countRows uint, err error) {
 	offset, limit := utils.GetOffsetAndLimit(page, pageSize)
 	if clientRole.String() != models.RoleSuperAdmin.String() {
-		return a.applicationGateway.GetApplicationsByAuthorId(userId, offset, limit)
+		return a.applicationGateway.GetApplicationsByAuthorId(clientId, offset, limit)
 	}
 	return a.applicationGateway.GetAllApplications(offset, limit)
 }
