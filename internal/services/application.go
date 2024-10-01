@@ -1,6 +1,7 @@
 package services
 
 import (
+	"fmt"
 	"github.com/robboworld/scratch_olympiad_platform/internal/api"
 	"github.com/robboworld/scratch_olympiad_platform/internal/consts"
 	"github.com/robboworld/scratch_olympiad_platform/internal/gateways"
@@ -43,6 +44,8 @@ func (a ApplicationServiceImpl) CreateApplication(application models.Application
 	}
 
 	userAge := uint(utils.CalculateUserAge(user.Birthdate))
+	fmt.Println(userAge)
+	fmt.Println(nomination.MaxAge)
 	if userAge > nomination.MaxAge {
 		return models.ApplicationCore{}, utils.ResponseError{
 			Code:    http.StatusForbidden,
