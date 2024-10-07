@@ -6,6 +6,9 @@ package resolvers
 
 import (
 	"context"
+	"net/http"
+	"strconv"
+
 	"github.com/robboworld/scratch_olympiad_platform/internal/consts"
 	"github.com/robboworld/scratch_olympiad_platform/internal/models"
 	"github.com/robboworld/scratch_olympiad_platform/pkg/utils"
@@ -48,6 +51,46 @@ func (r *mutationResolver) CreateApplication(ctx context.Context, input models.N
 
 	applicationHttp := models.ApplicationHTTP{}
 	applicationHttp.FromCore(newApplication)
+	return &applicationHttp, nil
+}
+
+// GetApplicationByID is the resolver for the GetApplicationById field.
+func (r *queryResolver) GetApplicationByID(ctx context.Context, id string) (*models.ApplicationHTTP, error) {
+	ginContext, err := utils.GinContextFromContext(ctx)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return nil, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": err,
+			},
+		}
+	}
+	atoi, err := strconv.Atoi(id)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return nil, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": utils.ResponseError{
+					Code:    http.StatusBadRequest,
+					Message: consts.ErrAtoi,
+				},
+			},
+		}
+	}
+	clientId := ginContext.Value(consts.KeyId).(uint)
+	clientRole := ginContext.Value(consts.KeyRole).(models.Role)
+	application, err := r.applicationService.GetApplicationById(uint(atoi), clientId, clientRole)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return nil, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": err,
+			},
+		}
+	}
+
+	applicationHttp := models.ApplicationHTTP{}
+	applicationHttp.FromCore(application)
 	return &applicationHttp, nil
 }
 
