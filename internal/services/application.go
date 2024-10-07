@@ -11,6 +11,7 @@ import (
 
 type ApplicationService interface {
 	CreateApplication(newApplication models.ApplicationCore) (models.ApplicationCore, error)
+	GetApplicationById(id, clientId uint, clientRole models.Role) (application models.ApplicationCore, err error)
 	GetAllApplications(page, pageSize *int, clientId uint, clientRole models.Role) (applications []models.ApplicationCore, countRows uint, err error)
 }
 
@@ -92,6 +93,24 @@ func (a ApplicationServiceImpl) CreateApplication(application models.Application
 	}
 
 	return a.applicationGateway.CreateApplication(application)
+}
+
+func (a ApplicationServiceImpl) GetApplicationById(id, clientId uint, clientRole models.Role) (application models.ApplicationCore, err error) {
+	application, err = a.applicationGateway.GetApplicationById(id)
+	if err != nil {
+		return application, err
+	}
+	if clientRole.String() == models.RoleSuperAdmin.String() {
+		return application, nil
+	} else {
+		if application.AuthorID != clientId {
+			return models.ApplicationCore{}, utils.ResponseError{
+				Code:    http.StatusForbidden,
+				Message: consts.ErrAccessDenied,
+			}
+		}
+	}
+	return application, nil
 }
 
 func (a ApplicationServiceImpl) GetAllApplications(page, pageSize *int, clientId uint, clientRole models.Role) (applications []models.ApplicationCore, countRows uint, err error) {
