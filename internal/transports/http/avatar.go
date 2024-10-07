@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -80,5 +81,5 @@ func (h AvatarHandler) UploadAvatar(c *gin.Context) {
 	}
 
 	c.Header("Content-Type", "application/json")
-	c.JSON(http.StatusOK, gin.H{"filename": strings.Replace(tempFile.Name(), "\\", "/", -1)})
+	c.JSON(http.StatusOK, gin.H{"filename": filepath.Base(tempFile.Name())})
 }

@@ -10,8 +10,6 @@ import (
 	"github.com/robboworld/scratch_olympiad_platform/internal/models"
 	"github.com/robboworld/scratch_olympiad_platform/pkg/utils"
 	"github.com/vektah/gqlparser/v2/gqlerror"
-	"net/http"
-	"strconv"
 )
 
 // CreateApplication is the resolver for the CreateApplication field.
@@ -53,20 +51,8 @@ func (r *mutationResolver) CreateApplication(ctx context.Context, input models.N
 	return &applicationHttp, nil
 }
 
-// GetApplicationsByAuthorID is the resolver for the GetApplicationsByAuthorId field.
-func (r *queryResolver) GetApplicationsByAuthorID(ctx context.Context, id string, page *int, pageSize *int) (*models.ApplicationHTTPList, error) {
-	atoi, err := strconv.Atoi(id)
-	if err != nil {
-		r.loggers.Err.Printf("%s", err.Error())
-		return nil, &gqlerror.Error{
-			Extensions: map[string]interface{}{
-				"err": utils.ResponseError{
-					Code:    http.StatusBadRequest,
-					Message: consts.ErrAtoi,
-				},
-			},
-		}
-	}
+// GetAllApplications is the resolver for the GetAllApplications field.
+func (r *queryResolver) GetAllApplications(ctx context.Context, page *int, pageSize *int) (*models.ApplicationHTTPList, error) {
 	ginContext, err := utils.GinContextFromContext(ctx)
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
@@ -78,7 +64,7 @@ func (r *queryResolver) GetApplicationsByAuthorID(ctx context.Context, id string
 	}
 	clientId := ginContext.Value(consts.KeyId).(uint)
 	clientRole := ginContext.Value(consts.KeyRole).(models.Role)
-	applications, countRows, err := r.applicationService.GetApplicationsByAuthorId(uint(atoi), clientId, clientRole, page, pageSize)
+	applications, countRows, err := r.applicationService.GetAllApplications(page, pageSize, clientId, clientRole)
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
 		return nil, &gqlerror.Error{

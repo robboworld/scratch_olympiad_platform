@@ -11,7 +11,7 @@ import (
 
 type CountryGateway interface {
 	GetAllCountries(offset, limit int) (countries []models.CountryCore, countRows uint, err error)
-	DoesExistName(id uint, name string) (bool, error)
+	DoesExistCountry(id uint, name string) (bool, error)
 }
 
 type CountryGatewayImpl struct {
@@ -31,7 +31,7 @@ func (c CountryGatewayImpl) GetAllCountries(offset, limit int) (countries []mode
 	return countries, uint(count), result.Error
 }
 
-func (c CountryGatewayImpl) DoesExistName(id uint, name string) (bool, error) {
+func (c CountryGatewayImpl) DoesExistCountry(id uint, name string) (bool, error) {
 	if err := c.postgresClient.Db.Where("id != ? AND name = ?", id, name).
 		Take(&models.CountryCore{}).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
