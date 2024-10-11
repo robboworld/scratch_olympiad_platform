@@ -74,20 +74,6 @@ type ComplexityRoot struct {
 		CountRows    func(childComplexity int) int
 	}
 
-	ApplicationPayloadHttp struct {
-		AlgorithmicTaskFile           func(childComplexity int) int
-		AlgorithmicTaskLink           func(childComplexity int) int
-		Author                        func(childComplexity int) int
-		CreativeTaskFile              func(childComplexity int) int
-		CreativeTaskLink              func(childComplexity int) int
-		EngineeringTaskCloudLink      func(childComplexity int) int
-		EngineeringTaskFile           func(childComplexity int) int
-		EngineeringTaskVideo          func(childComplexity int) int
-		EngineeringTaskVideoCloudLink func(childComplexity int) int
-		Nomination                    func(childComplexity int) int
-		Note                          func(childComplexity int) int
-	}
-
 	CountryHttp struct {
 		CreatedAt func(childComplexity int) int
 		ID        func(childComplexity int) int
@@ -149,24 +135,25 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		ConfirmActivation   func(childComplexity int, activationLink string) int
-		CreateApplication   func(childComplexity int, input models.NewApplication) int
-		CreateParentRel     func(childComplexity int, parentID string, childID string) int
-		CreateProjectPage   func(childComplexity int) int
-		CreateUser          func(childComplexity int, input models.NewUser) int
-		DeleteParentRel     func(childComplexity int, parentID string, childID string) int
-		DeleteProjectPage   func(childComplexity int, id string) int
-		DeleteUser          func(childComplexity int, id string) int
-		ForgotPassword      func(childComplexity int, email string) int
-		RefreshToken        func(childComplexity int, refreshToken string) int
-		ResetPassword       func(childComplexity int, resetLink string) int
-		SetActivationByLink func(childComplexity int, activationByLink bool) int
-		SetIsBanned         func(childComplexity int, projectPageID string, isBanned bool) int
-		SetUserIsActive     func(childComplexity int, id string, isActive bool) int
-		SignIn              func(childComplexity int, input models.SignIn) int
-		SignUp              func(childComplexity int, input models.SignUp) int
-		UpdateProjectPage   func(childComplexity int, input models.UpdateProjectPage) int
-		UpdateUser          func(childComplexity int, input models.UpdateUser) int
+		ConfirmActivation     func(childComplexity int, activationLink string) int
+		CreateApplication     func(childComplexity int, input models.NewApplication) int
+		CreateParentRel       func(childComplexity int, parentID string, childID string) int
+		CreateProjectPage     func(childComplexity int) int
+		CreateUser            func(childComplexity int, input models.NewUser) int
+		DeleteParentRel       func(childComplexity int, parentID string, childID string) int
+		DeleteProjectPage     func(childComplexity int, id string) int
+		DeleteUser            func(childComplexity int, id string) int
+		ExportAllApplications func(childComplexity int) int
+		ForgotPassword        func(childComplexity int, email string) int
+		RefreshToken          func(childComplexity int, refreshToken string) int
+		ResetPassword         func(childComplexity int, resetLink string) int
+		SetActivationByLink   func(childComplexity int, activationByLink bool) int
+		SetIsBanned           func(childComplexity int, projectPageID string, isBanned bool) int
+		SetUserIsActive       func(childComplexity int, id string, isActive bool) int
+		SignIn                func(childComplexity int, input models.SignIn) int
+		SignUp                func(childComplexity int, input models.SignUp) int
+		UpdateProjectPage     func(childComplexity int, input models.UpdateProjectPage) int
+		UpdateUser            func(childComplexity int, input models.UpdateUser) int
 	}
 
 	NewUserResponse struct {
@@ -273,6 +260,7 @@ type MutationResolver interface {
 	DeleteUser(ctx context.Context, id string) (*models.Response, error)
 	SetUserIsActive(ctx context.Context, id string, isActive bool) (*models.Response, error)
 	CreateApplication(ctx context.Context, input models.NewApplication) (*models.ApplicationHTTP, error)
+	ExportAllApplications(ctx context.Context) (*models.Response, error)
 	SignUp(ctx context.Context, input models.SignUp) (*models.Response, error)
 	SignIn(ctx context.Context, input models.SignIn) (*models.SignInResponse, error)
 	RefreshToken(ctx context.Context, refreshToken string) (*models.SignInResponse, error)
@@ -453,83 +441,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ApplicationHttpList.CountRows(childComplexity), true
-
-	case "ApplicationPayloadHttp.algorithmicTaskFile":
-		if e.complexity.ApplicationPayloadHttp.AlgorithmicTaskFile == nil {
-			break
-		}
-
-		return e.complexity.ApplicationPayloadHttp.AlgorithmicTaskFile(childComplexity), true
-
-	case "ApplicationPayloadHttp.algorithmicTaskLink":
-		if e.complexity.ApplicationPayloadHttp.AlgorithmicTaskLink == nil {
-			break
-		}
-
-		return e.complexity.ApplicationPayloadHttp.AlgorithmicTaskLink(childComplexity), true
-
-	case "ApplicationPayloadHttp.author":
-		if e.complexity.ApplicationPayloadHttp.Author == nil {
-			break
-		}
-
-		return e.complexity.ApplicationPayloadHttp.Author(childComplexity), true
-
-	case "ApplicationPayloadHttp.creativeTaskFile":
-		if e.complexity.ApplicationPayloadHttp.CreativeTaskFile == nil {
-			break
-		}
-
-		return e.complexity.ApplicationPayloadHttp.CreativeTaskFile(childComplexity), true
-
-	case "ApplicationPayloadHttp.creativeTaskLink":
-		if e.complexity.ApplicationPayloadHttp.CreativeTaskLink == nil {
-			break
-		}
-
-		return e.complexity.ApplicationPayloadHttp.CreativeTaskLink(childComplexity), true
-
-	case "ApplicationPayloadHttp.engineeringTaskCloudLink":
-		if e.complexity.ApplicationPayloadHttp.EngineeringTaskCloudLink == nil {
-			break
-		}
-
-		return e.complexity.ApplicationPayloadHttp.EngineeringTaskCloudLink(childComplexity), true
-
-	case "ApplicationPayloadHttp.engineeringTaskFile":
-		if e.complexity.ApplicationPayloadHttp.EngineeringTaskFile == nil {
-			break
-		}
-
-		return e.complexity.ApplicationPayloadHttp.EngineeringTaskFile(childComplexity), true
-
-	case "ApplicationPayloadHttp.engineeringTaskVideo":
-		if e.complexity.ApplicationPayloadHttp.EngineeringTaskVideo == nil {
-			break
-		}
-
-		return e.complexity.ApplicationPayloadHttp.EngineeringTaskVideo(childComplexity), true
-
-	case "ApplicationPayloadHttp.engineeringTaskVideoCloudLink":
-		if e.complexity.ApplicationPayloadHttp.EngineeringTaskVideoCloudLink == nil {
-			break
-		}
-
-		return e.complexity.ApplicationPayloadHttp.EngineeringTaskVideoCloudLink(childComplexity), true
-
-	case "ApplicationPayloadHttp.nomination":
-		if e.complexity.ApplicationPayloadHttp.Nomination == nil {
-			break
-		}
-
-		return e.complexity.ApplicationPayloadHttp.Nomination(childComplexity), true
-
-	case "ApplicationPayloadHttp.note":
-		if e.complexity.ApplicationPayloadHttp.Note == nil {
-			break
-		}
-
-		return e.complexity.ApplicationPayloadHttp.Note(childComplexity), true
 
 	case "CountryHttp.createdAt":
 		if e.complexity.CountryHttp.CreatedAt == nil {
@@ -894,6 +805,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.DeleteUser(childComplexity, args["id"].(string)), true
+
+	case "Mutation.ExportAllApplications":
+		if e.complexity.Mutation.ExportAllApplications == nil {
+			break
+		}
+
+		return e.complexity.Mutation.ExportAllApplications(childComplexity), true
 
 	case "Mutation.ForgotPassword":
 		if e.complexity.Mutation.ForgotPassword == nil {
@@ -3142,516 +3060,6 @@ func (ec *executionContext) fieldContext_ApplicationHttpList_countRows(ctx conte
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _ApplicationPayloadHttp_author(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationPayloadHTTP) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ApplicationPayloadHttp_author(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Author, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*models.UserHTTP)
-	fc.Result = res
-	return ec.marshalNUserHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐUserHTTP(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ApplicationPayloadHttp_author(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ApplicationPayloadHttp",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_UserHttp_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_UserHttp_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_UserHttp_updatedAt(ctx, field)
-			case "email":
-				return ec.fieldContext_UserHttp_email(ctx, field)
-			case "password":
-				return ec.fieldContext_UserHttp_password(ctx, field)
-			case "role":
-				return ec.fieldContext_UserHttp_role(ctx, field)
-			case "fullName":
-				return ec.fieldContext_UserHttp_fullName(ctx, field)
-			case "fullNameNative":
-				return ec.fieldContext_UserHttp_fullNameNative(ctx, field)
-			case "country":
-				return ec.fieldContext_UserHttp_country(ctx, field)
-			case "city":
-				return ec.fieldContext_UserHttp_city(ctx, field)
-			case "birthdate":
-				return ec.fieldContext_UserHttp_birthdate(ctx, field)
-			case "isActive":
-				return ec.fieldContext_UserHttp_isActive(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type UserHttp", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _ApplicationPayloadHttp_nomination(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationPayloadHTTP) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ApplicationPayloadHttp_nomination(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Nomination, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ApplicationPayloadHttp_nomination(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ApplicationPayloadHttp",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _ApplicationPayloadHttp_algorithmicTaskLink(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationPayloadHTTP) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ApplicationPayloadHttp_algorithmicTaskLink(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.AlgorithmicTaskLink, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ApplicationPayloadHttp_algorithmicTaskLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ApplicationPayloadHttp",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _ApplicationPayloadHttp_algorithmicTaskFile(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationPayloadHTTP) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ApplicationPayloadHttp_algorithmicTaskFile(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.AlgorithmicTaskFile, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ApplicationPayloadHttp_algorithmicTaskFile(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ApplicationPayloadHttp",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _ApplicationPayloadHttp_creativeTaskLink(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationPayloadHTTP) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ApplicationPayloadHttp_creativeTaskLink(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.CreativeTaskLink, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ApplicationPayloadHttp_creativeTaskLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ApplicationPayloadHttp",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _ApplicationPayloadHttp_creativeTaskFile(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationPayloadHTTP) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ApplicationPayloadHttp_creativeTaskFile(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.CreativeTaskFile, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ApplicationPayloadHttp_creativeTaskFile(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ApplicationPayloadHttp",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _ApplicationPayloadHttp_engineeringTaskFile(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationPayloadHTTP) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ApplicationPayloadHttp_engineeringTaskFile(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.EngineeringTaskFile, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ApplicationPayloadHttp_engineeringTaskFile(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ApplicationPayloadHttp",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _ApplicationPayloadHttp_engineeringTaskCloudLink(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationPayloadHTTP) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ApplicationPayloadHttp_engineeringTaskCloudLink(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.EngineeringTaskCloudLink, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ApplicationPayloadHttp_engineeringTaskCloudLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ApplicationPayloadHttp",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _ApplicationPayloadHttp_engineeringTaskVideo(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationPayloadHTTP) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ApplicationPayloadHttp_engineeringTaskVideo(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.EngineeringTaskVideo, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ApplicationPayloadHttp_engineeringTaskVideo(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ApplicationPayloadHttp",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _ApplicationPayloadHttp_engineeringTaskVideoCloudLink(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationPayloadHTTP) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ApplicationPayloadHttp_engineeringTaskVideoCloudLink(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.EngineeringTaskVideoCloudLink, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ApplicationPayloadHttp_engineeringTaskVideoCloudLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ApplicationPayloadHttp",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _ApplicationPayloadHttp_note(ctx context.Context, field graphql.CollectedField, obj *models.ApplicationPayloadHTTP) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ApplicationPayloadHttp_note(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Note, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ApplicationPayloadHttp_note(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ApplicationPayloadHttp",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -5933,6 +5341,78 @@ func (ec *executionContext) fieldContext_Mutation_CreateApplication(ctx context.
 	if fc.Args, err = ec.field_Mutation_CreateApplication_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_ExportAllApplications(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_ExportAllApplications(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Mutation().ExportAllApplications(rctx)
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin"})
+			if err != nil {
+				return nil, err
+			}
+			if ec.directives.HasRole == nil {
+				return nil, errors.New("directive hasRole is not implemented")
+			}
+			return ec.directives.HasRole(ctx, nil, directive0, roles)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, graphql.ErrorOnPath(ctx, err)
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(*models.Response); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.Response`, tmp)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.Response)
+	fc.Result = res
+	return ec.marshalNResponse2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_ExportAllApplications(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "ok":
+				return ec.fieldContext_Response_ok(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Response", field.Name)
+		},
 	}
 	return fc, nil
 }
@@ -13001,95 +12481,6 @@ func (ec *executionContext) _ApplicationHttpList(ctx context.Context, sel ast.Se
 	return out
 }
 
-var applicationPayloadHttpImplementors = []string{"ApplicationPayloadHttp"}
-
-func (ec *executionContext) _ApplicationPayloadHttp(ctx context.Context, sel ast.SelectionSet, obj *models.ApplicationPayloadHTTP) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, applicationPayloadHttpImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	deferred := make(map[string]*graphql.FieldSet)
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("ApplicationPayloadHttp")
-		case "author":
-			out.Values[i] = ec._ApplicationPayloadHttp_author(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "nomination":
-			out.Values[i] = ec._ApplicationPayloadHttp_nomination(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "algorithmicTaskLink":
-			out.Values[i] = ec._ApplicationPayloadHttp_algorithmicTaskLink(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "algorithmicTaskFile":
-			out.Values[i] = ec._ApplicationPayloadHttp_algorithmicTaskFile(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "creativeTaskLink":
-			out.Values[i] = ec._ApplicationPayloadHttp_creativeTaskLink(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "creativeTaskFile":
-			out.Values[i] = ec._ApplicationPayloadHttp_creativeTaskFile(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "engineeringTaskFile":
-			out.Values[i] = ec._ApplicationPayloadHttp_engineeringTaskFile(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "engineeringTaskCloudLink":
-			out.Values[i] = ec._ApplicationPayloadHttp_engineeringTaskCloudLink(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "engineeringTaskVideo":
-			out.Values[i] = ec._ApplicationPayloadHttp_engineeringTaskVideo(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "engineeringTaskVideoCloudLink":
-			out.Values[i] = ec._ApplicationPayloadHttp_engineeringTaskVideoCloudLink(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "note":
-			out.Values[i] = ec._ApplicationPayloadHttp_note(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch(ctx)
-	if out.Invalids > 0 {
-		return graphql.Null
-	}
-
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
-
-	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
-			Label:    label,
-			Path:     graphql.GetPath(ctx),
-			FieldSet: dfs,
-			Context:  ctx,
-		})
-	}
-
-	return out
-}
-
 var countryHttpImplementors = []string{"CountryHttp"}
 
 func (ec *executionContext) _CountryHttp(ctx context.Context, sel ast.SelectionSet, obj *models.CountryHTTP) graphql.Marshaler {
@@ -13558,6 +12949,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "CreateApplication":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_CreateApplication(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "ExportAllApplications":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_ExportAllApplications(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++

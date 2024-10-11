@@ -13,6 +13,7 @@ type ApplicationService interface {
 	CreateApplication(newApplication models.ApplicationCore) (models.ApplicationCore, error)
 	GetApplicationById(id, clientId uint, clientRole models.Role) (application models.ApplicationCore, err error)
 	GetAllApplications(page, pageSize *int, clientId uint, clientRole models.Role) (applications []models.ApplicationCore, countRows uint, err error)
+	ExportAllApplications() error
 }
 
 type ApplicationServiceImpl struct {
@@ -119,4 +120,19 @@ func (a ApplicationServiceImpl) GetAllApplications(page, pageSize *int, clientId
 		return a.applicationGateway.GetApplicationsByAuthorId(clientId, offset, limit)
 	}
 	return a.applicationGateway.GetAllApplications(offset, limit)
+}
+
+func (a ApplicationServiceImpl) ExportAllApplications() error {
+	offset, limit := utils.GetOffsetAndLimit(nil, nil)
+	applications, _, err := a.applicationGateway.GetAllApplications(offset, limit)
+	if err != nil {
+		return err
+	}
+
+	err = a.applicationAPI.ExportAllApplications(applications)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
