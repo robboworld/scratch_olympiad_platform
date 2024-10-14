@@ -3,7 +3,6 @@ package api
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"github.com/robboworld/scratch_olympiad_platform/internal/models"
 	"github.com/robboworld/scratch_olympiad_platform/pkg/utils"
 	"github.com/spf13/viper"
@@ -104,7 +103,6 @@ type ApplicationHTTPListPayload struct {
 func (a ApplicationAPIImpl) ExportAllApplications(applications []models.ApplicationCore) error {
 	var applicationsPayload []ApplicationPayloadHTTP
 	for _, application := range applications {
-		fmt.Println(application.Author)
 		authorHttp := &models.UserHTTP{}
 		authorHttp.FromCore(application.Author)
 		applicationPayload := ApplicationPayloadHTTP{
