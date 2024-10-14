@@ -54,6 +54,22 @@ func (r *mutationResolver) CreateApplication(ctx context.Context, input models.N
 	return &applicationHttp, nil
 }
 
+// ExportAllApplications is the resolver for the ExportAllApplications field.
+func (r *mutationResolver) ExportAllApplications(ctx context.Context) (*models.Response, error) {
+	err := r.applicationService.ExportAllApplications()
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return &models.Response{Ok: false}, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": err,
+			},
+		}
+	}
+	return &models.Response{
+		Ok: true,
+	}, nil
+}
+
 // GetApplicationByID is the resolver for the GetApplicationById field.
 func (r *queryResolver) GetApplicationByID(ctx context.Context, id string) (*models.ApplicationHTTP, error) {
 	ginContext, err := utils.GinContextFromContext(ctx)
