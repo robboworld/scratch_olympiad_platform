@@ -7,8 +7,19 @@ type EventHttp {
     endDate: Timestamp!
 }
 
+type EventDetailsHttp {
+    id: ID!
+    createdAt: Timestamp!
+    updatedAt: Timestamp!
+    name: String!
+    description: String!
+    startDate: Timestamp!
+    endDate: Timestamp!
+}
+
 input NewEvent {
     name: String!
+    description: String!
     startDate: Timestamp!
     endDate: Timestamp!
 }
@@ -19,10 +30,10 @@ type EventHttpList {
 }
 
 extend type Mutation {
-    CreateEvent(input: NewEvent!): EventHttp! @hasRole(roles: [SuperAdmin])
+    CreateEvent(input: NewEvent!): EventDetailsHttp! @hasRole(roles: [SuperAdmin])
 }
 
 extend type Query {
-    GetEventById(id: ID!): EventHttp!
+    GetEventById(id: ID!): EventDetailsHttp!
     GetAllEvents(page: Int, pageSize: Int): EventHttpList!
 }

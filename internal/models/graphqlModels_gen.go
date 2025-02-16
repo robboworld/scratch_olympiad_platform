@@ -84,6 +84,16 @@ type CoursesListHTTP struct {
 	CountRows int           `json:"countRows"`
 }
 
+type EventDetailsHTTP struct {
+	ID          string `json:"id"`
+	CreatedAt   string `json:"createdAt"`
+	UpdatedAt   string `json:"updatedAt"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	StartDate   string `json:"startDate"`
+	EndDate     string `json:"endDate"`
+}
+
 type EventHTTP struct {
 	ID        string `json:"id"`
 	CreatedAt string `json:"createdAt"`
@@ -124,9 +134,10 @@ type NewApplication struct {
 }
 
 type NewEvent struct {
-	Name      string `json:"name"`
-	StartDate string `json:"startDate"`
-	EndDate   string `json:"endDate"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	StartDate   string `json:"startDate"`
+	EndDate     string `json:"endDate"`
 }
 
 type NewUser struct {

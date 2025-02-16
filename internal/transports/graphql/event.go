@@ -6,18 +6,18 @@ package resolvers
 
 import (
 	"context"
-	"github.com/robboworld/scratch_olympiad_platform/internal/consts"
-	"github.com/robboworld/scratch_olympiad_platform/pkg/utils"
-	"github.com/vektah/gqlparser/v2/gqlerror"
 	"net/http"
 	"strconv"
 	"time"
 
+	"github.com/robboworld/scratch_olympiad_platform/internal/consts"
 	"github.com/robboworld/scratch_olympiad_platform/internal/models"
+	"github.com/robboworld/scratch_olympiad_platform/pkg/utils"
+	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
 // CreateEvent is the resolver for the CreateEvent field.
-func (r *mutationResolver) CreateEvent(ctx context.Context, input models.NewEvent) (*models.EventHTTP, error) {
+func (r *mutationResolver) CreateEvent(ctx context.Context, input models.NewEvent) (*models.EventDetailsHTTP, error) {
 	startDate, err := time.Parse(time.DateOnly, input.StartDate)
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
@@ -43,10 +43,12 @@ func (r *mutationResolver) CreateEvent(ctx context.Context, input models.NewEven
 		}
 	}
 	event := models.EventCore{
-		Name:      input.Name,
-		StartDate: startDate,
-		EndDate:   endDate,
+		Name:        input.Name,
+		StartDate:   startDate,
+		EndDate:     endDate,
+		Description: input.Description,
 	}
+
 	newEvent, err := r.eventService.CreateEvent(event)
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
@@ -57,13 +59,13 @@ func (r *mutationResolver) CreateEvent(ctx context.Context, input models.NewEven
 		}
 	}
 
-	eventHttp := models.EventHTTP{}
+	eventHttp := models.EventDetailsHTTP{}
 	eventHttp.FromCore(newEvent)
 	return &eventHttp, nil
 }
 
 // GetEventByID is the resolver for the GetEventById field.
-func (r *queryResolver) GetEventByID(ctx context.Context, id string) (*models.EventHTTP, error) {
+func (r *queryResolver) GetEventByID(ctx context.Context, id string) (*models.EventDetailsHTTP, error) {
 	atoi, err := strconv.Atoi(id)
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
@@ -85,7 +87,7 @@ func (r *queryResolver) GetEventByID(ctx context.Context, id string) (*models.Ev
 			},
 		}
 	}
-	eventHttp := models.EventHTTP{}
+	eventHttp := models.EventDetailsHTTP{}
 	eventHttp.FromCore(event)
 	return &eventHttp, nil
 }
