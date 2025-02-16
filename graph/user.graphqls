@@ -19,6 +19,10 @@ enum Role {
 	Parent
 	Teacher
 	UnitAdmin
+	Expert
+	Moderator
+	Organizer
+	Admin
 	SuperAdmin
 }
 
@@ -64,16 +68,16 @@ type Response {
 }
 
 type Mutation {
-	CreateUser(input: NewUser!): UserHttp! @hasRole(roles: [SuperAdmin, UnitAdmin])
-	UpdateUser(input: UpdateUser!): UserHttp! @hasRole(roles: [SuperAdmin, UnitAdmin, Teacher, Parent, Student])
-	DeleteUser(id: ID!): Response! @hasRole(roles: [SuperAdmin, UnitAdmin])
-	SetUserIsActive(id: ID!, isActive: Boolean!): Response! @hasRole(roles: [SuperAdmin, UnitAdmin])
+	CreateUser(input: NewUser!): UserHttp! @hasRole(roles: [SuperAdmin, Admin])
+	UpdateUser(input: UpdateUser!): UserHttp! @hasRole(roles: [SuperAdmin, Admin, Organizer, Moderator, Expert, Student])
+	DeleteUser(id: ID!): Response! @hasRole(roles: [SuperAdmin, Admin])
+	SetUserIsActive(id: ID!, isActive: Boolean!): Response! @hasRole(roles: [SuperAdmin, Admin])
 }
 
 type Query {
-	GetUserByAccessToken: UserHttp! @hasRole(roles: [SuperAdmin, UnitAdmin, Teacher, Parent, Student])
-	GetUserById(id: ID!): UserHttp! @hasRole(roles: [SuperAdmin, UnitAdmin, Teacher, Parent, Student])
-	GetAllUsers(page: Int, pageSize: Int, active: Boolean!, roles: [Role!]!): UsersList! @hasRole(roles: [SuperAdmin, UnitAdmin])
+	GetUserByAccessToken: UserHttp! @hasRole(roles: [SuperAdmin, Admin, Organizer, Moderator, Expert, Student])
+	GetUserById(id: ID!): UserHttp! @hasRole(roles: [SuperAdmin, Admin, Organizer, Moderator, Expert, Student])
+	GetAllUsers(page: Int, pageSize: Int, active: Boolean!, roles: [Role!]!): UsersList! @hasRole(roles: [SuperAdmin, Admin])
 }
 
 directive @hasRole(roles: [Role!]) on FIELD_DEFINITION

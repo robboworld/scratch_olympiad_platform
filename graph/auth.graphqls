@@ -19,7 +19,7 @@ type SignInResponse {
 }
 
 extend type Query {
-	Me: UserHttp! @hasRole(roles:[Student, Teacher, Parent, UnitAdmin, SuperAdmin])
+	Me: UserHttp! @hasRole(roles:[SuperAdmin, Admin, Moderator, Organizer, Expert, Student, Teacher, Parent])
 }
 
 extend type Mutation  {

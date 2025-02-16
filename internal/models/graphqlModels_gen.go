@@ -239,6 +239,10 @@ const (
 	RoleParent     Role = "Parent"
 	RoleTeacher    Role = "Teacher"
 	RoleUnitAdmin  Role = "UnitAdmin"
+	RoleExpert     Role = "Expert"
+	RoleModerator  Role = "Moderator"
+	RoleOrganizer  Role = "Organizer"
+	RoleAdmin      Role = "Admin"
 	RoleSuperAdmin Role = "SuperAdmin"
 )
 
@@ -248,12 +252,16 @@ var AllRole = []Role{
 	RoleParent,
 	RoleTeacher,
 	RoleUnitAdmin,
+	RoleExpert,
+	RoleModerator,
+	RoleOrganizer,
+	RoleAdmin,
 	RoleSuperAdmin,
 }
 
 func (e Role) IsValid() bool {
 	switch e {
-	case RoleAnonymous, RoleStudent, RoleParent, RoleTeacher, RoleUnitAdmin, RoleSuperAdmin:
+	case RoleAnonymous, RoleStudent, RoleParent, RoleTeacher, RoleUnitAdmin, RoleExpert, RoleModerator, RoleOrganizer, RoleAdmin, RoleSuperAdmin:
 		return true
 	}
 	return false
