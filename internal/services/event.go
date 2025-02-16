@@ -8,6 +8,7 @@ import (
 
 type EventService interface {
 	CreateEvent(newEvent models.EventCore) (models.EventCore, error)
+	UpdateEvent(event models.EventCore) (updatedEvent models.EventCore, err error)
 	GetEventById(id uint) (event models.EventCore, err error)
 	GetAllEvents(page, pageSize *int) (events []models.EventCore, countRows uint, err error)
 }
@@ -18,6 +19,10 @@ type EventServiceImpl struct {
 
 func (e EventServiceImpl) CreateEvent(newEvent models.EventCore) (event models.EventCore, err error) {
 	return e.eventGateway.CreateEvent(newEvent)
+}
+
+func (e EventServiceImpl) UpdateEvent(event models.EventCore) (updatedEvent models.EventCore, err error) {
+	return e.eventGateway.UpdateEvent(event)
 }
 
 func (e EventServiceImpl) GetEventById(id uint) (event models.EventCore, err error) {

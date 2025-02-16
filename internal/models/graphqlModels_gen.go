@@ -238,6 +238,14 @@ type SignUp struct {
 	Birthdate      string `json:"birthdate"`
 }
 
+type UpdateEvent struct {
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	StartDate   string `json:"startDate"`
+	EndDate     string `json:"endDate"`
+}
+
 type UpdateProjectPage struct {
 	ID          string `json:"id"`
 	Title       string `json:"title"`

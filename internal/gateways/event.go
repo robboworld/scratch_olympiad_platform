@@ -13,6 +13,7 @@ import (
 
 type EventGateway interface {
 	CreateEvent(event models.EventCore) (newEvent models.EventCore, err error)
+	UpdateEvent(event models.EventCore) (updatedEvent models.EventCore, err error)
 	GetEventById(id uint) (event models.EventCore, err error)
 	GetAllEvents(offset, limit int) (events []models.EventCore, countRows uint, err error)
 }
@@ -23,6 +24,29 @@ type EventGatewayImpl struct {
 
 func (e EventGatewayImpl) CreateEvent(event models.EventCore) (newEvent models.EventCore, err error) {
 	if err = e.postgresClient.Db.Create(&event).Clauses(clause.Returning{}).Error; err != nil {
+		return models.EventCore{}, utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+		}
+	}
+	return event, nil
+}
+
+func (e EventGatewayImpl) UpdateEvent(event models.EventCore) (updatedEvent models.EventCore, err error) {
+	if err := e.postgresClient.Db.Model(&event).Clauses(clause.Returning{}).
+		Take(&models.EventCore{}, event.ID).
+		Updates(map[string]interface{}{
+			"name":        event.Name,
+			"description": event.Description,
+			"start_date":  event.StartDate,
+			"end_date":    event.EndDate,
+		}).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return models.EventCore{}, utils.ResponseError{
+				Code:    http.StatusBadRequest,
+				Message: consts.ErrNotFoundInDB,
+			}
+		}
 		return models.EventCore{}, utils.ResponseError{
 			Code:    http.StatusInternalServerError,
 			Message: err.Error(),

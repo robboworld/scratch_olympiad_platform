@@ -64,6 +64,65 @@ func (r *mutationResolver) CreateEvent(ctx context.Context, input models.NewEven
 	return &eventHttp, nil
 }
 
+// UpdateEvent is the resolver for the UpdateEvent field.
+func (r *mutationResolver) UpdateEvent(ctx context.Context, input models.UpdateEvent) (*models.EventDetailsHTTP, error) {
+	atoi, err := strconv.Atoi(input.ID)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return nil, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": utils.ResponseError{
+					Code:    http.StatusBadRequest,
+					Message: consts.ErrAtoi,
+				},
+			},
+		}
+	}
+	startDate, err := time.Parse(time.DateOnly, input.StartDate)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return nil, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": utils.ResponseError{
+					Code:    http.StatusBadRequest,
+					Message: consts.ErrTimeParse,
+				},
+			},
+		}
+	}
+	endDate, err := time.Parse(time.DateOnly, input.EndDate)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return nil, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": utils.ResponseError{
+					Code:    http.StatusBadRequest,
+					Message: consts.ErrTimeParse,
+				},
+			},
+		}
+	}
+	event := models.EventCore{
+		ID:          uint(atoi),
+		Name:        input.Name,
+		Description: input.Description,
+		StartDate:   startDate,
+		EndDate:     endDate,
+	}
+	updatedEvent, err := r.eventService.UpdateEvent(event)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return nil, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": err,
+			},
+		}
+	}
+	eventHttp := models.EventDetailsHTTP{}
+	eventHttp.FromCore(updatedEvent)
+	return &eventHttp, nil
+}
+
 // GetEventByID is the resolver for the GetEventById field.
 func (r *queryResolver) GetEventByID(ctx context.Context, id string) (*models.EventDetailsHTTP, error) {
 	atoi, err := strconv.Atoi(id)

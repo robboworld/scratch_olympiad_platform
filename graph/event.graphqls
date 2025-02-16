@@ -24,6 +24,14 @@ input NewEvent {
     endDate: Timestamp!
 }
 
+input UpdateEvent {
+    id: ID!
+    name: String!
+    description: String!
+    startDate: Timestamp!
+    endDate: Timestamp!
+}
+
 type EventHttpList {
     events: [EventHttp!]!
     countRows: Int!
@@ -31,6 +39,7 @@ type EventHttpList {
 
 extend type Mutation {
     CreateEvent(input: NewEvent!): EventDetailsHttp! @hasRole(roles: [SuperAdmin])
+    UpdateEvent(input: UpdateEvent!): EventDetailsHttp! @hasRole(roles: [SuperAdmin])
 }
 
 extend type Query {
