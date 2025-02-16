@@ -39,7 +39,6 @@ func (r *mutationResolver) SignUp(ctx context.Context, input models.SignUp) (*mo
 		Birthdate:      birthdate,
 		Role:           models.RoleStudent,
 		IsActive:       false,
-		ActivationLink: utils.GetHashString(time.Now().String()),
 	}
 	err = r.authService.SignUp(newUser)
 	if err != nil {
@@ -87,8 +86,8 @@ func (r *mutationResolver) RefreshToken(ctx context.Context, refreshToken string
 }
 
 // ConfirmActivation is the resolver for the ConfirmActivation field.
-func (r *mutationResolver) ConfirmActivation(ctx context.Context, activationLink string) (*models.SignInResponse, error) {
-	tokens, err := r.authService.ConfirmActivation(activationLink)
+func (r *mutationResolver) ConfirmActivation(ctx context.Context, activationToken string) (*models.SignInResponse, error) {
+	tokens, err := r.authService.ConfirmActivation(activationToken)
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
 		return &models.SignInResponse{}, &gqlerror.Error{
@@ -118,8 +117,8 @@ func (r *mutationResolver) ForgotPassword(ctx context.Context, email string) (*m
 }
 
 // ResetPassword is the resolver for the ResetPassword field.
-func (r *mutationResolver) ResetPassword(ctx context.Context, resetLink string) (*models.Response, error) {
-	err := r.authService.ResetPassword(resetLink)
+func (r *mutationResolver) ResetPassword(ctx context.Context, resetToken string) (*models.Response, error) {
+	err := r.authService.ResetPassword(resetToken)
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
 		return &models.Response{Ok: false}, &gqlerror.Error{

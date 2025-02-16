@@ -21,6 +21,7 @@ type Services struct {
 
 func SetupServices(
 	userGateway gateways.UserGateway,
+	authDataGateway gateways.AuthDataGateway,
 	projectGateway gateways.ProjectGateway,
 	projectPageGateway gateways.ProjectPageGateway,
 	settingsGateway gateways.SettingsGateway,
@@ -37,6 +38,7 @@ func SetupServices(
 		},
 		AuthService: &AuthServiceImpl{
 			userGateway:     userGateway,
+			authDataGateway: authDataGateway,
 			countryGateway:  countryGateway,
 			settingsGateway: settingsGateway,
 		},

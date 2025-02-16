@@ -135,7 +135,7 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		ConfirmActivation     func(childComplexity int, activationLink string) int
+		ConfirmActivation     func(childComplexity int, activationToken string) int
 		CreateApplication     func(childComplexity int, input models.NewApplication) int
 		CreateParentRel       func(childComplexity int, parentID string, childID string) int
 		CreateProjectPage     func(childComplexity int) int
@@ -146,7 +146,7 @@ type ComplexityRoot struct {
 		ExportAllApplications func(childComplexity int) int
 		ForgotPassword        func(childComplexity int, email string) int
 		RefreshToken          func(childComplexity int, refreshToken string) int
-		ResetPassword         func(childComplexity int, resetLink string) int
+		ResetPassword         func(childComplexity int, resetToken string) int
 		SetActivationByLink   func(childComplexity int, activationByLink bool) int
 		SetIsBanned           func(childComplexity int, projectPageID string, isBanned bool) int
 		SetUserIsActive       func(childComplexity int, id string, isActive bool) int
@@ -264,9 +264,9 @@ type MutationResolver interface {
 	SignUp(ctx context.Context, input models.SignUp) (*models.Response, error)
 	SignIn(ctx context.Context, input models.SignIn) (*models.SignInResponse, error)
 	RefreshToken(ctx context.Context, refreshToken string) (*models.SignInResponse, error)
-	ConfirmActivation(ctx context.Context, activationLink string) (*models.SignInResponse, error)
+	ConfirmActivation(ctx context.Context, activationToken string) (*models.SignInResponse, error)
 	ForgotPassword(ctx context.Context, email string) (*models.Response, error)
-	ResetPassword(ctx context.Context, resetLink string) (*models.Response, error)
+	ResetPassword(ctx context.Context, resetToken string) (*models.Response, error)
 	CreateParentRel(ctx context.Context, parentID string, childID string) (*models.Response, error)
 	DeleteParentRel(ctx context.Context, parentID string, childID string) (*models.Response, error)
 	CreateProjectPage(ctx context.Context) (*models.ProjectPageHTTP, error)
@@ -725,7 +725,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.ConfirmActivation(childComplexity, args["activationLink"].(string)), true
+		return e.complexity.Mutation.ConfirmActivation(childComplexity, args["activationToken"].(string)), true
 
 	case "Mutation.CreateApplication":
 		if e.complexity.Mutation.CreateApplication == nil {
@@ -847,7 +847,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.ResetPassword(childComplexity, args["resetLink"].(string)), true
+		return e.complexity.Mutation.ResetPassword(childComplexity, args["resetToken"].(string)), true
 
 	case "Mutation.SetActivationByLink":
 		if e.complexity.Mutation.SetActivationByLink == nil {
@@ -1598,14 +1598,14 @@ func (ec *executionContext) field_Mutation_ConfirmActivation_args(ctx context.Co
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
-	if tmp, ok := rawArgs["activationLink"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("activationLink"))
+	if tmp, ok := rawArgs["activationToken"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("activationToken"))
 		arg0, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["activationLink"] = arg0
+	args["activationToken"] = arg0
 	return args, nil
 }
 
@@ -1751,14 +1751,14 @@ func (ec *executionContext) field_Mutation_ResetPassword_args(ctx context.Contex
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
-	if tmp, ok := rawArgs["resetLink"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("resetLink"))
+	if tmp, ok := rawArgs["resetToken"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("resetToken"))
 		arg0, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["resetLink"] = arg0
+	args["resetToken"] = arg0
 	return args, nil
 }
 
@@ -5612,7 +5612,7 @@ func (ec *executionContext) _Mutation_ConfirmActivation(ctx context.Context, fie
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().ConfirmActivation(rctx, fc.Args["activationLink"].(string))
+		return ec.resolvers.Mutation().ConfirmActivation(rctx, fc.Args["activationToken"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5732,7 +5732,7 @@ func (ec *executionContext) _Mutation_ResetPassword(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().ResetPassword(rctx, fc.Args["resetLink"].(string))
+		return ec.resolvers.Mutation().ResetPassword(rctx, fc.Args["resetToken"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)

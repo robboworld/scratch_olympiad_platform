@@ -27,18 +27,19 @@ type AuthService interface {
 	SignUp(newUser models.UserCore) error
 	SignIn(email, password string) (Tokens, error)
 	Refresh(token string) (string, error)
-	ConfirmActivation(link string) (Tokens, error)
+	ConfirmActivation(token string) (Tokens, error)
 	ForgotPassword(email string) error
-	ResetPassword(resetLink string) error
+	ResetPassword(token string) error
 }
 
 type AuthServiceImpl struct {
 	userGateway     gateways.UserGateway
+	authDataGateway gateways.AuthDataGateway
 	countryGateway  gateways.CountryGateway
 	settingsGateway gateways.SettingsGateway
 }
 
-func (a AuthServiceImpl) ConfirmActivation(link string) (Tokens, error) {
+func (a AuthServiceImpl) ConfirmActivation(token string) (Tokens, error) {
 	activationByLink, err := a.settingsGateway.GetActivationByLink()
 	if err != nil {
 		return Tokens{Access: "", Refresh: ""}, err
@@ -49,12 +50,19 @@ func (a AuthServiceImpl) ConfirmActivation(link string) (Tokens, error) {
 			Message: consts.ErrActivationLinkUnavailable,
 		}
 	}
-	activationLinkHash := utils.GetHashString(link)
-	user, err := a.userGateway.GetUserByActivationLink(activationLinkHash)
+	activationTokenHash := utils.GetHashString(token)
+	userId, err := a.authDataGateway.GetUserIdByActivationToken(activationTokenHash)
+	if err != nil {
+		return Tokens{Access: "", Refresh: ""}, err
+	}
+	user, err := a.userGateway.GetUserById(userId)
 	if err != nil {
 		return Tokens{Access: "", Refresh: ""}, err
 	}
 	if err = a.userGateway.SetIsActive(user.ID, true); err != nil {
+		return Tokens{Access: "", Refresh: ""}, err
+	}
+	if err = a.authDataGateway.SetActivationToken(user.ID, ""); err != nil {
 		return Tokens{Access: "", Refresh: ""}, err
 	}
 	access, err := generateToken(user, viper.GetDuration("auth_access_token_ttl"), []byte(viper.GetString("auth_access_signing_key")))
@@ -160,7 +168,7 @@ func (a AuthServiceImpl) SignUp(newUser models.UserCore) error {
 			Message: consts.ErrCountryNotFoundInDB,
 		}
 	}
-	activationLink := randstr.String(20)
+	activationToken := randstr.String(20)
 	activationByLink, err := a.settingsGateway.GetActivationByLink()
 	if err != nil {
 		return err
@@ -169,8 +177,8 @@ func (a AuthServiceImpl) SignUp(newUser models.UserCore) error {
 	if activationByLink {
 		subject = "Scratch Olympiad account activation"
 		body = "<p>Please follow this link to activate your Scratch Olympiad account:</p>" +
-			"<p><a href='" + viper.GetString("activation_path") + activationLink + "'>" +
-			viper.GetString("activation_path") + activationLink + "</a></p><br>" +
+			"<p><a href='" + viper.GetString("activation_link") + activationToken + "'>" +
+			viper.GetString("activation_link") + activationToken + "</a></p><br>" +
 			"<p>Organizing committee of the International Scratch Creative Programming Olympiad</p>" +
 			"<p><a href='mailto:scratch@creativeprogramming.org'>scratch@creativeprogramming.org</a></p>" +
 			"<p><a href='https://creativeprogramming.org'>creativeprogramming.org</a></p>"
@@ -188,12 +196,18 @@ func (a AuthServiceImpl) SignUp(newUser models.UserCore) error {
 		}
 	}
 
-	activationLinkHash := utils.GetHashString(activationLink)
 	passwordHash := utils.HashPassword(newUser.Password)
 	newUser.Password = passwordHash
-	newUser.ActivationLink = activationLinkHash
-	_, err = a.userGateway.CreateUser(newUser)
+	user, err := a.userGateway.CreateUser(newUser)
 	if err != nil {
+		return err
+	}
+
+	if err = a.authDataGateway.CreateAuthData(user.ID); err != nil {
+		return err
+	}
+	activationTokenHash := utils.GetHashString(activationToken)
+	if err = a.authDataGateway.SetActivationToken(user.ID, activationTokenHash); err != nil {
 		return err
 	}
 	return nil
@@ -211,13 +225,13 @@ func (a AuthServiceImpl) ForgotPassword(email string) error {
 		}
 	}
 
-	resetPasswordLink := randstr.String(20)
+	passwordResetToken := randstr.String(20)
 	subject := "Request to reset your Scratch Olympiad account password"
 	body := "<p>We have received a request to reset your account password.</p>" +
 		"<p>If you did it, please follow this link (the link is active for " +
-		viper.GetString("auth_password_reset_link_at") + " minutes):</p>" +
-		"<p><a href='" + viper.GetString("reset_password_path") + resetPasswordLink + "'>" +
-		viper.GetString("reset_password_path") + resetPasswordLink + "</a></p><br>" +
+		viper.GetString("auth_password_reset_token_at") + " minutes):</p>" +
+		"<p><a href='" + viper.GetString("password_reset_link") + passwordResetToken + "'>" +
+		viper.GetString("password_reset_link") + passwordResetToken + "</a></p><br>" +
 		"<p>If you did not do this, please just ignore this email.</p><br>" +
 		"<p>Organizing committee of the International Scratch Creative Programming Olympiad</p>" +
 		"<p><a href='mailto:scratch@creativeprogramming.org'>scratch@creativeprogramming.org</a></p>" +
@@ -230,28 +244,37 @@ func (a AuthServiceImpl) ForgotPassword(email string) error {
 		}
 	}
 
-	resetPasswordLinkHash := utils.GetHashString(resetPasswordLink)
-	// TODO: The date of the record change should not be changed
-	err = a.userGateway.SetPasswordResetLink(user.ID, resetPasswordLinkHash)
-	if err != nil {
+	passwordResetTokenHash := utils.GetHashString(passwordResetToken)
+	if err = a.authDataGateway.SetPasswordResetToken(user.ID, passwordResetTokenHash); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (a AuthServiceImpl) ResetPassword(resetLink string) error {
-	resetLinkHash := utils.GetHashString(resetLink)
-	user, err := a.userGateway.GetUserByPasswordResetLink(resetLinkHash)
+func (a AuthServiceImpl) ResetPassword(token string) error {
+	passwordResetTokenHash := utils.GetHashString(token)
+	userId, err := a.authDataGateway.GetUserIdByPasswordResetToken(passwordResetTokenHash)
 	if err != nil {
 		return utils.ResponseError{
 			Code:    http.StatusBadRequest,
-			Message: consts.ErrPasswordResetLinkInvalid,
+			Message: consts.ErrPasswordResetTokenInvalid,
 		}
 	}
-	if user.PasswordResetLinkAt.Before(time.Now()) {
+
+	user, err := a.userGateway.GetUserById(userId)
+	if err != nil {
+		return err
+	}
+
+	authData, err := a.authDataGateway.GetAuthDataByUserId(userId)
+	if err != nil {
+		return err
+	}
+
+	if authData.PasswordResetTokenAt.Before(time.Now()) {
 		return utils.ResponseError{
 			Code:    http.StatusBadRequest,
-			Message: consts.ErrPasswordResetLinkExpired,
+			Message: consts.ErrPasswordResetTokenExpired,
 		}
 	}
 	newPassword := randstr.String(8)
@@ -269,13 +292,10 @@ func (a AuthServiceImpl) ResetPassword(resetLink string) error {
 	}
 
 	newPasswordHash := utils.HashPassword(newPassword)
-	// TODO: The date of the record change should not be changed
-	err = a.userGateway.SetPassword(user.ID, newPasswordHash)
-	if err != nil {
+	if err = a.userGateway.SetPassword(user.ID, newPasswordHash); err != nil {
 		return err
 	}
-	err = a.userGateway.SetPasswordResetLink(user.ID, "")
-	if err != nil {
+	if err = a.authDataGateway.SetPasswordResetToken(user.ID, ""); err != nil {
 		return err
 	}
 	return nil

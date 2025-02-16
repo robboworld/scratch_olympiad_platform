@@ -26,7 +26,7 @@ extend type Mutation  {
 	SignUp(input: SignUp!): Response!
 	SignIn(input: SignIn!): SignInResponse!
 	RefreshToken(refreshToken: String!): SignInResponse!
-	ConfirmActivation(activationLink: String!): SignInResponse!
+	ConfirmActivation(activationToken: String!): SignInResponse!
 	ForgotPassword(email: String!): Response!
-	ResetPassword(resetLink: String!): Response!
+	ResetPassword(resetToken: String!): Response!
 }

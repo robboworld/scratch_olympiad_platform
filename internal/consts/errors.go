@@ -10,8 +10,8 @@ const (
 	ErrIncorrectPasswordOrEmail    = "incorrect password or email"
 	ErrNotFoundInDB                = "not found"
 	ErrShortPassword               = "please input password, at least 8 symbols"
-	ErrPasswordResetLinkInvalid    = "password reset link invalid"
-	ErrPasswordResetLinkExpired    = "password reset link expired"
+	ErrPasswordResetTokenInvalid   = "password reset token invalid"
+	ErrPasswordResetTokenExpired   = "password reset token expired"
 	ErrUserWithEmailNotFound       = "user with this email not found"
 	ErrApplicationAlreadySubmitted = "application already submitted"
 )

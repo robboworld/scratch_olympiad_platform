@@ -82,8 +82,8 @@ func (h AuthHandler) SignIn(c *gin.Context) {
 }
 
 func (h AuthHandler) Confirm(c *gin.Context) {
-	activationLink := c.Query("activationLink")
-	tokens, err := h.authService.ConfirmActivation(activationLink)
+	activationToken := c.Query("activationToken")
+	tokens, err := h.authService.ConfirmActivation(activationToken)
 	if err != nil {
 		h.loggers.Err.Printf("%s", err.Error())
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

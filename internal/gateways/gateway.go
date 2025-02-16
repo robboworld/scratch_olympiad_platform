@@ -7,27 +7,29 @@ import (
 
 type Gateways struct {
 	fx.Out
-	UserGateway UserGateway
-	ParentRel   ParentRel
-	Project     ProjectGateway
-	ProjectPage ProjectPageGateway
-	Settings    SettingsGateway
-	Application ApplicationGateway
-	Nomination  NominationGateway
-	Country     CountryGateway
-	Solution    SolutionGateway
+	UserGateway     UserGateway
+	AuthDataGateway AuthDataGateway
+	ParentRel       ParentRel
+	Project         ProjectGateway
+	ProjectPage     ProjectPageGateway
+	Settings        SettingsGateway
+	Application     ApplicationGateway
+	Nomination      NominationGateway
+	Country         CountryGateway
+	Solution        SolutionGateway
 }
 
 func SetupGateways(pc db.PostgresClient) Gateways {
 	return Gateways{
-		UserGateway: UserGatewayImpl{pc},
-		ParentRel:   ParentRelGatewayImpl{pc},
-		Project:     ProjectGatewayImpl{pc},
-		ProjectPage: ProjectPageGatewayImpl{pc},
-		Settings:    SettingsGatewayImpl{pc},
-		Application: ApplicationGatewayImpl{pc},
-		Nomination:  NominationGatewayImpl{pc},
-		Country:     CountryGatewayImpl{pc},
-		Solution:    SolutionGatewayImpl{pc},
+		UserGateway:     UserGatewayImpl{pc},
+		AuthDataGateway: AuthDataGatewayImpl{pc},
+		ParentRel:       ParentRelGatewayImpl{pc},
+		Project:         ProjectGatewayImpl{pc},
+		ProjectPage:     ProjectPageGatewayImpl{pc},
+		Settings:        SettingsGatewayImpl{pc},
+		Application:     ApplicationGatewayImpl{pc},
+		Nomination:      NominationGatewayImpl{pc},
+		Country:         CountryGatewayImpl{pc},
+		Solution:        SolutionGatewayImpl{pc},
 	}
 }
