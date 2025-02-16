@@ -16,10 +16,15 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DBNAME}
+      - PGDATA=/var/lib/postgresql/data/pgdata
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
     expose:
       - ${POSTGRES_PORT}
     volumes:
-      - ./postgres-data:/data/postgres
+      - ~./sop_pg_data:/var/lib/postgresql/data/pgdata
     command: -p ${POSTGRES_PORT}
+
+volumes:
+  mb-data:
+    name: sop_pg_data
