@@ -36,6 +36,7 @@ func (r *mutationResolver) SignUp(ctx context.Context, input models.SignUp) (*mo
 		FullNameNative: input.FullNameNative,
 		Country:        input.Country,
 		City:           input.City,
+		Region:         input.Region,
 		Birthdate:      birthdate,
 		Role:           models.RoleStudent,
 		IsActive:       false,

@@ -36,6 +36,7 @@ type AuthServiceImpl struct {
 	userGateway     gateways.UserGateway
 	authDataGateway gateways.AuthDataGateway
 	countryGateway  gateways.CountryGateway
+	regionGateway   gateways.RegionGateway
 	settingsGateway gateways.SettingsGateway
 }
 
@@ -158,14 +159,18 @@ func (a AuthServiceImpl) SignUp(newUser models.UserCore) error {
 			Message: consts.ErrShortPassword,
 		}
 	}
-	exist, err = a.countryGateway.DoesExistCountry(0, newUser.Country)
+	country, err := a.countryGateway.GetCountryByName(newUser.Country)
+	if err != nil {
+		return err
+	}
+	exist, err = a.regionGateway.DoesExistRegion(country.ID, 0, newUser.Region)
 	if err != nil {
 		return err
 	}
 	if !exist {
 		return utils.ResponseError{
 			Code:    http.StatusBadRequest,
-			Message: consts.ErrCountryNotFoundInDB,
+			Message: consts.ErrRegionNotFoundInDB,
 		}
 	}
 	activationToken := randstr.String(20)

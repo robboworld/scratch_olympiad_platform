@@ -20,6 +20,7 @@ type UserService interface {
 type UserServiceImpl struct {
 	userGateway    gateways.UserGateway
 	countryGateway gateways.CountryGateway
+	regionGateway  gateways.RegionGateway
 }
 
 func (u UserServiceImpl) SetIsActive(id uint, isActive bool) error {
@@ -55,14 +56,18 @@ func (u UserServiceImpl) CreateUser(user models.UserCore, clientRole models.Role
 			Message: consts.ErrShortPassword,
 		}
 	}
-	exist, err = u.countryGateway.DoesExistCountry(0, user.Country)
+	country, err := u.countryGateway.GetCountryByName(user.Country)
+	if err != nil {
+		return models.UserCore{}, err
+	}
+	exist, err = u.regionGateway.DoesExistRegion(country.ID, 0, user.Region)
 	if err != nil {
 		return models.UserCore{}, err
 	}
 	if !exist {
 		return models.UserCore{}, utils.ResponseError{
 			Code:    http.StatusBadRequest,
-			Message: consts.ErrCountryNotFoundInDB,
+			Message: consts.ErrRegionNotFoundInDB,
 		}
 	}
 
@@ -122,14 +127,18 @@ func (u UserServiceImpl) UpdateUser(user models.UserCore, clientRole models.Role
 			Message: consts.ErrEmailAlreadyInUse,
 		}
 	}
-	exist, err = u.countryGateway.DoesExistCountry(0, user.Country)
+	country, err := u.countryGateway.GetCountryByName(user.Country)
+	if err != nil {
+		return models.UserCore{}, err
+	}
+	exist, err = u.regionGateway.DoesExistRegion(country.ID, 0, user.Region)
 	if err != nil {
 		return models.UserCore{}, err
 	}
 	if !exist {
 		return models.UserCore{}, utils.ResponseError{
 			Code:    http.StatusBadRequest,
-			Message: consts.ErrCountryNotFoundInDB,
+			Message: consts.ErrRegionNotFoundInDB,
 		}
 	}
 	return u.userGateway.UpdateUser(user)

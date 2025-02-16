@@ -46,6 +46,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input models.NewUser)
 		FullName:       input.FullName,
 		FullNameNative: input.FullNameNative,
 		Country:        input.Country,
+		Region:         input.Region,
 		City:           input.City,
 		Birthdate:      birthdate,
 		IsActive:       true,
@@ -108,6 +109,7 @@ func (r *mutationResolver) UpdateUser(ctx context.Context, input models.UpdateUs
 		FullNameNative: input.FullNameNative,
 		Country:        input.Country,
 		City:           input.City,
+		Region:         input.Region,
 		Birthdate:      birthdate,
 	}
 	updatedUser, err := r.userService.UpdateUser(user, ginContext.Value(consts.KeyRole).(models.Role))

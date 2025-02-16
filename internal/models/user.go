@@ -18,6 +18,7 @@ type UserCore struct {
 	FullNameNative string         `gorm:"not null;"`
 	Country        string         `gorm:"not null;"`
 	City           string         `gorm:"not null;"`
+	Region         string         `gorm:"not null;"`
 	Birthdate      time.Time      `gorm:"not null;"`
 	IsActive       bool           `gorm:"not null;default:false;type:boolean;column:is_active"`
 }
@@ -33,6 +34,7 @@ func (u *UserHTTP) ToCore() UserCore {
 		FullName:       u.FullName,
 		FullNameNative: u.FullNameNative,
 		Country:        u.Country,
+		Region:         u.Region,
 		City:           u.City,
 		Birthdate:      birthDate,
 		IsActive:       u.IsActive,
@@ -48,6 +50,7 @@ func (u *UserHTTP) FromCore(userCore UserCore) {
 	u.FullNameNative = userCore.FullNameNative
 	u.Country = userCore.Country
 	u.City = userCore.City
+	u.Region = userCore.Region
 	u.Birthdate = userCore.Birthdate.Format(time.DateOnly)
 	u.IsActive = userCore.IsActive
 	u.Role = userCore.Role

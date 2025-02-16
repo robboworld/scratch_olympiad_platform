@@ -116,6 +116,7 @@ type NewUser struct {
 	FullName       string `json:"fullName"`
 	FullNameNative string `json:"fullNameNative"`
 	Country        string `json:"country"`
+	Region         string `json:"region"`
 	City           string `json:"city"`
 	Birthdate      string `json:"birthdate"`
 }
@@ -127,6 +128,7 @@ type NewUserResponse struct {
 	FullName       string `json:"fullName"`
 	FullNameNative string `json:"fullNameNative"`
 	Country        string `json:"country"`
+	Region         string `json:"region"`
 	City           string `json:"city"`
 	Birthdate      string `json:"birthdate"`
 }
@@ -165,6 +167,17 @@ type ProjectPageHTTPList struct {
 	CountRows    int                `json:"countRows"`
 }
 
+type RegionHTTP struct {
+	ID        string `json:"id"`
+	Name      string `json:"name"`
+	CountryID string `json:"countryId"`
+}
+
+type RegionHTTPList struct {
+	Regions   []*RegionHTTP `json:"regions"`
+	CountRows int           `json:"countRows"`
+}
+
 type Response struct {
 	Ok bool `json:"ok"`
 }
@@ -189,6 +202,7 @@ type SignUp struct {
 	FullName       string `json:"fullName"`
 	FullNameNative string `json:"fullNameNative"`
 	Country        string `json:"country"`
+	Region         string `json:"region"`
 	City           string `json:"city"`
 	Birthdate      string `json:"birthdate"`
 }
@@ -207,6 +221,7 @@ type UpdateUser struct {
 	FullName       string `json:"fullName"`
 	FullNameNative string `json:"fullNameNative"`
 	Country        string `json:"country"`
+	Region         string `json:"region"`
 	City           string `json:"city"`
 	Birthdate      string `json:"birthdate"`
 }
@@ -221,6 +236,7 @@ type UserHTTP struct {
 	FullName       string `json:"fullName"`
 	FullNameNative string `json:"fullNameNative"`
 	Country        string `json:"country"`
+	Region         string `json:"region"`
 	City           string `json:"city"`
 	Birthdate      string `json:"birthdate"`
 	IsActive       bool   `json:"isActive"`

@@ -16,6 +16,7 @@ type Gateways struct {
 	Application     ApplicationGateway
 	Nomination      NominationGateway
 	Country         CountryGateway
+	Region          RegionGateway
 	Solution        SolutionGateway
 }
 
@@ -30,6 +31,7 @@ func SetupGateways(pc db.PostgresClient) Gateways {
 		Application:     ApplicationGatewayImpl{pc},
 		Nomination:      NominationGatewayImpl{pc},
 		Country:         CountryGatewayImpl{pc},
+		Region:          RegionGatewayImpl{pc},
 		Solution:        SolutionGatewayImpl{pc},
 	}
 }

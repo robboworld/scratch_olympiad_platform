@@ -16,6 +16,7 @@ type Services struct {
 	ApplicationService ApplicationService
 	NominationService  NominationService
 	CountryService     CountryService
+	RegionService      RegionService
 	SolutionService    SolutionService
 }
 
@@ -28,6 +29,7 @@ func SetupServices(
 	applicationGateway gateways.ApplicationGateway,
 	nominationGateway gateways.NominationGateway,
 	countryGateway gateways.CountryGateway,
+	regionGateway gateways.RegionGateway,
 	solutionGateway gateways.SolutionGateway,
 	applicationAPI api.ApplicationAPI,
 ) Services {
@@ -35,11 +37,13 @@ func SetupServices(
 		UserService: &UserServiceImpl{
 			userGateway:    userGateway,
 			countryGateway: countryGateway,
+			regionGateway:  regionGateway,
 		},
 		AuthService: &AuthServiceImpl{
 			userGateway:     userGateway,
 			authDataGateway: authDataGateway,
 			countryGateway:  countryGateway,
+			regionGateway:   regionGateway,
 			settingsGateway: settingsGateway,
 		},
 		ProjectService: &ProjectServiceImpl{
@@ -63,6 +67,9 @@ func SetupServices(
 		},
 		CountryService: &CountryServiceImpl{
 			countryGateway: countryGateway,
+		},
+		RegionService: &RegionServiceImpl{
+			regionGateway: regionGateway,
 		},
 		SolutionService: SolutionServiceImpl{
 			solutionGateway: solutionGateway,

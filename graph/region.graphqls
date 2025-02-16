@@ -1,0 +1,14 @@
+type RegionHttp {
+    id: ID!
+    name: String!
+    countryId: ID!
+}
+
+type RegionHttpList {
+    regions: [RegionHttp!]!
+    countRows: Int!
+}
+
+extend type Query {
+    GetRegionsByCountryId(countryId: ID!, page: Int, pageSize: Int): RegionHttpList!
+}

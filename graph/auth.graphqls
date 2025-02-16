@@ -4,6 +4,7 @@ input SignUp {
 	fullName: String!
 	fullNameNative: String!
 	country: String!
+	region: String!
 	city: String!
 	birthdate: Timestamp!
 }

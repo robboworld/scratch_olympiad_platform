@@ -8,6 +8,7 @@ type UserHttp {
 	fullName: String!
 	fullNameNative: String!
 	country: String!
+	region: String!
 	city: String!
 	birthdate: Timestamp!
 	isActive: Boolean!
@@ -33,6 +34,7 @@ input NewUser {
 	fullName: String!
 	fullNameNative: String!
 	country: String!
+	region: String!
 	city: String!
 	birthdate: Timestamp!
 }
@@ -43,6 +45,7 @@ input UpdateUser {
 	fullName: String!
 	fullNameNative: String!
 	country: String!
+	region: String!
 	city: String!
 	birthdate: Timestamp!
 }
@@ -54,6 +57,7 @@ type NewUserResponse {
 	fullName: String!
 	fullNameNative: String!
 	country: String!
+	region: String!
 	city: String!
 	birthdate: Timestamp!
 }
