@@ -82,6 +82,7 @@ func (c *PostgresClient) Migrate() (err error) {
 		&models.CountryCore{},
 		&models.RegionCore{},
 		&models.SolutionCore{},
+		&models.EventCore{},
 	)
 	if err != nil {
 		return err

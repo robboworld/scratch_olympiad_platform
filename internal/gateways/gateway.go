@@ -18,6 +18,7 @@ type Gateways struct {
 	Country         CountryGateway
 	Region          RegionGateway
 	Solution        SolutionGateway
+	Event           EventGateway
 }
 
 func SetupGateways(pc db.PostgresClient) Gateways {
@@ -33,5 +34,6 @@ func SetupGateways(pc db.PostgresClient) Gateways {
 		Country:         CountryGatewayImpl{pc},
 		Region:          RegionGatewayImpl{pc},
 		Solution:        SolutionGatewayImpl{pc},
+		Event:           EventGatewayImpl{pc},
 	}
 }

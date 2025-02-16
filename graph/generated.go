@@ -122,6 +122,20 @@ type ComplexityRoot struct {
 		Courses   func(childComplexity int) int
 	}
 
+	EventHttp struct {
+		CreatedAt func(childComplexity int) int
+		EndDate   func(childComplexity int) int
+		ID        func(childComplexity int) int
+		Name      func(childComplexity int) int
+		StartDate func(childComplexity int) int
+		UpdatedAt func(childComplexity int) int
+	}
+
+	EventHttpList struct {
+		CountRows func(childComplexity int) int
+		Events    func(childComplexity int) int
+	}
+
 	ImageHttp struct {
 		ID    func(childComplexity int) int
 		Large func(childComplexity int) int
@@ -137,6 +151,7 @@ type ComplexityRoot struct {
 	Mutation struct {
 		ConfirmActivation     func(childComplexity int, activationToken string) int
 		CreateApplication     func(childComplexity int, input models.NewApplication) int
+		CreateEvent           func(childComplexity int, input models.NewEvent) int
 		CreateParentRel       func(childComplexity int, parentID string, childID string) int
 		CreateProjectPage     func(childComplexity int) int
 		CreateUser            func(childComplexity int, input models.NewUser) int
@@ -205,6 +220,7 @@ type ComplexityRoot struct {
 	Query struct {
 		GetAllApplications              func(childComplexity int, page *int, pageSize *int) int
 		GetAllCountries                 func(childComplexity int, page *int, pageSize *int) int
+		GetAllEvents                    func(childComplexity int, page *int, pageSize *int) int
 		GetAllNominations               func(childComplexity int, page *int, pageSize *int) int
 		GetAllProjectPagesByAccessToken func(childComplexity int, page *int, pageSize *int) int
 		GetAllProjectPagesByAuthorID    func(childComplexity int, id string, page *int, pageSize *int) int
@@ -213,6 +229,7 @@ type ComplexityRoot struct {
 		GetChildrenByParent             func(childComplexity int, parentID string) int
 		GetCourseByID                   func(childComplexity int, id string) int
 		GetCoursesByUser                func(childComplexity int) int
+		GetEventByID                    func(childComplexity int, id string) int
 		GetParentsByChild               func(childComplexity int, childID string) int
 		GetProjectPageByID              func(childComplexity int, id string) int
 		GetRegionsByCountryID           func(childComplexity int, countryID string, page *int, pageSize *int) int
@@ -281,6 +298,7 @@ type MutationResolver interface {
 	ConfirmActivation(ctx context.Context, activationToken string) (*models.SignInResponse, error)
 	ForgotPassword(ctx context.Context, email string) (*models.Response, error)
 	ResetPassword(ctx context.Context, resetToken string) (*models.Response, error)
+	CreateEvent(ctx context.Context, input models.NewEvent) (*models.EventHTTP, error)
 	CreateParentRel(ctx context.Context, parentID string, childID string) (*models.Response, error)
 	DeleteParentRel(ctx context.Context, parentID string, childID string) (*models.Response, error)
 	CreateProjectPage(ctx context.Context) (*models.ProjectPageHTTP, error)
@@ -299,6 +317,8 @@ type QueryResolver interface {
 	GetAllCountries(ctx context.Context, page *int, pageSize *int) (*models.CountryHTTPList, error)
 	GetCourseByID(ctx context.Context, id string) (*models.CourseHTTP, error)
 	GetCoursesByUser(ctx context.Context) (*models.CoursesListHTTP, error)
+	GetEventByID(ctx context.Context, id string) (*models.EventHTTP, error)
+	GetAllEvents(ctx context.Context, page *int, pageSize *int) (*models.EventHTTPList, error)
 	GetAllNominations(ctx context.Context, page *int, pageSize *int) (*models.NominationHTTPList, error)
 	GetChildrenByParent(ctx context.Context, parentID string) (*models.UsersList, error)
 	GetParentsByChild(ctx context.Context, childID string) (*models.UsersList, error)
@@ -688,6 +708,62 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.CoursesListHttp.Courses(childComplexity), true
 
+	case "EventHttp.createdAt":
+		if e.complexity.EventHttp.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.EventHttp.CreatedAt(childComplexity), true
+
+	case "EventHttp.endDate":
+		if e.complexity.EventHttp.EndDate == nil {
+			break
+		}
+
+		return e.complexity.EventHttp.EndDate(childComplexity), true
+
+	case "EventHttp.id":
+		if e.complexity.EventHttp.ID == nil {
+			break
+		}
+
+		return e.complexity.EventHttp.ID(childComplexity), true
+
+	case "EventHttp.name":
+		if e.complexity.EventHttp.Name == nil {
+			break
+		}
+
+		return e.complexity.EventHttp.Name(childComplexity), true
+
+	case "EventHttp.startDate":
+		if e.complexity.EventHttp.StartDate == nil {
+			break
+		}
+
+		return e.complexity.EventHttp.StartDate(childComplexity), true
+
+	case "EventHttp.updatedAt":
+		if e.complexity.EventHttp.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.EventHttp.UpdatedAt(childComplexity), true
+
+	case "EventHttpList.countRows":
+		if e.complexity.EventHttpList.CountRows == nil {
+			break
+		}
+
+		return e.complexity.EventHttpList.CountRows(childComplexity), true
+
+	case "EventHttpList.events":
+		if e.complexity.EventHttpList.Events == nil {
+			break
+		}
+
+		return e.complexity.EventHttpList.Events(childComplexity), true
+
 	case "ImageHttp.id":
 		if e.complexity.ImageHttp.ID == nil {
 			break
@@ -753,6 +829,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreateApplication(childComplexity, args["input"].(models.NewApplication)), true
+
+	case "Mutation.CreateEvent":
+		if e.complexity.Mutation.CreateEvent == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_CreateEvent_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateEvent(childComplexity, args["input"].(models.NewEvent)), true
 
 	case "Mutation.CreateParentRel":
 		if e.complexity.Mutation.CreateParentRel == nil {
@@ -1189,6 +1277,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.GetAllCountries(childComplexity, args["page"].(*int), args["pageSize"].(*int)), true
 
+	case "Query.GetAllEvents":
+		if e.complexity.Query.GetAllEvents == nil {
+			break
+		}
+
+		args, err := ec.field_Query_GetAllEvents_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetAllEvents(childComplexity, args["page"].(*int), args["pageSize"].(*int)), true
+
 	case "Query.GetAllNominations":
 		if e.complexity.Query.GetAllNominations == nil {
 			break
@@ -1279,6 +1379,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.GetCoursesByUser(childComplexity), true
+
+	case "Query.GetEventById":
+		if e.complexity.Query.GetEventByID == nil {
+			break
+		}
+
+		args, err := ec.field_Query_GetEventById_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetEventByID(childComplexity, args["id"].(string)), true
 
 	case "Query.GetParentsByChild":
 		if e.complexity.Query.GetParentsByChild == nil {
@@ -1526,6 +1638,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	ec := executionContext{rc, e, 0, 0, make(chan graphql.DeferredResult)}
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
 		ec.unmarshalInputNewApplication,
+		ec.unmarshalInputNewEvent,
 		ec.unmarshalInputNewUser,
 		ec.unmarshalInputSignIn,
 		ec.unmarshalInputSignUp,
@@ -1627,7 +1740,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 	return introspection.WrapTypeFromDef(parsedSchema, parsedSchema.Types[name]), nil
 }
 
-//go:embed "application.graphqls" "auth.graphqls" "country.graphqls" "course.graphqls" "nomination.graphqls" "parentRel.graphqls" "projectPage.graphqls" "region.graphqls" "settings.graphqls" "user.graphqls"
+//go:embed "application.graphqls" "auth.graphqls" "country.graphqls" "course.graphqls" "event.graphqls" "nomination.graphqls" "parentRel.graphqls" "projectPage.graphqls" "region.graphqls" "settings.graphqls" "user.graphqls"
 var sourcesFS embed.FS
 
 func sourceData(filename string) string {
@@ -1643,6 +1756,7 @@ var sources = []*ast.Source{
 	{Name: "auth.graphqls", Input: sourceData("auth.graphqls"), BuiltIn: false},
 	{Name: "country.graphqls", Input: sourceData("country.graphqls"), BuiltIn: false},
 	{Name: "course.graphqls", Input: sourceData("course.graphqls"), BuiltIn: false},
+	{Name: "event.graphqls", Input: sourceData("event.graphqls"), BuiltIn: false},
 	{Name: "nomination.graphqls", Input: sourceData("nomination.graphqls"), BuiltIn: false},
 	{Name: "parentRel.graphqls", Input: sourceData("parentRel.graphqls"), BuiltIn: false},
 	{Name: "projectPage.graphqls", Input: sourceData("projectPage.graphqls"), BuiltIn: false},
@@ -1693,6 +1807,21 @@ func (ec *executionContext) field_Mutation_CreateApplication_args(ctx context.Co
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg0, err = ec.unmarshalNNewApplication2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐNewApplication(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_CreateEvent_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 models.NewEvent
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNNewEvent2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐNewEvent(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2010,6 +2139,30 @@ func (ec *executionContext) field_Query_GetAllCountries_args(ctx context.Context
 	return args, nil
 }
 
+func (ec *executionContext) field_Query_GetAllEvents_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *int
+	if tmp, ok := rawArgs["page"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("page"))
+		arg0, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["page"] = arg0
+	var arg1 *int
+	if tmp, ok := rawArgs["pageSize"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pageSize"))
+		arg1, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["pageSize"] = arg1
+	return args, nil
+}
+
 func (ec *executionContext) field_Query_GetAllNominations_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -2164,6 +2317,21 @@ func (ec *executionContext) field_Query_GetChildrenByParent_args(ctx context.Con
 }
 
 func (ec *executionContext) field_Query_GetCourseById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_GetEventById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
@@ -4706,6 +4874,372 @@ func (ec *executionContext) fieldContext_CoursesListHttp_countRows(ctx context.C
 	return fc, nil
 }
 
+func (ec *executionContext) _EventHttp_id(ctx context.Context, field graphql.CollectedField, obj *models.EventHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EventHttp_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EventHttp_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EventHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EventHttp_createdAt(ctx context.Context, field graphql.CollectedField, obj *models.EventHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EventHttp_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNTimestamp2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EventHttp_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EventHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Timestamp does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EventHttp_updatedAt(ctx context.Context, field graphql.CollectedField, obj *models.EventHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EventHttp_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNTimestamp2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EventHttp_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EventHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Timestamp does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EventHttp_name(ctx context.Context, field graphql.CollectedField, obj *models.EventHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EventHttp_name(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Name, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EventHttp_name(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EventHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EventHttp_startDate(ctx context.Context, field graphql.CollectedField, obj *models.EventHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EventHttp_startDate(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.StartDate, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNTimestamp2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EventHttp_startDate(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EventHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Timestamp does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EventHttp_endDate(ctx context.Context, field graphql.CollectedField, obj *models.EventHTTP) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EventHttp_endDate(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.EndDate, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNTimestamp2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EventHttp_endDate(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EventHttp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Timestamp does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EventHttpList_events(ctx context.Context, field graphql.CollectedField, obj *models.EventHTTPList) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EventHttpList_events(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Events, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*models.EventHTTP)
+	fc.Result = res
+	return ec.marshalNEventHttp2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐEventHTTPᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EventHttpList_events(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EventHttpList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_EventHttp_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_EventHttp_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_EventHttp_updatedAt(ctx, field)
+			case "name":
+				return ec.fieldContext_EventHttp_name(ctx, field)
+			case "startDate":
+				return ec.fieldContext_EventHttp_startDate(ctx, field)
+			case "endDate":
+				return ec.fieldContext_EventHttp_endDate(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type EventHttp", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EventHttpList_countRows(ctx context.Context, field graphql.CollectedField, obj *models.EventHTTPList) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EventHttpList_countRows(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CountRows, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EventHttpList_countRows(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EventHttpList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _ImageHttp_id(ctx context.Context, field graphql.CollectedField, obj *models.ImageHTTP) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ImageHttp_id(ctx, field)
 	if err != nil {
@@ -5885,6 +6419,99 @@ func (ec *executionContext) fieldContext_Mutation_ResetPassword(ctx context.Cont
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_ResetPassword_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_CreateEvent(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_CreateEvent(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Mutation().CreateEvent(rctx, fc.Args["input"].(models.NewEvent))
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin"})
+			if err != nil {
+				return nil, err
+			}
+			if ec.directives.HasRole == nil {
+				return nil, errors.New("directive hasRole is not implemented")
+			}
+			return ec.directives.HasRole(ctx, nil, directive0, roles)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, graphql.ErrorOnPath(ctx, err)
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(*models.EventHTTP); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.EventHTTP`, tmp)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.EventHTTP)
+	fc.Result = res
+	return ec.marshalNEventHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐEventHTTP(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_CreateEvent(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_EventHttp_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_EventHttp_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_EventHttp_updatedAt(ctx, field)
+			case "name":
+				return ec.fieldContext_EventHttp_name(ctx, field)
+			case "startDate":
+				return ec.fieldContext_EventHttp_startDate(ctx, field)
+			case "endDate":
+				return ec.fieldContext_EventHttp_endDate(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type EventHttp", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_CreateEvent_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -8691,6 +9318,136 @@ func (ec *executionContext) fieldContext_Query_GetCoursesByUser(ctx context.Cont
 			}
 			return nil, fmt.Errorf("no field named %q was found under type CoursesListHttp", field.Name)
 		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_GetEventById(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_GetEventById(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetEventByID(rctx, fc.Args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.EventHTTP)
+	fc.Result = res
+	return ec.marshalNEventHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐEventHTTP(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_GetEventById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_EventHttp_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_EventHttp_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_EventHttp_updatedAt(ctx, field)
+			case "name":
+				return ec.fieldContext_EventHttp_name(ctx, field)
+			case "startDate":
+				return ec.fieldContext_EventHttp_startDate(ctx, field)
+			case "endDate":
+				return ec.fieldContext_EventHttp_endDate(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type EventHttp", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_GetEventById_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_GetAllEvents(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_GetAllEvents(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetAllEvents(rctx, fc.Args["page"].(*int), fc.Args["pageSize"].(*int))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.EventHTTPList)
+	fc.Result = res
+	return ec.marshalNEventHttpList2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐEventHTTPList(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_GetAllEvents(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "events":
+				return ec.fieldContext_EventHttpList_events(ctx, field)
+			case "countRows":
+				return ec.fieldContext_EventHttpList_countRows(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type EventHttpList", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_GetAllEvents_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -12414,6 +13171,53 @@ func (ec *executionContext) unmarshalInputNewApplication(ctx context.Context, ob
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputNewEvent(ctx context.Context, obj interface{}) (models.NewEvent, error) {
+	var it models.NewEvent
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "startDate", "endDate"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "startDate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("startDate"))
+			data, err := ec.unmarshalNTimestamp2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.StartDate = data
+		case "endDate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("endDate"))
+			data, err := ec.unmarshalNTimestamp2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EndDate = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputNewUser(ctx context.Context, obj interface{}) (models.NewUser, error) {
 	var it models.NewUser
 	asMap := map[string]interface{}{}
@@ -13327,6 +14131,114 @@ func (ec *executionContext) _CoursesListHttp(ctx context.Context, sel ast.Select
 	return out
 }
 
+var eventHttpImplementors = []string{"EventHttp"}
+
+func (ec *executionContext) _EventHttp(ctx context.Context, sel ast.SelectionSet, obj *models.EventHTTP) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, eventHttpImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("EventHttp")
+		case "id":
+			out.Values[i] = ec._EventHttp_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._EventHttp_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._EventHttp_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "name":
+			out.Values[i] = ec._EventHttp_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "startDate":
+			out.Values[i] = ec._EventHttp_startDate(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "endDate":
+			out.Values[i] = ec._EventHttp_endDate(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var eventHttpListImplementors = []string{"EventHttpList"}
+
+func (ec *executionContext) _EventHttpList(ctx context.Context, sel ast.SelectionSet, obj *models.EventHTTPList) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, eventHttpListImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("EventHttpList")
+		case "events":
+			out.Values[i] = ec._EventHttpList_events(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "countRows":
+			out.Values[i] = ec._EventHttpList_countRows(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var imageHttpImplementors = []string{"ImageHttp"}
 
 func (ec *executionContext) _ImageHttp(ctx context.Context, sel ast.SelectionSet, obj *models.ImageHTTP) graphql.Marshaler {
@@ -13524,6 +14436,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "ResetPassword":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_ResetPassword(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "CreateEvent":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_CreateEvent(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -14130,6 +15049,50 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_GetCoursesByUser(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "GetEventById":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_GetEventById(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "GetAllEvents":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_GetAllEvents(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -15270,6 +16233,78 @@ func (ec *executionContext) marshalNCoursesListHttp2ᚖgithubᚗcomᚋrobboworld
 	return ec._CoursesListHttp(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalNEventHttp2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐEventHTTP(ctx context.Context, sel ast.SelectionSet, v models.EventHTTP) graphql.Marshaler {
+	return ec._EventHttp(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNEventHttp2ᚕᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐEventHTTPᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.EventHTTP) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNEventHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐEventHTTP(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNEventHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐEventHTTP(ctx context.Context, sel ast.SelectionSet, v *models.EventHTTP) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._EventHttp(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNEventHttpList2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐEventHTTPList(ctx context.Context, sel ast.SelectionSet, v models.EventHTTPList) graphql.Marshaler {
+	return ec._EventHttpList(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNEventHttpList2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐEventHTTPList(ctx context.Context, sel ast.SelectionSet, v *models.EventHTTPList) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._EventHttpList(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalNID2string(ctx context.Context, v interface{}) (string, error) {
 	res, err := graphql.UnmarshalID(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -15302,6 +16337,11 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 
 func (ec *executionContext) unmarshalNNewApplication2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐNewApplication(ctx context.Context, v interface{}) (models.NewApplication, error) {
 	res, err := ec.unmarshalInputNewApplication(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNNewEvent2githubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐNewEvent(ctx context.Context, v interface{}) (models.NewEvent, error) {
+	res, err := ec.unmarshalInputNewEvent(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 

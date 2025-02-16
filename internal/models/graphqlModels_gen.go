@@ -84,6 +84,20 @@ type CoursesListHTTP struct {
 	CountRows int           `json:"countRows"`
 }
 
+type EventHTTP struct {
+	ID        string `json:"id"`
+	CreatedAt string `json:"createdAt"`
+	UpdatedAt string `json:"updatedAt"`
+	Name      string `json:"name"`
+	StartDate string `json:"startDate"`
+	EndDate   string `json:"endDate"`
+}
+
+type EventHTTPList struct {
+	Events    []*EventHTTP `json:"events"`
+	CountRows int          `json:"countRows"`
+}
+
 type ImageHTTP struct {
 	ID    string `json:"id"`
 	Raw   string `json:"raw"`
@@ -107,6 +121,12 @@ type NewApplication struct {
 	EngineeringTaskVideo          *string `json:"engineeringTaskVideo,omitempty"`
 	EngineeringTaskVideoCloudLink *string `json:"engineeringTaskVideoCloudLink,omitempty"`
 	Note                          *string `json:"note,omitempty"`
+}
+
+type NewEvent struct {
+	Name      string `json:"name"`
+	StartDate string `json:"startDate"`
+	EndDate   string `json:"endDate"`
 }
 
 type NewUser struct {

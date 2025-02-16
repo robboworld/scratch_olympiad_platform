@@ -1,0 +1,28 @@
+type EventHttp {
+    id: ID!
+    createdAt: Timestamp!
+    updatedAt: Timestamp!
+    name: String!
+    startDate: Timestamp!
+    endDate: Timestamp!
+}
+
+input NewEvent {
+    name: String!
+    startDate: Timestamp!
+    endDate: Timestamp!
+}
+
+type EventHttpList {
+    events: [EventHttp!]!
+    countRows: Int!
+}
+
+extend type Mutation {
+    CreateEvent(input: NewEvent!): EventHttp! @hasRole(roles: [SuperAdmin])
+}
+
+extend type Query {
+    GetEventById(id: ID!): EventHttp!
+    GetAllEvents(page: Int, pageSize: Int): EventHttpList!
+}
