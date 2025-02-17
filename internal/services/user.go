@@ -61,24 +61,24 @@ func (u UserServiceImpl) CreateUser(user models.UserCore, clientRole models.Role
 		return models.UserCore{}, err
 	}
 	user.Country = country
-	if newUser.RegionID != nil {
+	if user.RegionID != nil {
 		if !country.HasRegions {
 			return models.UserCore{}, utils.ResponseError{
 				Code:    http.StatusBadRequest,
 				Message: consts.ErrCountryHasNoRegions,
 			}
 		}
-		region, err := u.regionGateway.GetRegionById(*newUser.RegionID)
+		region, err := u.regionGateway.GetRegionById(*user.RegionID)
 		if err != nil {
 			return models.UserCore{}, err
 		}
-		if newUser.CountryID != region.CountryID {
+		if user.CountryID != region.CountryID {
 			return models.UserCore{}, utils.ResponseError{
 				Code:    http.StatusBadRequest,
 				Message: consts.ErrRegionNotInCountry,
 			}
 		}
-		newUser.Region = &region
+		user.Region = &region
 	}
 
 	passwordHash := utils.HashPassword(user.Password)
