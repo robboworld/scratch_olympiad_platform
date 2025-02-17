@@ -26,7 +26,7 @@ func (h SolutionHandler) SetupSolutionRoutes(router *gin.Engine) {
 func (h SolutionHandler) UploadSolution(c *gin.Context) {
 	userID := c.Value(consts.KeyId).(uint)
 	role := c.Value(consts.KeyRole).(models.Role)
-	accessRoles := []models.Role{models.RoleStudent, models.RoleSuperAdmin}
+	accessRoles := []models.Role{models.RoleUser, models.RoleSuperAdmin}
 	if !utils.DoesHaveRole(role, accessRoles) {
 		h.loggers.Err.Printf("%s", consts.ErrAccessDenied)
 		c.JSON(http.StatusForbidden, gin.H{"error": consts.ErrAccessDenied})

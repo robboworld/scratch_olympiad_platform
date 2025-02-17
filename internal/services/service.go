@@ -10,8 +10,6 @@ type Services struct {
 	fx.Out
 	UserService        UserService
 	AuthService        AuthService
-	ProjectService     ProjectService
-	ProjectPageService ProjectPageService
 	SettingsService    SettingsService
 	ApplicationService ApplicationService
 	NominationService  NominationService
@@ -24,8 +22,6 @@ type Services struct {
 func SetupServices(
 	userGateway gateways.UserGateway,
 	authDataGateway gateways.AuthDataGateway,
-	projectGateway gateways.ProjectGateway,
-	projectPageGateway gateways.ProjectPageGateway,
 	settingsGateway gateways.SettingsGateway,
 	applicationGateway gateways.ApplicationGateway,
 	nominationGateway gateways.NominationGateway,
@@ -47,13 +43,6 @@ func SetupServices(
 			countryGateway:  countryGateway,
 			regionGateway:   regionGateway,
 			settingsGateway: settingsGateway,
-		},
-		ProjectService: &ProjectServiceImpl{
-			projectGateway: projectGateway,
-		},
-		ProjectPageService: &ProjectPageServiceImpl{
-			projectGateway:     projectGateway,
-			projectPageGateway: projectPageGateway,
 		},
 		SettingsService: &SettingsServiceImpl{
 			settingsGateway: settingsGateway,

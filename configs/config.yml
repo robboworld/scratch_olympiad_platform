@@ -10,18 +10,6 @@ projectPage:
   scratchLink: "0.0.0.0:8601/"
 
 api_urls:
-  refreshToken: "https://edx-test.ru/oauth2/access_token"
-  getUser: "https://edx-test.ru/api/user/v1/me"
-  getCourse: "https://edx-test.ru/api/courses/v1/courses/"
-  getEnrollment: "https://edx-test.ru/api/enrollment/v1/enrollments?username="
-  getCourses: "https://edx-test.ru/api/courses/v1/courses/"
-  getAllPublicCourses: "https://courses.edx.org/api/courses/v1/courses/?page="
-  postEnrollment: "https://edx-test.ru/api/enrollment/v1/enrollment"
-  postRegistration: "https://edx-test.ru/api/user/v1/account/registration/"
-  postCohort: "https://edx-test.ru/api/cohorts/v1/courses/"
-  login: "https://edx-test.ru/api/user/v1/account/login_session/"
-  getLogin: "https://edx-test.ru/login"
-  getRegistration: "https://edx-test.ru/register?next=%2F"
   create_application: "https://script.google.com/macros/s/AKfycbxsTNFg4n-q2vYxAMZ5JWef2BEuF5SPMkt3n56mNmrYOqn9SEqoGlCC2jixIShpSFO0HA/exec"
   export_all_applications: "https://script.google.com/macros/s/AKfycbxsTNFg4n-q2vYxAMZ5JWef2BEuF5SPMkt3n56mNmrYOqn9SEqoGlCC2jixIShpSFO0HA/exec?appList=true"
 

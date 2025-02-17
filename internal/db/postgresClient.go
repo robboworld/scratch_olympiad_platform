@@ -73,9 +73,6 @@ func (c *PostgresClient) Migrate() (err error) {
 	err = c.Db.AutoMigrate(
 		&models.UserCore{},
 		&models.AuthDataCore{},
-		&models.ProjectPageCore{},
-		&models.ProjectCore{},
-		&models.ParentRelCore{},
 		&models.SettingsCore{},
 		&models.ApplicationCore{},
 		&models.NominationCore{},

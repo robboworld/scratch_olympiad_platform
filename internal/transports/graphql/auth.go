@@ -38,7 +38,7 @@ func (r *mutationResolver) SignUp(ctx context.Context, input models.SignUp) (*mo
 		City:           input.City,
 		Region:         input.Region,
 		Birthdate:      birthdate,
-		Role:           models.RoleStudent,
+		Role:           models.RoleUser,
 		IsActive:       false,
 	}
 	err = r.authService.SignUp(newUser)

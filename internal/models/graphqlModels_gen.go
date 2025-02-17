@@ -8,12 +8,6 @@ import (
 	"strconv"
 )
 
-type AbsoluteMediaHTTP struct {
-	ID          string `json:"id"`
-	URI         string `json:"uri"`
-	URIAbsolute string `json:"uri_absolute"`
-}
-
 type ApplicationHTTP struct {
 	ID                            string `json:"id"`
 	CreatedAt                     string `json:"createdAt"`
@@ -37,51 +31,16 @@ type ApplicationHTTPList struct {
 }
 
 type CountryHTTP struct {
-	ID        string `json:"id"`
-	CreatedAt string `json:"createdAt"`
-	UpdatedAt string `json:"updatedAt"`
-	Name      string `json:"name"`
+	ID         string `json:"id"`
+	CreatedAt  string `json:"createdAt"`
+	UpdatedAt  string `json:"updatedAt"`
+	Name       string `json:"name"`
+	HasRegions bool   `json:"hasRegions"`
 }
 
 type CountryHTTPList struct {
 	Countries []*CountryHTTP `json:"countries"`
 	CountRows int            `json:"countRows"`
-}
-
-type CourseAPIMediaCollectionHTTP struct {
-	ID          string             `json:"id"`
-	BannerImage *AbsoluteMediaHTTP `json:"banner_image,omitempty"`
-	CourseImage *MediaHTTP         `json:"course_image,omitempty"`
-	CourseVideo *MediaHTTP         `json:"course_video,omitempty"`
-	Image       *ImageHTTP         `json:"image,omitempty"`
-}
-
-type CourseHTTP struct {
-	ID               string                        `json:"id"`
-	BlocksURL        string                        `json:"blocks_url"`
-	Effort           string                        `json:"effort"`
-	EnrollmentStart  string                        `json:"enrollment_start"`
-	EnrollmentEnd    string                        `json:"enrollment_end"`
-	End              string                        `json:"end"`
-	Name             string                        `json:"name"`
-	Number           string                        `json:"number"`
-	Org              string                        `json:"org"`
-	ShortDescription string                        `json:"short_description"`
-	Start            string                        `json:"start"`
-	StartDisplay     string                        `json:"start_display"`
-	StartType        string                        `json:"start_type"`
-	Pacing           string                        `json:"pacing"`
-	MobileAvailable  bool                          `json:"mobile_available"`
-	Hidden           bool                          `json:"hidden"`
-	InvitationOnly   bool                          `json:"invitation_only"`
-	Overview         *string                       `json:"overview,omitempty"`
-	CourseID         string                        `json:"course_id"`
-	Media            *CourseAPIMediaCollectionHTTP `json:"media"`
-}
-
-type CoursesListHTTP struct {
-	Courses   []*CourseHTTP `json:"courses"`
-	CountRows int           `json:"countRows"`
 }
 
 type EventDetailsHTTP struct {
@@ -106,18 +65,6 @@ type EventHTTP struct {
 type EventHTTPList struct {
 	Events    []*EventHTTP `json:"events"`
 	CountRows int          `json:"countRows"`
-}
-
-type ImageHTTP struct {
-	ID    string `json:"id"`
-	Raw   string `json:"raw"`
-	Small string `json:"small"`
-	Large string `json:"large"`
-}
-
-type MediaHTTP struct {
-	ID  string `json:"id"`
-	URI string `json:"uri"`
 }
 
 type NewApplication struct {
@@ -178,26 +125,6 @@ type NominationHTTPList struct {
 	CountRows   int               `json:"countRows"`
 }
 
-type ProjectPageHTTP struct {
-	ID               string `json:"id"`
-	CreatedAt        string `json:"createdAt"`
-	UpdatedAt        string `json:"updatedAt"`
-	AuthorID         string `json:"authorId"`
-	ProjectID        string `json:"projectId"`
-	ProjectUpdatedAt string `json:"projectUpdatedAt"`
-	Title            string `json:"title"`
-	Instruction      string `json:"instruction"`
-	Notes            string `json:"notes"`
-	LinkToScratch    string `json:"linkToScratch"`
-	IsShared         bool   `json:"isShared"`
-	IsBanned         bool   `json:"isBanned"`
-}
-
-type ProjectPageHTTPList struct {
-	ProjectPages []*ProjectPageHTTP `json:"projectPages"`
-	CountRows    int                `json:"countRows"`
-}
-
 type RegionHTTP struct {
 	ID        string `json:"id"`
 	Name      string `json:"name"`
@@ -246,14 +173,6 @@ type UpdateEvent struct {
 	EndDate     string `json:"endDate"`
 }
 
-type UpdateProjectPage struct {
-	ID          string `json:"id"`
-	Title       string `json:"title"`
-	Instruction string `json:"instruction"`
-	Notes       string `json:"notes"`
-	IsShared    bool   `json:"isShared"`
-}
-
 type UpdateUser struct {
 	ID             string `json:"id"`
 	Email          string `json:"email"`
@@ -286,37 +205,68 @@ type UsersList struct {
 	CountRows int         `json:"countRows"`
 }
 
+type EventRole string
+
+const (
+	EventRoleOrganizer EventRole = "Organizer"
+	EventRoleModerator EventRole = "Moderator"
+	EventRoleExpert    EventRole = "Expert"
+)
+
+var AllEventRole = []EventRole{
+	EventRoleOrganizer,
+	EventRoleModerator,
+	EventRoleExpert,
+}
+
+func (e EventRole) IsValid() bool {
+	switch e {
+	case EventRoleOrganizer, EventRoleModerator, EventRoleExpert:
+		return true
+	}
+	return false
+}
+
+func (e EventRole) String() string {
+	return string(e)
+}
+
+func (e *EventRole) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = EventRole(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid EventRole", str)
+	}
+	return nil
+}
+
+func (e EventRole) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
 type Role string
 
 const (
 	RoleAnonymous  Role = "Anonymous"
-	RoleStudent    Role = "Student"
-	RoleParent     Role = "Parent"
-	RoleTeacher    Role = "Teacher"
-	RoleUnitAdmin  Role = "UnitAdmin"
-	RoleExpert     Role = "Expert"
-	RoleModerator  Role = "Moderator"
-	RoleOrganizer  Role = "Organizer"
+	RoleUser       Role = "User"
 	RoleAdmin      Role = "Admin"
 	RoleSuperAdmin Role = "SuperAdmin"
 )
 
 var AllRole = []Role{
 	RoleAnonymous,
-	RoleStudent,
-	RoleParent,
-	RoleTeacher,
-	RoleUnitAdmin,
-	RoleExpert,
-	RoleModerator,
-	RoleOrganizer,
+	RoleUser,
 	RoleAdmin,
 	RoleSuperAdmin,
 }
 
 func (e Role) IsValid() bool {
 	switch e {
-	case RoleAnonymous, RoleStudent, RoleParent, RoleTeacher, RoleUnitAdmin, RoleExpert, RoleModerator, RoleOrganizer, RoleAdmin, RoleSuperAdmin:
+	case RoleAnonymous, RoleUser, RoleAdmin, RoleSuperAdmin:
 		return true
 	}
 	return false

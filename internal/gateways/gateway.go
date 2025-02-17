@@ -9,9 +9,6 @@ type Gateways struct {
 	fx.Out
 	UserGateway     UserGateway
 	AuthDataGateway AuthDataGateway
-	ParentRel       ParentRel
-	Project         ProjectGateway
-	ProjectPage     ProjectPageGateway
 	Settings        SettingsGateway
 	Application     ApplicationGateway
 	Nomination      NominationGateway
@@ -25,9 +22,6 @@ func SetupGateways(pc db.PostgresClient) Gateways {
 	return Gateways{
 		UserGateway:     UserGatewayImpl{pc},
 		AuthDataGateway: AuthDataGatewayImpl{pc},
-		ParentRel:       ParentRelGatewayImpl{pc},
-		Project:         ProjectGatewayImpl{pc},
-		ProjectPage:     ProjectPageGatewayImpl{pc},
 		Settings:        SettingsGatewayImpl{pc},
 		Application:     ApplicationGatewayImpl{pc},
 		Nomination:      NominationGatewayImpl{pc},

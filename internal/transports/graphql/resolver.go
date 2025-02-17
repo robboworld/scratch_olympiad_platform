@@ -9,7 +9,6 @@ type Resolver struct {
 	loggers            logger.Loggers
 	userService        services.UserService
 	authService        services.AuthService
-	projectPageService services.ProjectPageService
 	settingsService    services.SettingsService
 	applicationService services.ApplicationService
 	nominationService  services.NominationService
@@ -22,7 +21,6 @@ func SetupResolvers(
 	loggers logger.Loggers,
 	userService services.UserService,
 	authService services.AuthService,
-	projectPageService services.ProjectPageService,
 	settingsService services.SettingsService,
 	applicationService services.ApplicationService,
 	nominationService services.NominationService,
@@ -34,7 +32,6 @@ func SetupResolvers(
 		loggers:            loggers,
 		userService:        userService,
 		authService:        authService,
-		projectPageService: projectPageService,
 		settingsService:    settingsService,
 		applicationService: applicationService,
 		nominationService:  nominationService,

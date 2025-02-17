@@ -16,13 +16,7 @@ type UserHttp {
 
 enum Role {
 	Anonymous
-	Student
-	Parent
-	Teacher
-	UnitAdmin
-	Expert
-	Moderator
-	Organizer
+	User
 	Admin
 	SuperAdmin
 }
@@ -73,14 +67,14 @@ type Response {
 
 type Mutation {
 	CreateUser(input: NewUser!): UserHttp! @hasRole(roles: [SuperAdmin, Admin])
-	UpdateUser(input: UpdateUser!): UserHttp! @hasRole(roles: [SuperAdmin, Admin, Organizer, Moderator, Expert, Student])
+	UpdateUser(input: UpdateUser!): UserHttp! @hasRole(roles: [SuperAdmin, Admin, User])
 	DeleteUser(id: ID!): Response! @hasRole(roles: [SuperAdmin, Admin])
 	SetUserIsActive(id: ID!, isActive: Boolean!): Response! @hasRole(roles: [SuperAdmin, Admin])
 }
 
 type Query {
-	GetUserByAccessToken: UserHttp! @hasRole(roles: [SuperAdmin, Admin, Organizer, Moderator, Expert, Student])
-	GetUserById(id: ID!): UserHttp! @hasRole(roles: [SuperAdmin, Admin, Organizer, Moderator, Expert, Student])
+	GetUserByAccessToken: UserHttp! @hasRole(roles: [SuperAdmin, Admin, User])
+	GetUserById(id: ID!): UserHttp! @hasRole(roles: [SuperAdmin, Admin, User])
 	GetAllUsers(page: Int, pageSize: Int, active: Boolean!, roles: [Role!]!): UsersList! @hasRole(roles: [SuperAdmin, Admin])
 }
 

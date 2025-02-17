@@ -5,13 +5,15 @@ import (
 )
 
 type CountryCore struct {
-	ID   uint   `gorm:"primaryKey"`
-	Name string `gorm:"unique;size:255"`
+	ID         uint   `gorm:"primaryKey"`
+	Name       string `gorm:"unique;size:255"`
+	HasRegions bool   `gorm:"default:true"`
 }
 
 func (c *CountryHTTP) FromCore(country CountryCore) {
 	c.ID = strconv.Itoa(int(country.ID))
 	c.Name = country.Name
+	c.HasRegions = country.HasRegions
 }
 
 func FromCountriesCore(countriesCore []CountryCore) (countriesHttp []*CountryHTTP) {

@@ -32,7 +32,7 @@ func (u UserServiceImpl) SetIsActive(id uint, isActive bool) error {
 func (u UserServiceImpl) CreateUser(user models.UserCore, clientRole models.Role) (newUser models.UserCore, err error) {
 	// TODO сразу активен? надо ли высылать код
 	// checking the client role for the possibility of creating a user
-	if (clientRole == models.RoleUnitAdmin && user.Role.String() == models.RoleUnitAdmin.String()) ||
+	if (clientRole == models.RoleAdmin && user.Role.String() == models.RoleAdmin.String()) ||
 		user.Role.String() == models.RoleSuperAdmin.String() {
 		return models.UserCore{}, utils.ResponseError{
 			Code:    http.StatusForbidden,
@@ -92,29 +92,15 @@ func (u UserServiceImpl) UpdateUser(user models.UserCore, clientRole models.Role
 	}
 	// checking the client role for the possibility of updating a user
 	switch clientRole {
-	case models.RoleUnitAdmin:
+	case models.RoleAdmin:
 		if user.Role.String() == models.RoleSuperAdmin.String() {
 			return models.UserCore{}, utils.ResponseError{
 				Code:    http.StatusForbidden,
 				Message: consts.ErrAccessDenied,
 			}
 		}
-	case models.RoleTeacher:
-		if user.Role.String() != models.RoleTeacher.String() {
-			return models.UserCore{}, utils.ResponseError{
-				Code:    http.StatusForbidden,
-				Message: consts.ErrAccessDenied,
-			}
-		}
-	case models.RoleParent:
-		if user.Role.String() != models.RoleParent.String() {
-			return models.UserCore{}, utils.ResponseError{
-				Code:    http.StatusForbidden,
-				Message: consts.ErrAccessDenied,
-			}
-		}
-	case models.RoleStudent:
-		if user.Role.String() != models.RoleStudent.String() {
+	case models.RoleUser:
+		if user.Role.String() != models.RoleUser.String() {
 			return models.UserCore{}, utils.ResponseError{
 				Code:    http.StatusForbidden,
 				Message: consts.ErrAccessDenied,
@@ -151,22 +137,7 @@ func (u UserServiceImpl) GetUserById(id uint, clientRole models.Role) (models.Us
 	}
 	// checking the client role for the possibility of getting a user
 	switch clientRole {
-	case models.RoleParent:
-		if user.Role.String() != models.RoleStudent.String() {
-			return models.UserCore{}, utils.ResponseError{
-				Code:    http.StatusForbidden,
-				Message: consts.ErrAccessDenied,
-			}
-		}
-	case models.RoleTeacher:
-		if user.Role.String() == models.RoleUnitAdmin.String() ||
-			user.Role.String() == models.RoleSuperAdmin.String() {
-			return models.UserCore{}, utils.ResponseError{
-				Code:    http.StatusForbidden,
-				Message: consts.ErrAccessDenied,
-			}
-		}
-	case models.RoleUnitAdmin:
+	case models.RoleAdmin:
 		if user.Role.String() == models.RoleSuperAdmin.String() {
 			return models.UserCore{}, utils.ResponseError{
 				Code:    http.StatusForbidden,
@@ -185,9 +156,9 @@ func (u UserServiceImpl) GetAllUsers(
 ) (users []models.UserCore, countRows uint, err error) {
 	// checking the client role for the possibility of getting a users
 	switch clientRole {
-	case models.RoleUnitAdmin:
+	case models.RoleAdmin:
 		for _, role := range roles {
-			if role.String() == models.RoleSuperAdmin.String() || role.String() == models.RoleUnitAdmin.String() {
+			if role.String() == models.RoleSuperAdmin.String() || role.String() == models.RoleAdmin.String() {
 				return []models.UserCore{}, 0, utils.ResponseError{
 					Code:    http.StatusForbidden,
 					Message: consts.ErrAccessDenied,

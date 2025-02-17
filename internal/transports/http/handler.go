@@ -6,35 +6,17 @@ import (
 )
 
 type Handlers struct {
-	ProjectHandler     ProjectHandler
-	AvatarHandler      AvatarHandler
-	AuthHandler        AuthHandler
-	ApplicationHandler ApplicationHandler
-	SolutionHandler    SolutionHandler
+	AvatarHandler   AvatarHandler
+	SolutionHandler SolutionHandler
 }
 
 func SetupHandlers(
 	loggers logger.Loggers,
-	projectService services.ProjectService,
-	authService services.AuthService,
-	applicationService services.ApplicationService,
 	solutionService services.SolutionService,
 ) Handlers {
 	return Handlers{
-		ProjectHandler: ProjectHandler{
-			loggers:        loggers,
-			projectService: projectService,
-		},
 		AvatarHandler: AvatarHandler{
 			loggers: loggers,
-		},
-		AuthHandler: AuthHandler{
-			loggers:     loggers,
-			authService: authService,
-		},
-		ApplicationHandler: ApplicationHandler{
-			loggers:            loggers,
-			applicationService: applicationService,
 		},
 		SolutionHandler: SolutionHandler{
 			loggers:         loggers,

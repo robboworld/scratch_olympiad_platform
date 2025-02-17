@@ -152,10 +152,8 @@ func (u UserGatewayImpl) GetAllUsers(
 	var count int64
 	if len(role) == 0 {
 		role = append(role,
-			models.RoleStudent,
-			models.RoleParent,
-			models.RoleTeacher,
-			models.RoleUnitAdmin,
+			models.RoleUser,
+			models.RoleAdmin,
 		)
 	}
 	result := u.postgresClient.Db.Limit(limit).Offset(offset).

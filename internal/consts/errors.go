@@ -26,7 +26,6 @@ const (
 // http code 403
 const (
 	ErrUserIsNotActive         = "user is not active. please check your email"
-	ErrProjectPageIsBanned     = "the projectPage is banned. no access"
 	ErrAccessDenied            = "access denied"
 	ErrDoesNotMatchAgeCategory = "does not match the age category"
 )
