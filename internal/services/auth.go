@@ -159,19 +159,29 @@ func (a AuthServiceImpl) SignUp(newUser models.UserCore) error {
 			Message: consts.ErrShortPassword,
 		}
 	}
-	country, err := a.countryGateway.GetCountryByName(newUser.Country)
+	country, err := a.countryGateway.GetCountryById(newUser.CountryID)
 	if err != nil {
 		return err
 	}
-	exist, err = a.regionGateway.DoesExistRegion(country.ID, 0, newUser.Region)
-	if err != nil {
-		return err
-	}
-	if !exist {
-		return utils.ResponseError{
-			Code:    http.StatusBadRequest,
-			Message: consts.ErrRegionNotFoundInDB,
+	newUser.Country = country
+	if newUser.RegionID != nil {
+		if !country.HasRegions {
+			return utils.ResponseError{
+				Code:    http.StatusBadRequest,
+				Message: consts.ErrCountryHasNoRegions,
+			}
 		}
+		region, err := a.regionGateway.GetRegionById(*newUser.RegionID)
+		if err != nil {
+			return err
+		}
+		if newUser.CountryID != region.CountryID {
+			return utils.ResponseError{
+				Code:    http.StatusBadRequest,
+				Message: consts.ErrRegionNotInCountry,
+			}
+		}
+		newUser.Region = &region
 	}
 	activationToken := randstr.String(20)
 	activationByLink, err := a.settingsGateway.GetActivationByLink()

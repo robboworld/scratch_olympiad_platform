@@ -126,12 +126,12 @@ type ComplexityRoot struct {
 	NewUserResponse struct {
 		Birthdate      func(childComplexity int) int
 		City           func(childComplexity int) int
-		Country        func(childComplexity int) int
+		CountryID      func(childComplexity int) int
 		Email          func(childComplexity int) int
 		FullName       func(childComplexity int) int
 		FullNameNative func(childComplexity int) int
 		ID             func(childComplexity int) int
-		Region         func(childComplexity int) int
+		RegionID       func(childComplexity int) int
 		Role           func(childComplexity int) int
 	}
 
@@ -712,12 +712,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.NewUserResponse.City(childComplexity), true
 
-	case "NewUserResponse.country":
-		if e.complexity.NewUserResponse.Country == nil {
+	case "NewUserResponse.countryId":
+		if e.complexity.NewUserResponse.CountryID == nil {
 			break
 		}
 
-		return e.complexity.NewUserResponse.Country(childComplexity), true
+		return e.complexity.NewUserResponse.CountryID(childComplexity), true
 
 	case "NewUserResponse.email":
 		if e.complexity.NewUserResponse.Email == nil {
@@ -747,12 +747,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.NewUserResponse.ID(childComplexity), true
 
-	case "NewUserResponse.region":
-		if e.complexity.NewUserResponse.Region == nil {
+	case "NewUserResponse.regionId":
+		if e.complexity.NewUserResponse.RegionID == nil {
 			break
 		}
 
-		return e.complexity.NewUserResponse.Region(childComplexity), true
+		return e.complexity.NewUserResponse.RegionID(childComplexity), true
 
 	case "NewUserResponse.role":
 		if e.complexity.NewUserResponse.Role == nil {
@@ -4422,7 +4422,7 @@ func (ec *executionContext) _Mutation_CreateEvent(ctx context.Context, field gra
 			return ec.resolvers.Mutation().CreateEvent(rctx, fc.Args["input"].(models.NewEvent))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "Admin"})
 			if err != nil {
 				return nil, err
 			}
@@ -4897,8 +4897,8 @@ func (ec *executionContext) fieldContext_NewUserResponse_fullNameNative(ctx cont
 	return fc, nil
 }
 
-func (ec *executionContext) _NewUserResponse_country(ctx context.Context, field graphql.CollectedField, obj *models.NewUserResponse) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_NewUserResponse_country(ctx, field)
+func (ec *executionContext) _NewUserResponse_countryId(ctx context.Context, field graphql.CollectedField, obj *models.NewUserResponse) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NewUserResponse_countryId(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -4911,7 +4911,7 @@ func (ec *executionContext) _NewUserResponse_country(ctx context.Context, field 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Country, nil
+		return obj.CountryID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4925,24 +4925,24 @@ func (ec *executionContext) _NewUserResponse_country(ctx context.Context, field 
 	}
 	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_NewUserResponse_country(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_NewUserResponse_countryId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "NewUserResponse",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
+			return nil, errors.New("field of type ID does not have child fields")
 		},
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _NewUserResponse_region(ctx context.Context, field graphql.CollectedField, obj *models.NewUserResponse) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_NewUserResponse_region(ctx, field)
+func (ec *executionContext) _NewUserResponse_regionId(ctx context.Context, field graphql.CollectedField, obj *models.NewUserResponse) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NewUserResponse_regionId(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -4955,31 +4955,28 @@ func (ec *executionContext) _NewUserResponse_region(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Region, nil
+		return obj.RegionID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalOID2ᚖstring(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_NewUserResponse_region(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_NewUserResponse_regionId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "NewUserResponse",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
+			return nil, errors.New("field of type ID does not have child fields")
 		},
 	}
 	return fc, nil
@@ -6091,8 +6088,32 @@ func (ec *executionContext) _Query_GetEventById(ctx context.Context, field graph
 		}
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetEventByID(rctx, fc.Args["id"].(string))
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Query().GetEventByID(rctx, fc.Args["id"].(string))
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "Admin", "User"})
+			if err != nil {
+				return nil, err
+			}
+			if ec.directives.HasRole == nil {
+				return nil, errors.New("directive hasRole is not implemented")
+			}
+			return ec.directives.HasRole(ctx, nil, directive0, roles)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, graphql.ErrorOnPath(ctx, err)
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(*models.EventDetailsHTTP); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.EventDetailsHTTP`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6162,8 +6183,32 @@ func (ec *executionContext) _Query_GetAllEvents(ctx context.Context, field graph
 		}
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetAllEvents(rctx, fc.Args["page"].(*int), fc.Args["pageSize"].(*int))
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Query().GetAllEvents(rctx, fc.Args["page"].(*int), fc.Args["pageSize"].(*int))
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "Admin", "User"})
+			if err != nil {
+				return nil, err
+			}
+			if ec.directives.HasRole == nil {
+				return nil, errors.New("directive hasRole is not implemented")
+			}
+			return ec.directives.HasRole(ctx, nil, directive0, roles)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, graphql.ErrorOnPath(ctx, err)
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(*models.EventHTTPList); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.EventHTTPList`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -7339,9 +7384,9 @@ func (ec *executionContext) _UserHttp_country(ctx context.Context, field graphql
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*models.CountryHTTP)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalNCountryHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐCountryHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_UserHttp_country(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -7351,7 +7396,19 @@ func (ec *executionContext) fieldContext_UserHttp_country(ctx context.Context, f
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_CountryHttp_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_CountryHttp_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_CountryHttp_updatedAt(ctx, field)
+			case "name":
+				return ec.fieldContext_CountryHttp_name(ctx, field)
+			case "hasRegions":
+				return ec.fieldContext_CountryHttp_hasRegions(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CountryHttp", field.Name)
 		},
 	}
 	return fc, nil
@@ -7378,14 +7435,11 @@ func (ec *executionContext) _UserHttp_region(ctx context.Context, field graphql.
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*models.RegionHTTP)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalORegionHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRegionHTTP(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_UserHttp_region(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -7395,7 +7449,15 @@ func (ec *executionContext) fieldContext_UserHttp_region(ctx context.Context, fi
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_RegionHttp_id(ctx, field)
+			case "name":
+				return ec.fieldContext_RegionHttp_name(ctx, field)
+			case "countryId":
+				return ec.fieldContext_RegionHttp_countryId(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type RegionHttp", field.Name)
 		},
 	}
 	return fc, nil
@@ -9595,7 +9657,7 @@ func (ec *executionContext) unmarshalInputNewUser(ctx context.Context, obj inter
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"email", "password", "role", "fullName", "fullNameNative", "country", "region", "city", "birthdate"}
+	fieldsInOrder := [...]string{"email", "password", "role", "fullName", "fullNameNative", "countryId", "regionId", "city", "birthdate"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -9647,24 +9709,24 @@ func (ec *executionContext) unmarshalInputNewUser(ctx context.Context, obj inter
 				return it, err
 			}
 			it.FullNameNative = data
-		case "country":
+		case "countryId":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("country"))
-			data, err := ec.unmarshalNString2string(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("countryId"))
+			data, err := ec.unmarshalNID2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Country = data
-		case "region":
+			it.CountryID = data
+		case "regionId":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("region"))
-			data, err := ec.unmarshalNString2string(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("regionId"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Region = data
+			it.RegionID = data
 		case "city":
 			var err error
 
@@ -9734,7 +9796,7 @@ func (ec *executionContext) unmarshalInputSignUp(ctx context.Context, obj interf
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"email", "password", "fullName", "fullNameNative", "country", "region", "city", "birthdate"}
+	fieldsInOrder := [...]string{"email", "password", "fullName", "fullNameNative", "countryId", "regionId", "city", "birthdate"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -9777,24 +9839,24 @@ func (ec *executionContext) unmarshalInputSignUp(ctx context.Context, obj interf
 				return it, err
 			}
 			it.FullNameNative = data
-		case "country":
+		case "countryId":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("country"))
-			data, err := ec.unmarshalNString2string(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("countryId"))
+			data, err := ec.unmarshalNID2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Country = data
-		case "region":
+			it.CountryID = data
+		case "regionId":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("region"))
-			data, err := ec.unmarshalNString2string(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("regionId"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Region = data
+			it.RegionID = data
 		case "city":
 			var err error
 
@@ -9891,7 +9953,7 @@ func (ec *executionContext) unmarshalInputUpdateUser(ctx context.Context, obj in
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"id", "email", "fullName", "fullNameNative", "country", "region", "city", "birthdate"}
+	fieldsInOrder := [...]string{"id", "email", "fullName", "fullNameNative", "countryId", "regionId", "city", "birthdate"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -9934,24 +9996,24 @@ func (ec *executionContext) unmarshalInputUpdateUser(ctx context.Context, obj in
 				return it, err
 			}
 			it.FullNameNative = data
-		case "country":
+		case "countryId":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("country"))
-			data, err := ec.unmarshalNString2string(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("countryId"))
+			data, err := ec.unmarshalNID2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Country = data
-		case "region":
+			it.CountryID = data
+		case "regionId":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("region"))
-			data, err := ec.unmarshalNString2string(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("regionId"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Region = data
+			it.RegionID = data
 		case "city":
 			var err error
 
@@ -10595,16 +10657,13 @@ func (ec *executionContext) _NewUserResponse(ctx context.Context, sel ast.Select
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "country":
-			out.Values[i] = ec._NewUserResponse_country(ctx, field, obj)
+		case "countryId":
+			out.Values[i] = ec._NewUserResponse_countryId(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "region":
-			out.Values[i] = ec._NewUserResponse_region(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
+		case "regionId":
+			out.Values[i] = ec._NewUserResponse_regionId(ctx, field, obj)
 		case "city":
 			out.Values[i] = ec._NewUserResponse_city(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -11333,9 +11392,6 @@ func (ec *executionContext) _UserHttp(ctx context.Context, sel ast.SelectionSet,
 			}
 		case "region":
 			out.Values[i] = ec._UserHttp_region(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
 		case "city":
 			out.Values[i] = ec._UserHttp_city(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -12676,6 +12732,22 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
+func (ec *executionContext) unmarshalOID2ᚖstring(ctx context.Context, v interface{}) (*string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalID(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOID2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	res := graphql.MarshalID(*v)
+	return res
+}
+
 func (ec *executionContext) unmarshalOInt2ᚖint(ctx context.Context, v interface{}) (*int, error) {
 	if v == nil {
 		return nil, nil
@@ -12690,6 +12762,13 @@ func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.Sele
 	}
 	res := graphql.MarshalInt(*v)
 	return res
+}
+
+func (ec *executionContext) marshalORegionHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRegionHTTP(ctx context.Context, sel ast.SelectionSet, v *models.RegionHTTP) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._RegionHttp(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx context.Context, v interface{}) ([]models.Role, error) {

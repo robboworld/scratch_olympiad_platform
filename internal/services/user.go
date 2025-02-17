@@ -56,19 +56,29 @@ func (u UserServiceImpl) CreateUser(user models.UserCore, clientRole models.Role
 			Message: consts.ErrShortPassword,
 		}
 	}
-	country, err := u.countryGateway.GetCountryByName(user.Country)
+	country, err := u.countryGateway.GetCountryById(user.CountryID)
 	if err != nil {
 		return models.UserCore{}, err
 	}
-	exist, err = u.regionGateway.DoesExistRegion(country.ID, 0, user.Region)
-	if err != nil {
-		return models.UserCore{}, err
-	}
-	if !exist {
-		return models.UserCore{}, utils.ResponseError{
-			Code:    http.StatusBadRequest,
-			Message: consts.ErrRegionNotFoundInDB,
+	user.Country = country
+	if newUser.RegionID != nil {
+		if !country.HasRegions {
+			return models.UserCore{}, utils.ResponseError{
+				Code:    http.StatusBadRequest,
+				Message: consts.ErrCountryHasNoRegions,
+			}
 		}
+		region, err := u.regionGateway.GetRegionById(*newUser.RegionID)
+		if err != nil {
+			return models.UserCore{}, err
+		}
+		if newUser.CountryID != region.CountryID {
+			return models.UserCore{}, utils.ResponseError{
+				Code:    http.StatusBadRequest,
+				Message: consts.ErrRegionNotInCountry,
+			}
+		}
+		newUser.Region = &region
 	}
 
 	passwordHash := utils.HashPassword(user.Password)
@@ -113,19 +123,29 @@ func (u UserServiceImpl) UpdateUser(user models.UserCore, clientRole models.Role
 			Message: consts.ErrEmailAlreadyInUse,
 		}
 	}
-	country, err := u.countryGateway.GetCountryByName(user.Country)
+	country, err := u.countryGateway.GetCountryById(user.CountryID)
 	if err != nil {
 		return models.UserCore{}, err
 	}
-	exist, err = u.regionGateway.DoesExistRegion(country.ID, 0, user.Region)
-	if err != nil {
-		return models.UserCore{}, err
-	}
-	if !exist {
-		return models.UserCore{}, utils.ResponseError{
-			Code:    http.StatusBadRequest,
-			Message: consts.ErrRegionNotFoundInDB,
+	user.Country = country
+	if user.RegionID != nil {
+		if !country.HasRegions {
+			return models.UserCore{}, utils.ResponseError{
+				Code:    http.StatusBadRequest,
+				Message: consts.ErrCountryHasNoRegions,
+			}
 		}
+		region, err := u.regionGateway.GetRegionById(*user.RegionID)
+		if err != nil {
+			return models.UserCore{}, err
+		}
+		if user.CountryID != region.CountryID {
+			return models.UserCore{}, utils.ResponseError{
+				Code:    http.StatusBadRequest,
+				Message: consts.ErrRegionNotInCountry,
+			}
+		}
+		user.Region = &region
 	}
 	return u.userGateway.UpdateUser(user)
 }

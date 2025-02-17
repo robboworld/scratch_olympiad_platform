@@ -110,7 +110,8 @@ func (u UserGatewayImpl) UpdateUser(user models.UserCore) (models.UserCore, erro
 			"email":            user.Email,
 			"full_name":        user.FullName,
 			"full_name_native": user.FullNameNative,
-			"country":          user.Country,
+			"country_id":       user.CountryID,
+			"region_id":        user.RegionID,
 			"city":             user.City,
 			"birthdate":        user.Birthdate,
 		}).Error; err != nil {
@@ -129,7 +130,7 @@ func (u UserGatewayImpl) UpdateUser(user models.UserCore) (models.UserCore, erro
 }
 
 func (u UserGatewayImpl) GetUserById(id uint) (user models.UserCore, err error) {
-	if err = u.postgresClient.Db.First(&user, id).Error; err != nil {
+	if err = u.postgresClient.Db.Preload("Country").Preload("Region").First(&user, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return models.UserCore{}, utils.ResponseError{
 				Code:    http.StatusBadRequest,
@@ -156,7 +157,7 @@ func (u UserGatewayImpl) GetAllUsers(
 			models.RoleAdmin,
 		)
 	}
-	result := u.postgresClient.Db.Limit(limit).Offset(offset).
+	result := u.postgresClient.Db.Preload("Country").Preload("Region").Limit(limit).Offset(offset).
 		Where("is_active = ? AND (role) IN ?", isActive, role).Find(&users)
 	if result.Error != nil {
 		return []models.UserCore{}, 0, utils.ResponseError{

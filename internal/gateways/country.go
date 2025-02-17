@@ -11,17 +11,16 @@ import (
 )
 
 type CountryGateway interface {
-	GetCountryByName(name string) (country models.CountryCore, err error)
+	GetCountryById(id uint) (country models.CountryCore, err error)
 	GetAllCountries(offset, limit int) (countries []models.CountryCore, countRows uint, err error)
-	DoesExistCountry(id uint, name string) (bool, error)
 }
 
 type CountryGatewayImpl struct {
 	postgresClient db.PostgresClient
 }
 
-func (c CountryGatewayImpl) GetCountryByName(name string) (country models.CountryCore, err error) {
-	if err = c.postgresClient.Db.Where("name = ?", name).Take(&country).Error; err != nil {
+func (c CountryGatewayImpl) GetCountryById(id uint) (country models.CountryCore, err error) {
+	if err = c.postgresClient.Db.Where("id = ?", id).Take(&country).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return country, utils.ResponseError{
 				Code:    http.StatusBadRequest,
@@ -47,18 +46,4 @@ func (c CountryGatewayImpl) GetAllCountries(offset, limit int) (countries []mode
 	}
 	result.Count(&count)
 	return countries, uint(count), result.Error
-}
-
-func (c CountryGatewayImpl) DoesExistCountry(id uint, name string) (bool, error) {
-	if err := c.postgresClient.Db.Where("id != ? AND name = ?", id, name).
-		Take(&models.CountryCore{}).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return false, nil
-		}
-		return false, utils.ResponseError{
-			Code:    http.StatusInternalServerError,
-			Message: err.Error(),
-		}
-	}
-	return true, nil
 }

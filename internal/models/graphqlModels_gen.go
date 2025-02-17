@@ -88,27 +88,27 @@ type NewEvent struct {
 }
 
 type NewUser struct {
-	Email          string `json:"email"`
-	Password       string `json:"password"`
-	Role           Role   `json:"role"`
-	FullName       string `json:"fullName"`
-	FullNameNative string `json:"fullNameNative"`
-	Country        string `json:"country"`
-	Region         string `json:"region"`
-	City           string `json:"city"`
-	Birthdate      string `json:"birthdate"`
+	Email          string  `json:"email"`
+	Password       string  `json:"password"`
+	Role           Role    `json:"role"`
+	FullName       string  `json:"fullName"`
+	FullNameNative string  `json:"fullNameNative"`
+	CountryID      string  `json:"countryId"`
+	RegionID       *string `json:"regionId,omitempty"`
+	City           string  `json:"city"`
+	Birthdate      string  `json:"birthdate"`
 }
 
 type NewUserResponse struct {
-	ID             string `json:"id"`
-	Email          string `json:"email"`
-	Role           int    `json:"role"`
-	FullName       string `json:"fullName"`
-	FullNameNative string `json:"fullNameNative"`
-	Country        string `json:"country"`
-	Region         string `json:"region"`
-	City           string `json:"city"`
-	Birthdate      string `json:"birthdate"`
+	ID             string  `json:"id"`
+	Email          string  `json:"email"`
+	Role           int     `json:"role"`
+	FullName       string  `json:"fullName"`
+	FullNameNative string  `json:"fullNameNative"`
+	CountryID      string  `json:"countryId"`
+	RegionID       *string `json:"regionId,omitempty"`
+	City           string  `json:"city"`
+	Birthdate      string  `json:"birthdate"`
 }
 
 type NominationHTTP struct {
@@ -155,14 +155,14 @@ type SignInResponse struct {
 }
 
 type SignUp struct {
-	Email          string `json:"email"`
-	Password       string `json:"password"`
-	FullName       string `json:"fullName"`
-	FullNameNative string `json:"fullNameNative"`
-	Country        string `json:"country"`
-	Region         string `json:"region"`
-	City           string `json:"city"`
-	Birthdate      string `json:"birthdate"`
+	Email          string  `json:"email"`
+	Password       string  `json:"password"`
+	FullName       string  `json:"fullName"`
+	FullNameNative string  `json:"fullNameNative"`
+	CountryID      string  `json:"countryId"`
+	RegionID       *string `json:"regionId,omitempty"`
+	City           string  `json:"city"`
+	Birthdate      string  `json:"birthdate"`
 }
 
 type UpdateEvent struct {
@@ -174,30 +174,30 @@ type UpdateEvent struct {
 }
 
 type UpdateUser struct {
-	ID             string `json:"id"`
-	Email          string `json:"email"`
-	FullName       string `json:"fullName"`
-	FullNameNative string `json:"fullNameNative"`
-	Country        string `json:"country"`
-	Region         string `json:"region"`
-	City           string `json:"city"`
-	Birthdate      string `json:"birthdate"`
+	ID             string  `json:"id"`
+	Email          string  `json:"email"`
+	FullName       string  `json:"fullName"`
+	FullNameNative string  `json:"fullNameNative"`
+	CountryID      string  `json:"countryId"`
+	RegionID       *string `json:"regionId,omitempty"`
+	City           string  `json:"city"`
+	Birthdate      string  `json:"birthdate"`
 }
 
 type UserHTTP struct {
-	ID             string `json:"id"`
-	CreatedAt      string `json:"createdAt"`
-	UpdatedAt      string `json:"updatedAt"`
-	Email          string `json:"email"`
-	Password       string `json:"password"`
-	Role           Role   `json:"role"`
-	FullName       string `json:"fullName"`
-	FullNameNative string `json:"fullNameNative"`
-	Country        string `json:"country"`
-	Region         string `json:"region"`
-	City           string `json:"city"`
-	Birthdate      string `json:"birthdate"`
-	IsActive       bool   `json:"isActive"`
+	ID             string       `json:"id"`
+	CreatedAt      string       `json:"createdAt"`
+	UpdatedAt      string       `json:"updatedAt"`
+	Email          string       `json:"email"`
+	Password       string       `json:"password"`
+	Role           Role         `json:"role"`
+	FullName       string       `json:"fullName"`
+	FullNameNative string       `json:"fullNameNative"`
+	Country        *CountryHTTP `json:"country"`
+	Region         *RegionHTTP  `json:"region,omitempty"`
+	City           string       `json:"city"`
+	Birthdate      string       `json:"birthdate"`
+	IsActive       bool         `json:"isActive"`
 }
 
 type UsersList struct {

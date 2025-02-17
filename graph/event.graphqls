@@ -44,11 +44,11 @@ type EventHttpList {
 }
 
 extend type Query {
-    GetEventById(id: ID!): EventDetailsHttp!
-    GetAllEvents(page: Int, pageSize: Int): EventHttpList!
+    GetEventById(id: ID!): EventDetailsHttp! @hasRole(roles: [SuperAdmin, Admin, User])
+    GetAllEvents(page: Int, pageSize: Int): EventHttpList! @hasRole(roles: [SuperAdmin, Admin, User])
 }
 
 extend type Mutation {
-    CreateEvent(input: NewEvent!): EventDetailsHttp! @hasRole(roles: [SuperAdmin])
+    CreateEvent(input: NewEvent!): EventDetailsHttp! @hasRole(roles: [SuperAdmin, Admin])
     UpdateEvent(input: UpdateEvent!): EventDetailsHttp! @hasRole(roles: [SuperAdmin])
 }

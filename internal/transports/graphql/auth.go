@@ -6,7 +6,9 @@ package resolvers
 
 import (
 	"context"
+	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/robboworld/scratch_olympiad_platform/internal/consts"
@@ -29,14 +31,43 @@ func (r *mutationResolver) SignUp(ctx context.Context, input models.SignUp) (*mo
 			},
 		}
 	}
+	countryIdInt, err := strconv.Atoi(input.CountryID)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return nil, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": utils.ResponseError{
+					Code:    http.StatusBadRequest,
+					Message: consts.ErrAtoi,
+				},
+			},
+		}
+	}
+	var regionId *uint
+	if input.RegionID != nil {
+		regionIdInt, err := strconv.Atoi(utils.StringPointerToString(input.RegionID))
+		if err != nil {
+			r.loggers.Err.Printf("%s", err.Error())
+			return nil, &gqlerror.Error{
+				Extensions: map[string]interface{}{
+					"err": utils.ResponseError{
+						Code:    http.StatusBadRequest,
+						Message: consts.ErrAtoi,
+					},
+				},
+			}
+		}
+		regionIdUint := uint(regionIdInt)
+		regionId = &regionIdUint
+	}
 	newUser := models.UserCore{
 		Email:          input.Email,
 		Password:       input.Password,
 		FullName:       input.FullName,
 		FullNameNative: input.FullNameNative,
-		Country:        input.Country,
+		CountryID:      uint(countryIdInt),
+		RegionID:       regionId,
 		City:           input.City,
-		Region:         input.Region,
 		Birthdate:      birthdate,
 		Role:           models.RoleUser,
 		IsActive:       false,
@@ -151,6 +182,7 @@ func (r *queryResolver) Me(ctx context.Context) (*models.UserHTTP, error) {
 			},
 		}
 	}
+	fmt.Println(user)
 	userHttp := models.UserHTTP{}
 	userHttp.FromCore(user)
 	return &userHttp, nil

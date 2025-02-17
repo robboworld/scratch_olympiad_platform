@@ -2,6 +2,7 @@ package gateways
 
 import (
 	"errors"
+	"github.com/robboworld/scratch_olympiad_platform/internal/consts"
 	"github.com/robboworld/scratch_olympiad_platform/internal/db"
 	"github.com/robboworld/scratch_olympiad_platform/internal/models"
 	"github.com/robboworld/scratch_olympiad_platform/pkg/utils"
@@ -12,7 +13,7 @@ import (
 type RegionGateway interface {
 	GetAllRegions(offset, limit int) (regions []models.RegionCore, countRows uint, err error)
 	GetRegionsByCountryId(countryId uint, offset, limit int) (regions []models.RegionCore, countRows uint, err error)
-	DoesExistRegion(countryId, id uint, name string) (bool, error)
+	GetRegionById(id uint) (region models.RegionCore, err error)
 }
 
 type RegionGatewayImpl struct {
@@ -46,16 +47,18 @@ func (r RegionGatewayImpl) GetRegionsByCountryId(countryId uint, offset, limit i
 	return regions, uint(count), result.Error
 }
 
-func (r RegionGatewayImpl) DoesExistRegion(countryId, id uint, name string) (bool, error) {
-	if err := r.postgresClient.Db.Where("id != ? AND name = ? AND country_id = ?", id, name, countryId).
-		Take(&models.RegionCore{}).Error; err != nil {
+func (r RegionGatewayImpl) GetRegionById(id uint) (region models.RegionCore, err error) {
+	if err = r.postgresClient.Db.Where("id = ?", id).Take(&region).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return false, nil
+			return region, utils.ResponseError{
+				Code:    http.StatusBadRequest,
+				Message: consts.ErrRegionNotFoundInDB,
+			}
 		}
-		return false, utils.ResponseError{
+		return region, utils.ResponseError{
 			Code:    http.StatusInternalServerError,
 			Message: err.Error(),
 		}
 	}
-	return true, nil
+	return region, nil
 }

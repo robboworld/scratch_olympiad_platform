@@ -10,6 +10,15 @@ type CountryCore struct {
 	HasRegions bool   `gorm:"default:true"`
 }
 
+func (c *CountryHTTP) ToCore() CountryCore {
+	id, _ := strconv.ParseUint(c.ID, 10, 64)
+	return CountryCore{
+		ID:         uint(id),
+		Name:       c.Name,
+		HasRegions: c.HasRegions,
+	}
+}
+
 func (c *CountryHTTP) FromCore(country CountryCore) {
 	c.ID = strconv.Itoa(int(country.ID))
 	c.Name = country.Name

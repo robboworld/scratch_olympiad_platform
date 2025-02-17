@@ -4,6 +4,8 @@ package consts
 const (
 	ErrCountryNotFoundInDB         = "country not found"
 	ErrRegionNotFoundInDB          = "region not found"
+	ErrRegionNotInCountry          = "region not in country"
+	ErrCountryHasNoRegions         = "country has no regions"
 	ErrNominationNotFoundInDB      = "nomination not found"
 	ErrEmailAlreadyInUse           = "email already in use"
 	ErrAtoi                        = "string to int error"

@@ -3,8 +3,8 @@ input SignUp {
 	password: String!
 	fullName: String!
 	fullNameNative: String!
-	country: String!
-	region: String!
+	countryId: ID!
+	regionId: ID
 	city: String!
 	birthdate: Timestamp!
 }

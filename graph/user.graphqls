@@ -7,8 +7,8 @@ type UserHttp {
 	role: Role!
 	fullName: String!
 	fullNameNative: String!
-	country: String!
-	region: String!
+	country: CountryHttp!
+	region: RegionHttp
 	city: String!
 	birthdate: Timestamp!
 	isActive: Boolean!
@@ -27,8 +27,8 @@ input NewUser {
 	role: Role!
 	fullName: String!
 	fullNameNative: String!
-	country: String!
-	region: String!
+	countryId: ID!
+	regionId: ID
 	city: String!
 	birthdate: Timestamp!
 }
@@ -38,8 +38,8 @@ input UpdateUser {
 	email: String!
 	fullName: String!
 	fullNameNative: String!
-	country: String!
-	region: String!
+	countryId: ID!
+	regionId: ID
 	city: String!
 	birthdate: Timestamp!
 }
@@ -50,8 +50,8 @@ type NewUserResponse {
 	role: Int!
 	fullName: String!
 	fullNameNative: String!
-	country: String!
-	region: String!
+	countryId: ID!
+	regionId: ID
 	city: String!
 	birthdate: Timestamp!
 }
