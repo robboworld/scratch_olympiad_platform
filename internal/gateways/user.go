@@ -104,23 +104,30 @@ func (u UserGatewayImpl) DeleteUser(id uint) (err error) {
 }
 
 func (u UserGatewayImpl) UpdateUser(user models.UserCore) (models.UserCore, error) {
-	if err := u.postgresClient.Db.Model(&user).Clauses(clause.Returning{}).
-		Take(&models.UserCore{}, user.ID).
-		Updates(map[string]interface{}{
-			"email":            user.Email,
-			"full_name":        user.FullName,
-			"full_name_native": user.FullNameNative,
-			"country_id":       user.CountryID,
-			"region_id":        user.RegionID,
-			"city":             user.City,
-			"birthdate":        user.Birthdate,
-		}).Error; err != nil {
+	updateStruct := map[string]interface{}{
+		"email":            user.Email,
+		"full_name":        user.FullName,
+		"full_name_native": user.FullNameNative,
+		"country_id":       user.CountryID,
+		"region_id":        user.RegionID,
+		"city":             user.City,
+		"birthdate":        user.Birthdate,
+	}
+
+	if err := u.postgresClient.Db.Model(&user).Clauses(clause.Returning{}).Updates(updateStruct).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return models.UserCore{}, utils.ResponseError{
 				Code:    http.StatusBadRequest,
 				Message: consts.ErrNotFoundInDB,
 			}
 		}
+		return models.UserCore{}, utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+		}
+	}
+	if err := u.postgresClient.Db.Preload("Country").Preload("Region").
+		First(&user, user.ID).Error; err != nil {
 		return models.UserCore{}, utils.ResponseError{
 			Code:    http.StatusInternalServerError,
 			Message: err.Error(),

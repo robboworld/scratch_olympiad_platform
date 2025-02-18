@@ -61,6 +61,12 @@ func (u UserServiceImpl) CreateUser(user models.UserCore, clientRole models.Role
 		return models.UserCore{}, err
 	}
 	user.Country = country
+	if user.RegionID == nil && country.HasRegions {
+		return models.UserCore{}, utils.ResponseError{
+			Code:    http.StatusBadRequest,
+			Message: consts.ErrRegionRequired,
+		}
+	}
 	if user.RegionID != nil {
 		if !country.HasRegions {
 			return models.UserCore{}, utils.ResponseError{
@@ -128,6 +134,12 @@ func (u UserServiceImpl) UpdateUser(user models.UserCore, clientRole models.Role
 		return models.UserCore{}, err
 	}
 	user.Country = country
+	if user.RegionID == nil && country.HasRegions {
+		return models.UserCore{}, utils.ResponseError{
+			Code:    http.StatusBadRequest,
+			Message: consts.ErrRegionRequired,
+		}
+	}
 	if user.RegionID != nil {
 		if !country.HasRegions {
 			return models.UserCore{}, utils.ResponseError{

@@ -164,6 +164,12 @@ func (a AuthServiceImpl) SignUp(newUser models.UserCore) error {
 		return err
 	}
 	newUser.Country = country
+	if newUser.RegionID == nil && country.HasRegions {
+		return utils.ResponseError{
+			Code:    http.StatusBadRequest,
+			Message: consts.ErrRegionRequired,
+		}
+	}
 	if newUser.RegionID != nil {
 		if !country.HasRegions {
 			return utils.ResponseError{
