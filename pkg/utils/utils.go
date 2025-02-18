@@ -66,6 +66,21 @@ func DoesHaveRole(clientRole models.Role, roles []models.Role) bool {
 	return false
 }
 
+func DoesHaveEventRole(userEventsRoles []models.EventRole, allowedEventsRoles []models.EventRole) bool {
+	userRolesSet := make(map[models.EventRole]struct{}, len(userEventsRoles))
+	for _, role := range userEventsRoles {
+		userRolesSet[role] = struct{}{}
+	}
+
+	for _, allowedRole := range allowedEventsRoles {
+		if _, exists := userRolesSet[allowedRole]; exists {
+			return true
+		}
+	}
+
+	return false
+}
+
 func GetHashString(s string) string {
 	h := sha1.New()
 	h.Write([]byte(s))
