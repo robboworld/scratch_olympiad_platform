@@ -36,20 +36,6 @@ type ApplicationHTTPList struct {
 	CountRows    int                `json:"countRows"`
 }
 
-type ApplicationPayloadHTTP struct {
-	Author                        *UserHTTP `json:"author"`
-	Nomination                    string    `json:"nomination"`
-	AlgorithmicTaskLink           string    `json:"algorithmicTaskLink"`
-	AlgorithmicTaskFile           string    `json:"algorithmicTaskFile"`
-	CreativeTaskLink              string    `json:"creativeTaskLink"`
-	CreativeTaskFile              string    `json:"creativeTaskFile"`
-	EngineeringTaskFile           string    `json:"engineeringTaskFile"`
-	EngineeringTaskCloudLink      string    `json:"engineeringTaskCloudLink"`
-	EngineeringTaskVideo          string    `json:"engineeringTaskVideo"`
-	EngineeringTaskVideoCloudLink string    `json:"engineeringTaskVideoCloudLink"`
-	Note                          string    `json:"note"`
-}
-
 type CountryHTTP struct {
 	ID        string `json:"id"`
 	CreatedAt string `json:"createdAt"`

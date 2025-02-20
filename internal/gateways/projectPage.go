@@ -1,6 +1,8 @@
 package gateways
 
 import (
+	"errors"
+	"github.com/robboworld/scratch_olympiad_platform/internal/consts"
 	"github.com/robboworld/scratch_olympiad_platform/internal/db"
 	"github.com/robboworld/scratch_olympiad_platform/internal/models"
 	"github.com/robboworld/scratch_olympiad_platform/pkg/utils"
@@ -56,8 +58,8 @@ func (p ProjectPageGatewayImpl) SetIsBanned(id uint, isBanned bool) error {
 
 func (p ProjectPageGatewayImpl) GetProjectPagesByAuthorId(id uint, offset, limit int) (projectPages []models.ProjectPageCore, countRows uint, err error) {
 	var count int64
-	result := p.postgresClient.Db.Limit(limit).Offset(offset).Where("author_id = ? AND is_banned = ?", id, false).
-		Find(&projectPages).Preload("Project")
+	result := p.postgresClient.Db.Preload("Project").Limit(limit).Offset(offset).Where("author_id = ? AND is_banned = ?", id, false).
+		Find(&projectPages)
 	if result.Error != nil {
 		return []models.ProjectPageCore{}, 0, utils.ResponseError{
 			Code:    http.StatusInternalServerError,
@@ -70,7 +72,7 @@ func (p ProjectPageGatewayImpl) GetProjectPagesByAuthorId(id uint, offset, limit
 
 func (p ProjectPageGatewayImpl) GetAllProjectPages(offset, limit int) (projectPages []models.ProjectPageCore, countRows uint, err error) {
 	var count int64
-	result := p.postgresClient.Db.Limit(limit).Offset(offset).Find(&projectPages).Preload("Project")
+	result := p.postgresClient.Db.Preload("Project").Limit(limit).Offset(offset).Find(&projectPages)
 	if result.Error != nil {
 		return []models.ProjectPageCore{}, 0, utils.ResponseError{
 			Code:    http.StatusInternalServerError,
@@ -176,6 +178,12 @@ func (p ProjectPageGatewayImpl) UpdateProjectPage(projectPage models.ProjectPage
 
 func (p ProjectPageGatewayImpl) GetProjectPageById(id uint) (projectPage models.ProjectPageCore, err error) {
 	if err = p.postgresClient.Db.Model(&models.ProjectPageCore{}).Preload("Project").First(&projectPage, id).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return models.ProjectPageCore{}, utils.ResponseError{
+				Code:    http.StatusBadRequest,
+				Message: consts.ErrNotFoundInDB,
+			}
+		}
 		return projectPage, utils.ResponseError{
 			Code:    http.StatusInternalServerError,
 			Message: err.Error(),

@@ -78,7 +78,7 @@ func (a ApplicationGatewayImpl) GetApplicationsByAuthorId(id uint, offset, limit
 }
 func (a ApplicationGatewayImpl) GetAllApplications(offset, limit int) (applications []models.ApplicationCore, countRows uint, err error) {
 	var count int64
-	result := a.postgresClient.Db.Limit(limit).Offset(offset).Find(&applications)
+	result := a.postgresClient.Db.Preload("Author").Limit(limit).Offset(offset).Find(&applications)
 	if result.Error != nil {
 		return []models.ApplicationCore{}, 0, utils.ResponseError{
 			Code:    http.StatusInternalServerError,

@@ -23,6 +23,7 @@ api_urls:
   getLogin: "https://edx-test.ru/login"
   getRegistration: "https://edx-test.ru/register?next=%2F"
   create_application: "https://script.google.com/macros/s/AKfycbxsTNFg4n-q2vYxAMZ5JWef2BEuF5SPMkt3n56mNmrYOqn9SEqoGlCC2jixIShpSFO0HA/exec"
+  export_all_applications: "https://script.google.com/macros/s/AKfycbxsTNFg4n-q2vYxAMZ5JWef2BEuF5SPMkt3n56mNmrYOqn9SEqoGlCC2jixIShpSFO0HA/exec?appList=true"
 
 cors:
   allowed_origins: [
