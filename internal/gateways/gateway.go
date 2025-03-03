@@ -16,6 +16,7 @@ type Gateways struct {
 	Region              RegionGateway
 	Solution            SolutionGateway
 	Event               EventGateway
+	EventTranslation    EventTranslationGateway
 	EventCountryGateway EventCountryGateway
 	EventRegionGateway  EventRegionGateway
 	EventUserGateway    EventUserGateway
@@ -32,6 +33,7 @@ func SetupGateways(pc db.PostgresClient) Gateways {
 		Region:              RegionGatewayImpl{pc},
 		Solution:            SolutionGatewayImpl{pc},
 		Event:               EventGatewayImpl{pc},
+		EventTranslation:    EventTranslationGatewayImpl{pc},
 		EventCountryGateway: EventCountryGatewayImpl{pc},
 		EventRegionGateway:  EventRegionGatewayImpl{pc},
 		EventUserGateway:    EventUserGatewayImpl{pc},

@@ -67,6 +67,19 @@ type EventHTTPList struct {
 	CountRows int          `json:"countRows"`
 }
 
+type EventRoleList struct {
+	Roles []EventRole `json:"roles"`
+}
+
+type EventTranslationHTTP struct {
+	ID          string `json:"id"`
+	CreatedAt   string `json:"createdAt"`
+	UpdatedAt   string `json:"updatedAt"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	EventID     string `json:"eventId"`
+}
+
 type NewApplication struct {
 	Nomination                    string  `json:"nomination"`
 	AlgorithmicTaskLink           *string `json:"algorithmicTaskLink,omitempty"`
@@ -85,6 +98,12 @@ type NewEvent struct {
 	Description string `json:"description"`
 	StartDate   string `json:"startDate"`
 	EndDate     string `json:"endDate"`
+}
+
+type NewEventTranslation struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	EventID     string `json:"eventId"`
 }
 
 type NewUser struct {
@@ -171,6 +190,12 @@ type UpdateEvent struct {
 	Description string `json:"description"`
 	StartDate   string `json:"startDate"`
 	EndDate     string `json:"endDate"`
+}
+
+type UpdateEventTranslation struct {
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
 }
 
 type UpdateUser struct {

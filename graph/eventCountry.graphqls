@@ -1,5 +1,0 @@
-
-extend type Mutation {
-    SetCountryForEvent(eventId: ID!, countryId: ID!): Response! @hasRole(roles: [SuperAdmin, Admin])
-    UnsetCountryForEvent(eventId: ID!, countryId: ID!): Response! @hasRole(roles: [SuperAdmin, Admin])
-}

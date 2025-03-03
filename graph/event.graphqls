@@ -23,11 +23,26 @@ type EventDetailsHttp {
     endDate: Timestamp!
 }
 
+type EventTranslationHttp {
+    id: ID!
+    createdAt: Timestamp!
+    updatedAt: Timestamp!
+    name: String!
+    description: String!
+    eventId: ID!
+}
+
 input NewEvent {
     name: String!
     description: String!
     startDate: Timestamp!
     endDate: Timestamp!
+}
+
+input NewEventTranslation {
+    name: String!
+    description: String!
+    eventId: ID!
 }
 
 input UpdateEvent {
@@ -38,17 +53,45 @@ input UpdateEvent {
     endDate: Timestamp!
 }
 
+input UpdateEventTranslation {
+    id: ID!
+    name: String!
+    description: String!
+}
+
 type EventHttpList {
     events: [EventHttp!]!
     countRows: Int!
 }
 
+type EventRoleList {
+    roles: [EventRole!]!
+}
+
 extend type Query {
     GetEventById(id: ID!): EventDetailsHttp! @hasRole(roles: [SuperAdmin, Admin, User])
     GetAllEvents(page: Int, pageSize: Int): EventHttpList! @hasRole(roles: [SuperAdmin, Admin, User])
+    GetEventTranslationByEventId(eventId: ID!): EventTranslationHttp! @hasRole(roles: [SuperAdmin, Admin, User])
+    GetEventRolesByAccessToken(eventId: ID!): EventRoleList! @hasRole(roles: [SuperAdmin, Admin, User])
 }
 
 extend type Mutation {
     CreateEvent(input: NewEvent!): EventDetailsHttp! @hasRole(roles: [SuperAdmin, Admin])
     UpdateEvent(input: UpdateEvent!): EventDetailsHttp! @hasRole(roles: [SuperAdmin])
+
+    CreateEventTranslation(input: NewEventTranslation!): EventTranslationHttp! @hasRole(roles: [SuperAdmin, Admin, User])
+    UpdateEventTranslation(input: UpdateEventTranslation!): EventTranslationHttp! @hasRole(roles: [SuperAdmin, Admin, User])
+    DeleteEventTranslation(id: ID!): Response! @hasRole(roles: [SuperAdmin, Admin, User])
+
+    SetOrganizerForEvent(eventId: ID!, userId: ID!): Response! @hasRole(roles: [SuperAdmin, Admin])
+    SetModeratorForEvent(eventId: ID!, userId: ID!): Response! @hasRole(roles: [SuperAdmin, Admin, User])
+    SetExpertForEvent(eventId: ID!, userId: ID!): Response! @hasRole(roles: [SuperAdmin, Admin, User])
+    SetCountryForEvent(eventId: ID!, countryId: ID!): Response! @hasRole(roles: [SuperAdmin, Admin])
+    SetRegionForEvent(eventId: ID!, regionId: ID!): Response! @hasRole(roles: [SuperAdmin, Admin])
+
+    UnsetOrganizerForEvent(eventId: ID!, userId: ID!): Response! @hasRole(roles: [SuperAdmin, Admin])
+    UnsetModeratorForEvent(eventId: ID!, userId: ID!): Response! @hasRole(roles: [SuperAdmin, Admin, User])
+    UnsetExpertForEvent(eventId: ID!, userId: ID!): Response! @hasRole(roles: [SuperAdmin, Admin, User])
+    UnsetCountryForEvent(eventId: ID!, countryId: ID!): Response! @hasRole(roles: [SuperAdmin, Admin])
+    UnsetRegionForEvent(eventId: ID!, regionId: ID!): Response! @hasRole(roles: [SuperAdmin, Admin])
 }

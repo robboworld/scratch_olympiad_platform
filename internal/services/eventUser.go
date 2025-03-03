@@ -16,6 +16,8 @@ type EventUserService interface {
 	UnsetOrganizerForEvent(eventId, userId uint, clientRole models.Role) error
 	UnsetModeratorForEvent(eventId, userId, clientId uint, clientRole models.Role) error
 	UnsetExpertForEvent(eventId, userId, clientId uint, clientRole models.Role) error
+
+	GetEventRoles(eventId, userId uint) ([]models.EventRole, error)
 }
 
 type EventUserServiceImpl struct {
@@ -83,6 +85,12 @@ func (e EventUserServiceImpl) SetOrganizerForEvent(eventId, userId, clientId uin
 
 	// проверка доступности мероприятия для user по региону
 	if user.Country.HasRegions {
+		if user.RegionID == nil {
+			return utils.ResponseError{
+				Code:    http.StatusBadRequest,
+				Message: consts.ErrEventNotAccessible,
+			}
+		}
 		exist, err = e.eventRegionGateway.DoesExistEventRegion(eventId, *user.RegionID)
 		if err != nil {
 			return err
@@ -160,6 +168,12 @@ func (e EventUserServiceImpl) SetModeratorForEvent(eventId, userId, clientId uin
 	}
 	// проверка доступности мероприятия для user по региону
 	if user.Country.HasRegions {
+		if user.RegionID == nil {
+			return utils.ResponseError{
+				Code:    http.StatusBadRequest,
+				Message: consts.ErrEventNotAccessible,
+			}
+		}
 		exist, err = e.eventRegionGateway.DoesExistEventRegion(eventId, *user.RegionID)
 		if err != nil {
 			return err
@@ -234,6 +248,12 @@ func (e EventUserServiceImpl) SetExpertForEvent(eventId, userId, clientId uint, 
 	}
 	// проверка доступности мероприятия для user по региону
 	if user.Country.HasRegions {
+		if user.RegionID == nil {
+			return utils.ResponseError{
+				Code:    http.StatusBadRequest,
+				Message: consts.ErrEventNotAccessible,
+			}
+		}
 		exist, err = e.eventRegionGateway.DoesExistEventRegion(eventId, *user.RegionID)
 		if err != nil {
 			return err
@@ -295,4 +315,8 @@ func (e EventUserServiceImpl) UnsetExpertForEvent(eventId, userId, clientId uint
 	}
 
 	return e.eventUserGateway.UnsetUserForEvent(eventId, userId, models.EventRoleExpert)
+}
+
+func (e EventUserServiceImpl) GetEventRoles(eventId, userId uint) ([]models.EventRole, error) {
+	return e.eventUserGateway.GetUserRolesForEvent(eventId, userId)
 }

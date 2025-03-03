@@ -8,18 +8,19 @@ import (
 
 type Services struct {
 	fx.Out
-	UserService         UserService
-	AuthService         AuthService
-	SettingsService     SettingsService
-	ApplicationService  ApplicationService
-	NominationService   NominationService
-	CountryService      CountryService
-	RegionService       RegionService
-	SolutionService     SolutionService
-	EventService        EventService
-	EventCountryService EventCountryService
-	EventRegionService  EventRegionService
-	EventUserService    EventUserService
+	UserService             UserService
+	AuthService             AuthService
+	SettingsService         SettingsService
+	ApplicationService      ApplicationService
+	NominationService       NominationService
+	CountryService          CountryService
+	RegionService           RegionService
+	SolutionService         SolutionService
+	EventService            EventService
+	EventTranslationService EventTranslationService
+	EventCountryService     EventCountryService
+	EventRegionService      EventRegionService
+	EventUserService        EventUserService
 }
 
 func SetupServices(
@@ -32,6 +33,7 @@ func SetupServices(
 	regionGateway gateways.RegionGateway,
 	solutionGateway gateways.SolutionGateway,
 	eventGateway gateways.EventGateway,
+	eventTranslationGateway gateways.EventTranslationGateway,
 	eventCountryGateway gateways.EventCountryGateway,
 	eventRegionGateway gateways.EventRegionGateway,
 	eventUserGateway gateways.EventUserGateway,
@@ -73,7 +75,16 @@ func SetupServices(
 			userGateway:     userGateway,
 		},
 		EventService: &EventServiceImpl{
-			eventGateway: eventGateway,
+			userGateway:             userGateway,
+			eventGateway:            eventGateway,
+			eventTranslationGateway: eventTranslationGateway,
+			eventCountryGateway:     eventCountryGateway,
+			eventRegionGateway:      eventRegionGateway,
+		},
+		EventTranslationService: &EventTranslationServiceImpl{
+			eventGateway:            eventGateway,
+			eventTranslationGateway: eventTranslationGateway,
+			eventUserGateway:        eventUserGateway,
 		},
 		EventCountryService: &EventCountryServiceImpl{
 			countryGateway:      countryGateway,
