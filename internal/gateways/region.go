@@ -34,16 +34,24 @@ func (r RegionGatewayImpl) GetAllRegions(offset, limit int) (regions []models.Re
 }
 
 func (r RegionGatewayImpl) GetRegionsByCountryId(countryId uint, offset, limit int) (regions []models.RegionCore, countRows uint, err error) {
+	query := r.postgresClient.Db.Model(&models.RegionCore{}).Where("country_id = ?", countryId)
+
 	var count int64
-	result := r.postgresClient.Db.Limit(limit).Offset(offset).Where("country_id = ?", countryId).
-		Find(&regions)
+	result := query.Count(&count)
 	if result.Error != nil {
 		return []models.RegionCore{}, 0, utils.ResponseError{
 			Code:    http.StatusInternalServerError,
 			Message: result.Error.Error(),
 		}
 	}
-	result.Count(&count)
+
+	result = query.Limit(limit).Offset(offset).Find(&regions)
+	if result.Error != nil {
+		return []models.RegionCore{}, 0, utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: result.Error.Error(),
+		}
+	}
 	return regions, uint(count), result.Error
 }
 

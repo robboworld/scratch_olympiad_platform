@@ -20,15 +20,24 @@ type NominationGatewayImpl struct {
 }
 
 func (n NominationGatewayImpl) GetAllNominations(offset, limit int) (nominations []models.NominationCore, countRows uint, err error) {
+	query := n.postgresClient.Db.Model(&models.NominationCore{})
+
 	var count int64
-	result := n.postgresClient.Db.Limit(limit).Offset(offset).Find(&nominations)
+	result := query.Count(&count)
+	if result.Error != nil {
+		return nil, 0, utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: result.Error.Error(),
+		}
+	}
+
+	result = query.Limit(limit).Offset(offset).Find(&nominations)
 	if result.Error != nil {
 		return []models.NominationCore{}, 0, utils.ResponseError{
 			Code:    http.StatusInternalServerError,
 			Message: result.Error.Error(),
 		}
 	}
-	result.Count(&count)
 	return nominations, uint(count), result.Error
 }
 

@@ -36,14 +36,23 @@ func (c CountryGatewayImpl) GetCountryById(id uint) (country models.CountryCore,
 }
 
 func (c CountryGatewayImpl) GetAllCountries(offset, limit int) (countries []models.CountryCore, countRows uint, err error) {
+	query := c.postgresClient.Db.Model(&models.CountryCore{})
+
 	var count int64
-	result := c.postgresClient.Db.Limit(limit).Offset(offset).Find(&countries)
+	result := query.Count(&count)
+	if result.Error != nil {
+		return nil, 0, utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: result.Error.Error(),
+		}
+	}
+
+	result = query.Limit(limit).Offset(offset).Find(&countries)
 	if result.Error != nil {
 		return []models.CountryCore{}, 0, utils.ResponseError{
 			Code:    http.StatusInternalServerError,
 			Message: result.Error.Error(),
 		}
 	}
-	result.Count(&count)
 	return countries, uint(count), result.Error
 }

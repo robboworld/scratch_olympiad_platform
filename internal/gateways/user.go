@@ -84,6 +84,12 @@ func (u UserGatewayImpl) CreateUser(user models.UserCore) (newUser models.UserCo
 			Message: err.Error(),
 		}
 	}
+	if err = u.postgresClient.Db.Preload("Country").Preload("Region").First(&user, user.ID).Error; err != nil {
+		return models.UserCore{}, utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+		}
+	}
 	return user, nil
 }
 
@@ -157,22 +163,32 @@ func (u UserGatewayImpl) GetAllUsers(
 	isActive bool,
 	role []models.Role,
 ) (users []models.UserCore, countRows uint, err error) {
-	var count int64
 	if len(role) == 0 {
 		role = append(role,
 			models.RoleUser,
 			models.RoleAdmin,
 		)
 	}
-	result := u.postgresClient.Db.Preload("Country").Preload("Region").Limit(limit).Offset(offset).
-		Where("is_active = ? AND (role) IN ?", isActive, role).Find(&users)
+	query := u.postgresClient.Db.Model(&models.UserCore{}).
+		Preload("Country").Preload("Region").
+		Where("is_active = ? AND (role) IN ?", isActive, role)
+
+	var count int64
+	result := query.Count(&count)
+	if result.Error != nil {
+		return users, countRows, utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: result.Error.Error(),
+		}
+	}
+
+	result = query.Limit(limit).Offset(offset).Find(&users)
 	if result.Error != nil {
 		return []models.UserCore{}, 0, utils.ResponseError{
 			Code:    http.StatusInternalServerError,
 			Message: result.Error.Error(),
 		}
 	}
-	result.Count(&count)
 	return users, uint(count), nil
 }
 

@@ -60,7 +60,6 @@ func (u UserServiceImpl) CreateUser(user models.UserCore, clientRole models.Role
 	if err != nil {
 		return models.UserCore{}, err
 	}
-	user.Country = country
 	if user.RegionID == nil && country.HasRegions {
 		return models.UserCore{}, utils.ResponseError{
 			Code:    http.StatusBadRequest,
@@ -78,13 +77,12 @@ func (u UserServiceImpl) CreateUser(user models.UserCore, clientRole models.Role
 		if err != nil {
 			return models.UserCore{}, err
 		}
-		if user.CountryID != region.CountryID {
+		if region.CountryID != country.ID {
 			return models.UserCore{}, utils.ResponseError{
 				Code:    http.StatusBadRequest,
 				Message: consts.ErrRegionNotInCountry,
 			}
 		}
-		user.Region = &region
 	}
 
 	passwordHash := utils.HashPassword(user.Password)
@@ -133,7 +131,6 @@ func (u UserServiceImpl) UpdateUser(user models.UserCore, clientRole models.Role
 	if err != nil {
 		return models.UserCore{}, err
 	}
-	user.Country = country
 	if user.RegionID == nil && country.HasRegions {
 		return models.UserCore{}, utils.ResponseError{
 			Code:    http.StatusBadRequest,
@@ -157,7 +154,6 @@ func (u UserServiceImpl) UpdateUser(user models.UserCore, clientRole models.Role
 				Message: consts.ErrRegionNotInCountry,
 			}
 		}
-		user.Region = &region
 	}
 	return u.userGateway.UpdateUser(user)
 }
