@@ -64,27 +64,45 @@ func (a ApplicationGatewayImpl) GetApplicationById(id uint) (application models.
 }
 
 func (a ApplicationGatewayImpl) GetApplicationsByAuthorId(id uint, offset, limit int) (applications []models.ApplicationCore, countRows uint, err error) {
+	query := a.postgresClient.Db.Model(&models.ApplicationCore{}).Preload("Author").Where("author_id = ?", id)
+
 	var count int64
-	result := a.postgresClient.Db.Limit(limit).Offset(offset).Where("author_id = ?", id).
-		Find(&applications)
+	result := query.Count(&count)
+	if result.Error != nil {
+		return nil, 0, utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: result.Error.Error(),
+		}
+	}
+
+	result = query.Limit(limit).Offset(offset).Find(&applications)
 	if result.Error != nil {
 		return []models.ApplicationCore{}, 0, utils.ResponseError{
 			Code:    http.StatusInternalServerError,
 			Message: result.Error.Error(),
 		}
 	}
-	result.Count(&count)
 	return applications, uint(count), result.Error
 }
 func (a ApplicationGatewayImpl) GetAllApplications(offset, limit int) (applications []models.ApplicationCore, countRows uint, err error) {
+	query := a.postgresClient.Db.Model(&models.ApplicationCore{}).Preload("Author")
+
 	var count int64
-	result := a.postgresClient.Db.Preload("Author").Limit(limit).Offset(offset).Find(&applications)
+	result := query.Count(&count)
+	if result.Error != nil {
+		return nil, 0, utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: result.Error.Error(),
+		}
+	}
+
+	result = query.Limit(limit).Offset(offset).Find(&applications)
 	if result.Error != nil {
 		return []models.ApplicationCore{}, 0, utils.ResponseError{
 			Code:    http.StatusInternalServerError,
 			Message: result.Error.Error(),
 		}
 	}
-	result.Count(&count)
+
 	return applications, uint(count), result.Error
 }

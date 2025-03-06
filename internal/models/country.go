@@ -1,24 +1,28 @@
 package models
 
 import (
-	"gorm.io/gorm"
 	"strconv"
-	"time"
 )
 
 type CountryCore struct {
-	ID        uint `gorm:"primaryKey"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt gorm.DeletedAt `gorm:"index"`
-	Name      string         `gorm:"unique;size:255"`
+	ID         uint   `gorm:"primaryKey"`
+	Name       string `gorm:"unique;size:255"`
+	HasRegions bool   `gorm:"default:true"`
+}
+
+func (c *CountryHTTP) ToCore() CountryCore {
+	id, _ := strconv.ParseUint(c.ID, 10, 64)
+	return CountryCore{
+		ID:         uint(id),
+		Name:       c.Name,
+		HasRegions: c.HasRegions,
+	}
 }
 
 func (c *CountryHTTP) FromCore(country CountryCore) {
 	c.ID = strconv.Itoa(int(country.ID))
-	c.CreatedAt = country.CreatedAt.Format(time.DateTime)
-	c.UpdatedAt = country.UpdatedAt.Format(time.DateTime)
 	c.Name = country.Name
+	c.HasRegions = country.HasRegions
 }
 
 func FromCountriesCore(countriesCore []CountryCore) (countriesHttp []*CountryHTTP) {

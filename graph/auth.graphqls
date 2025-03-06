@@ -3,7 +3,8 @@ input SignUp {
 	password: String!
 	fullName: String!
 	fullNameNative: String!
-	country: String!
+	countryId: ID!
+	regionId: ID
 	city: String!
 	birthdate: Timestamp!
 }
@@ -19,14 +20,14 @@ type SignInResponse {
 }
 
 extend type Query {
-	Me: UserHttp! @hasRole(roles:[Student, Teacher, Parent, UnitAdmin, SuperAdmin])
+	Me: UserHttp! @hasRole(roles:[SuperAdmin, Admin, User])
 }
 
 extend type Mutation  {
 	SignUp(input: SignUp!): Response!
 	SignIn(input: SignIn!): SignInResponse!
 	RefreshToken(refreshToken: String!): SignInResponse!
-	ConfirmActivation(activationLink: String!): SignInResponse!
+	ConfirmActivation(activationToken: String!): SignInResponse!
 	ForgotPassword(email: String!): Response!
-	ResetPassword(resetLink: String!): Response!
+	ResetPassword(resetToken: String!): Response!
 }

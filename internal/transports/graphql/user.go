@@ -40,12 +40,42 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input models.NewUser)
 			},
 		}
 	}
+	countryIdInt, err := strconv.Atoi(input.CountryID)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return nil, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": utils.ResponseError{
+					Code:    http.StatusBadRequest,
+					Message: consts.ErrAtoi,
+				},
+			},
+		}
+	}
+	var regionId *uint
+	if input.RegionID != nil {
+		regionIdInt, err := strconv.Atoi(utils.StringPointerToString(input.RegionID))
+		if err != nil {
+			r.loggers.Err.Printf("%s", err.Error())
+			return nil, &gqlerror.Error{
+				Extensions: map[string]interface{}{
+					"err": utils.ResponseError{
+						Code:    http.StatusBadRequest,
+						Message: consts.ErrAtoi,
+					},
+				},
+			}
+		}
+		regionIdUint := uint(regionIdInt)
+		regionId = &regionIdUint
+	}
 	user := models.UserCore{
 		Email:          input.Email,
 		Password:       input.Password,
 		FullName:       input.FullName,
 		FullNameNative: input.FullNameNative,
-		Country:        input.Country,
+		CountryID:      uint(countryIdInt),
+		RegionID:       regionId,
 		City:           input.City,
 		Birthdate:      birthdate,
 		IsActive:       true,
@@ -100,13 +130,43 @@ func (r *mutationResolver) UpdateUser(ctx context.Context, input models.UpdateUs
 			},
 		}
 	}
+	countryIdInt, err := strconv.Atoi(input.CountryID)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return nil, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": utils.ResponseError{
+					Code:    http.StatusBadRequest,
+					Message: consts.ErrAtoi,
+				},
+			},
+		}
+	}
+	var regionId *uint
+	if input.RegionID != nil {
+		regionIdInt, err := strconv.Atoi(utils.StringPointerToString(input.RegionID))
+		if err != nil {
+			r.loggers.Err.Printf("%s", err.Error())
+			return nil, &gqlerror.Error{
+				Extensions: map[string]interface{}{
+					"err": utils.ResponseError{
+						Code:    http.StatusBadRequest,
+						Message: consts.ErrAtoi,
+					},
+				},
+			}
+		}
+		regionIdUint := uint(regionIdInt)
+		regionId = &regionIdUint
+	}
 	// TODO not required field
 	user := models.UserCore{
 		ID:             uint(atoi),
 		Email:          input.Email,
 		FullName:       input.FullName,
 		FullNameNative: input.FullNameNative,
-		Country:        input.Country,
+		CountryID:      uint(countryIdInt),
+		RegionID:       regionId,
 		City:           input.City,
 		Birthdate:      birthdate,
 	}

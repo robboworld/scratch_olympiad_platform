@@ -7,7 +7,8 @@ type UserHttp {
 	role: Role!
 	fullName: String!
 	fullNameNative: String!
-	country: String!
+	country: CountryHttp!
+	region: RegionHttp
 	city: String!
 	birthdate: Timestamp!
 	isActive: Boolean!
@@ -15,10 +16,8 @@ type UserHttp {
 
 enum Role {
 	Anonymous
-	Student
-	Parent
-	Teacher
-	UnitAdmin
+	User
+	Admin
 	SuperAdmin
 }
 
@@ -28,7 +27,8 @@ input NewUser {
 	role: Role!
 	fullName: String!
 	fullNameNative: String!
-	country: String!
+	countryId: ID!
+	regionId: ID
 	city: String!
 	birthdate: Timestamp!
 }
@@ -38,7 +38,8 @@ input UpdateUser {
 	email: String!
 	fullName: String!
 	fullNameNative: String!
-	country: String!
+	countryId: ID!
+	regionId: ID
 	city: String!
 	birthdate: Timestamp!
 }
@@ -49,7 +50,8 @@ type NewUserResponse {
 	role: Int!
 	fullName: String!
 	fullNameNative: String!
-	country: String!
+	countryId: ID!
+	regionId: ID
 	city: String!
 	birthdate: Timestamp!
 }
@@ -64,16 +66,16 @@ type Response {
 }
 
 type Mutation {
-	CreateUser(input: NewUser!): UserHttp! @hasRole(roles: [SuperAdmin, UnitAdmin])
-	UpdateUser(input: UpdateUser!): UserHttp! @hasRole(roles: [SuperAdmin, UnitAdmin, Teacher, Parent, Student])
-	DeleteUser(id: ID!): Response! @hasRole(roles: [SuperAdmin, UnitAdmin])
-	SetUserIsActive(id: ID!, isActive: Boolean!): Response! @hasRole(roles: [SuperAdmin, UnitAdmin])
+	CreateUser(input: NewUser!): UserHttp! @hasRole(roles: [SuperAdmin, Admin])
+	UpdateUser(input: UpdateUser!): UserHttp! @hasRole(roles: [SuperAdmin, Admin, User])
+	DeleteUser(id: ID!): Response! @hasRole(roles: [SuperAdmin, Admin])
+	SetUserIsActive(id: ID!, isActive: Boolean!): Response! @hasRole(roles: [SuperAdmin, Admin])
 }
 
 type Query {
-	GetUserByAccessToken: UserHttp! @hasRole(roles: [SuperAdmin, UnitAdmin, Teacher, Parent, Student])
-	GetUserById(id: ID!): UserHttp! @hasRole(roles: [SuperAdmin, UnitAdmin, Teacher, Parent, Student])
-	GetAllUsers(page: Int, pageSize: Int, active: Boolean!, roles: [Role!]!): UsersList! @hasRole(roles: [SuperAdmin, UnitAdmin])
+	GetUserByAccessToken: UserHttp! @hasRole(roles: [SuperAdmin, Admin, User])
+	GetUserById(id: ID!): UserHttp! @hasRole(roles: [SuperAdmin, Admin, User])
+	GetAllUsers(page: Int, pageSize: Int, active: Boolean!, roles: [Role!]!): UsersList! @hasRole(roles: [SuperAdmin, Admin])
 }
 
 directive @hasRole(roles: [Role!]) on FIELD_DEFINITION

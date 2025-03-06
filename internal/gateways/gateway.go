@@ -7,27 +7,35 @@ import (
 
 type Gateways struct {
 	fx.Out
-	UserGateway UserGateway
-	ParentRel   ParentRel
-	Project     ProjectGateway
-	ProjectPage ProjectPageGateway
-	Settings    SettingsGateway
-	Application ApplicationGateway
-	Nomination  NominationGateway
-	Country     CountryGateway
-	Solution    SolutionGateway
+	UserGateway         UserGateway
+	AuthDataGateway     AuthDataGateway
+	Settings            SettingsGateway
+	Application         ApplicationGateway
+	Nomination          NominationGateway
+	Country             CountryGateway
+	Region              RegionGateway
+	Solution            SolutionGateway
+	Event               EventGateway
+	EventTranslation    EventTranslationGateway
+	EventCountryGateway EventCountryGateway
+	EventRegionGateway  EventRegionGateway
+	EventUserGateway    EventUserGateway
 }
 
 func SetupGateways(pc db.PostgresClient) Gateways {
 	return Gateways{
-		UserGateway: UserGatewayImpl{pc},
-		ParentRel:   ParentRelGatewayImpl{pc},
-		Project:     ProjectGatewayImpl{pc},
-		ProjectPage: ProjectPageGatewayImpl{pc},
-		Settings:    SettingsGatewayImpl{pc},
-		Application: ApplicationGatewayImpl{pc},
-		Nomination:  NominationGatewayImpl{pc},
-		Country:     CountryGatewayImpl{pc},
-		Solution:    SolutionGatewayImpl{pc},
+		UserGateway:         UserGatewayImpl{pc},
+		AuthDataGateway:     AuthDataGatewayImpl{pc},
+		Settings:            SettingsGatewayImpl{pc},
+		Application:         ApplicationGatewayImpl{pc},
+		Nomination:          NominationGatewayImpl{pc},
+		Country:             CountryGatewayImpl{pc},
+		Region:              RegionGatewayImpl{pc},
+		Solution:            SolutionGatewayImpl{pc},
+		Event:               EventGatewayImpl{pc},
+		EventTranslation:    EventTranslationGatewayImpl{pc},
+		EventCountryGateway: EventCountryGatewayImpl{pc},
+		EventRegionGateway:  EventRegionGatewayImpl{pc},
+		EventUserGateway:    EventUserGatewayImpl{pc},
 	}
 }

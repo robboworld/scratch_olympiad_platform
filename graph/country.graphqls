@@ -3,6 +3,7 @@ type CountryHttp {
     createdAt: Timestamp!
     updatedAt: Timestamp!
     name: String!
+    hasRegions: Boolean!
 }
 
 type CountryHttpList {

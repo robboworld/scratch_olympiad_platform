@@ -34,11 +34,11 @@ type ApplicationHttpList {
 }
 
 extend type Mutation {
-    CreateApplication(input: NewApplication!): ApplicationHttp! @hasRole(roles: [Student, SuperAdmin])
+    CreateApplication(input: NewApplication!): ApplicationHttp! @hasRole(roles: [SuperAdmin, User])
     ExportAllApplications: Response! @hasRole(roles: [SuperAdmin])
 }
 
 extend type Query {
-    GetApplicationById(id: ID!): ApplicationHttp! @hasRole(roles: [Student, SuperAdmin])
-    GetAllApplications(page: Int, pageSize: Int): ApplicationHttpList! @hasRole(roles: [Student, SuperAdmin])
+    GetApplicationById(id: ID!): ApplicationHttp! @hasRole(roles: [SuperAdmin, User])
+    GetAllApplications(page: Int, pageSize: Int): ApplicationHttpList! @hasRole(roles: [SuperAdmin, User])
 }

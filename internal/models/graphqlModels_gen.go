@@ -8,12 +8,6 @@ import (
 	"strconv"
 )
 
-type AbsoluteMediaHTTP struct {
-	ID          string `json:"id"`
-	URI         string `json:"uri"`
-	URIAbsolute string `json:"uri_absolute"`
-}
-
 type ApplicationHTTP struct {
 	ID                            string `json:"id"`
 	CreatedAt                     string `json:"createdAt"`
@@ -37,10 +31,11 @@ type ApplicationHTTPList struct {
 }
 
 type CountryHTTP struct {
-	ID        string `json:"id"`
-	CreatedAt string `json:"createdAt"`
-	UpdatedAt string `json:"updatedAt"`
-	Name      string `json:"name"`
+	ID         string `json:"id"`
+	CreatedAt  string `json:"createdAt"`
+	UpdatedAt  string `json:"updatedAt"`
+	Name       string `json:"name"`
+	HasRegions bool   `json:"hasRegions"`
 }
 
 type CountryHTTPList struct {
@@ -48,52 +43,41 @@ type CountryHTTPList struct {
 	CountRows int            `json:"countRows"`
 }
 
-type CourseAPIMediaCollectionHTTP struct {
-	ID          string             `json:"id"`
-	BannerImage *AbsoluteMediaHTTP `json:"banner_image,omitempty"`
-	CourseImage *MediaHTTP         `json:"course_image,omitempty"`
-	CourseVideo *MediaHTTP         `json:"course_video,omitempty"`
-	Image       *ImageHTTP         `json:"image,omitempty"`
+type EventDetailsHTTP struct {
+	ID          string `json:"id"`
+	CreatedAt   string `json:"createdAt"`
+	UpdatedAt   string `json:"updatedAt"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	StartDate   string `json:"startDate"`
+	EndDate     string `json:"endDate"`
 }
 
-type CourseHTTP struct {
-	ID               string                        `json:"id"`
-	BlocksURL        string                        `json:"blocks_url"`
-	Effort           string                        `json:"effort"`
-	EnrollmentStart  string                        `json:"enrollment_start"`
-	EnrollmentEnd    string                        `json:"enrollment_end"`
-	End              string                        `json:"end"`
-	Name             string                        `json:"name"`
-	Number           string                        `json:"number"`
-	Org              string                        `json:"org"`
-	ShortDescription string                        `json:"short_description"`
-	Start            string                        `json:"start"`
-	StartDisplay     string                        `json:"start_display"`
-	StartType        string                        `json:"start_type"`
-	Pacing           string                        `json:"pacing"`
-	MobileAvailable  bool                          `json:"mobile_available"`
-	Hidden           bool                          `json:"hidden"`
-	InvitationOnly   bool                          `json:"invitation_only"`
-	Overview         *string                       `json:"overview,omitempty"`
-	CourseID         string                        `json:"course_id"`
-	Media            *CourseAPIMediaCollectionHTTP `json:"media"`
+type EventHTTP struct {
+	ID        string `json:"id"`
+	CreatedAt string `json:"createdAt"`
+	UpdatedAt string `json:"updatedAt"`
+	Name      string `json:"name"`
+	StartDate string `json:"startDate"`
+	EndDate   string `json:"endDate"`
 }
 
-type CoursesListHTTP struct {
-	Courses   []*CourseHTTP `json:"courses"`
-	CountRows int           `json:"countRows"`
+type EventHTTPList struct {
+	Events    []*EventHTTP `json:"events"`
+	CountRows int          `json:"countRows"`
 }
 
-type ImageHTTP struct {
-	ID    string `json:"id"`
-	Raw   string `json:"raw"`
-	Small string `json:"small"`
-	Large string `json:"large"`
+type EventRoleList struct {
+	Roles []EventRole `json:"roles"`
 }
 
-type MediaHTTP struct {
-	ID  string `json:"id"`
-	URI string `json:"uri"`
+type EventTranslationHTTP struct {
+	ID          string `json:"id"`
+	CreatedAt   string `json:"createdAt"`
+	UpdatedAt   string `json:"updatedAt"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	EventID     string `json:"eventId"`
 }
 
 type NewApplication struct {
@@ -109,26 +93,41 @@ type NewApplication struct {
 	Note                          *string `json:"note,omitempty"`
 }
 
+type NewEvent struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	StartDate   string `json:"startDate"`
+	EndDate     string `json:"endDate"`
+}
+
+type NewEventTranslation struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	EventID     string `json:"eventId"`
+}
+
 type NewUser struct {
-	Email          string `json:"email"`
-	Password       string `json:"password"`
-	Role           Role   `json:"role"`
-	FullName       string `json:"fullName"`
-	FullNameNative string `json:"fullNameNative"`
-	Country        string `json:"country"`
-	City           string `json:"city"`
-	Birthdate      string `json:"birthdate"`
+	Email          string  `json:"email"`
+	Password       string  `json:"password"`
+	Role           Role    `json:"role"`
+	FullName       string  `json:"fullName"`
+	FullNameNative string  `json:"fullNameNative"`
+	CountryID      string  `json:"countryId"`
+	RegionID       *string `json:"regionId,omitempty"`
+	City           string  `json:"city"`
+	Birthdate      string  `json:"birthdate"`
 }
 
 type NewUserResponse struct {
-	ID             string `json:"id"`
-	Email          string `json:"email"`
-	Role           int    `json:"role"`
-	FullName       string `json:"fullName"`
-	FullNameNative string `json:"fullNameNative"`
-	Country        string `json:"country"`
-	City           string `json:"city"`
-	Birthdate      string `json:"birthdate"`
+	ID             string  `json:"id"`
+	Email          string  `json:"email"`
+	Role           int     `json:"role"`
+	FullName       string  `json:"fullName"`
+	FullNameNative string  `json:"fullNameNative"`
+	CountryID      string  `json:"countryId"`
+	RegionID       *string `json:"regionId,omitempty"`
+	City           string  `json:"city"`
+	Birthdate      string  `json:"birthdate"`
 }
 
 type NominationHTTP struct {
@@ -145,24 +144,15 @@ type NominationHTTPList struct {
 	CountRows   int               `json:"countRows"`
 }
 
-type ProjectPageHTTP struct {
-	ID               string `json:"id"`
-	CreatedAt        string `json:"createdAt"`
-	UpdatedAt        string `json:"updatedAt"`
-	AuthorID         string `json:"authorId"`
-	ProjectID        string `json:"projectId"`
-	ProjectUpdatedAt string `json:"projectUpdatedAt"`
-	Title            string `json:"title"`
-	Instruction      string `json:"instruction"`
-	Notes            string `json:"notes"`
-	LinkToScratch    string `json:"linkToScratch"`
-	IsShared         bool   `json:"isShared"`
-	IsBanned         bool   `json:"isBanned"`
+type RegionHTTP struct {
+	ID        string `json:"id"`
+	Name      string `json:"name"`
+	CountryID string `json:"countryId"`
 }
 
-type ProjectPageHTTPList struct {
-	ProjectPages []*ProjectPageHTTP `json:"projectPages"`
-	CountRows    int                `json:"countRows"`
+type RegionHTTPList struct {
+	Regions   []*RegionHTTP `json:"regions"`
+	CountRows int           `json:"countRows"`
 }
 
 type Response struct {
@@ -184,46 +174,55 @@ type SignInResponse struct {
 }
 
 type SignUp struct {
-	Email          string `json:"email"`
-	Password       string `json:"password"`
-	FullName       string `json:"fullName"`
-	FullNameNative string `json:"fullNameNative"`
-	Country        string `json:"country"`
-	City           string `json:"city"`
-	Birthdate      string `json:"birthdate"`
+	Email          string  `json:"email"`
+	Password       string  `json:"password"`
+	FullName       string  `json:"fullName"`
+	FullNameNative string  `json:"fullNameNative"`
+	CountryID      string  `json:"countryId"`
+	RegionID       *string `json:"regionId,omitempty"`
+	City           string  `json:"city"`
+	Birthdate      string  `json:"birthdate"`
 }
 
-type UpdateProjectPage struct {
+type UpdateEvent struct {
 	ID          string `json:"id"`
-	Title       string `json:"title"`
-	Instruction string `json:"instruction"`
-	Notes       string `json:"notes"`
-	IsShared    bool   `json:"isShared"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	StartDate   string `json:"startDate"`
+	EndDate     string `json:"endDate"`
+}
+
+type UpdateEventTranslation struct {
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
 }
 
 type UpdateUser struct {
-	ID             string `json:"id"`
-	Email          string `json:"email"`
-	FullName       string `json:"fullName"`
-	FullNameNative string `json:"fullNameNative"`
-	Country        string `json:"country"`
-	City           string `json:"city"`
-	Birthdate      string `json:"birthdate"`
+	ID             string  `json:"id"`
+	Email          string  `json:"email"`
+	FullName       string  `json:"fullName"`
+	FullNameNative string  `json:"fullNameNative"`
+	CountryID      string  `json:"countryId"`
+	RegionID       *string `json:"regionId,omitempty"`
+	City           string  `json:"city"`
+	Birthdate      string  `json:"birthdate"`
 }
 
 type UserHTTP struct {
-	ID             string `json:"id"`
-	CreatedAt      string `json:"createdAt"`
-	UpdatedAt      string `json:"updatedAt"`
-	Email          string `json:"email"`
-	Password       string `json:"password"`
-	Role           Role   `json:"role"`
-	FullName       string `json:"fullName"`
-	FullNameNative string `json:"fullNameNative"`
-	Country        string `json:"country"`
-	City           string `json:"city"`
-	Birthdate      string `json:"birthdate"`
-	IsActive       bool   `json:"isActive"`
+	ID             string       `json:"id"`
+	CreatedAt      string       `json:"createdAt"`
+	UpdatedAt      string       `json:"updatedAt"`
+	Email          string       `json:"email"`
+	Password       string       `json:"password"`
+	Role           Role         `json:"role"`
+	FullName       string       `json:"fullName"`
+	FullNameNative string       `json:"fullNameNative"`
+	Country        *CountryHTTP `json:"country"`
+	Region         *RegionHTTP  `json:"region,omitempty"`
+	City           string       `json:"city"`
+	Birthdate      string       `json:"birthdate"`
+	IsActive       bool         `json:"isActive"`
 }
 
 type UsersList struct {
@@ -231,29 +230,68 @@ type UsersList struct {
 	CountRows int         `json:"countRows"`
 }
 
+type EventRole string
+
+const (
+	EventRoleOrganizer EventRole = "Organizer"
+	EventRoleModerator EventRole = "Moderator"
+	EventRoleExpert    EventRole = "Expert"
+)
+
+var AllEventRole = []EventRole{
+	EventRoleOrganizer,
+	EventRoleModerator,
+	EventRoleExpert,
+}
+
+func (e EventRole) IsValid() bool {
+	switch e {
+	case EventRoleOrganizer, EventRoleModerator, EventRoleExpert:
+		return true
+	}
+	return false
+}
+
+func (e EventRole) String() string {
+	return string(e)
+}
+
+func (e *EventRole) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = EventRole(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid EventRole", str)
+	}
+	return nil
+}
+
+func (e EventRole) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
 type Role string
 
 const (
 	RoleAnonymous  Role = "Anonymous"
-	RoleStudent    Role = "Student"
-	RoleParent     Role = "Parent"
-	RoleTeacher    Role = "Teacher"
-	RoleUnitAdmin  Role = "UnitAdmin"
+	RoleUser       Role = "User"
+	RoleAdmin      Role = "Admin"
 	RoleSuperAdmin Role = "SuperAdmin"
 )
 
 var AllRole = []Role{
 	RoleAnonymous,
-	RoleStudent,
-	RoleParent,
-	RoleTeacher,
-	RoleUnitAdmin,
+	RoleUser,
+	RoleAdmin,
 	RoleSuperAdmin,
 }
 
 func (e Role) IsValid() bool {
 	switch e {
-	case RoleAnonymous, RoleStudent, RoleParent, RoleTeacher, RoleUnitAdmin, RoleSuperAdmin:
+	case RoleAnonymous, RoleUser, RoleAdmin, RoleSuperAdmin:
 		return true
 	}
 	return false

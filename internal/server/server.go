@@ -43,18 +43,12 @@ func NewServer(
 				switch m {
 				case consts.Production:
 					router.POST("/query", gin.WrapH(srv))
-					handlers.AuthHandler.SetupAuthRoutes(router)
-					handlers.ProjectHandler.SetupProjectRoutes(router)
 					handlers.AvatarHandler.SetupAvatarRoutes(router)
-					handlers.ApplicationHandler.SetupApplicationRoutes(router)
 					handlers.SolutionHandler.SetupSolutionRoutes(router)
 				case consts.Development:
 					router.GET("/", gin.WrapH(playground.Handler("GraphQL playground", "/query")))
 					router.POST("/query", gin.WrapH(srv))
-					handlers.AuthHandler.SetupAuthRoutes(router)
-					handlers.ProjectHandler.SetupProjectRoutes(router)
 					handlers.AvatarHandler.SetupAvatarRoutes(router)
-					handlers.ApplicationHandler.SetupApplicationRoutes(router)
 					handlers.SolutionHandler.SetupSolutionRoutes(router)
 				}
 

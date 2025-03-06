@@ -8,44 +8,49 @@ import (
 
 type Services struct {
 	fx.Out
-	UserService        UserService
-	AuthService        AuthService
-	ProjectService     ProjectService
-	ProjectPageService ProjectPageService
-	SettingsService    SettingsService
-	ApplicationService ApplicationService
-	NominationService  NominationService
-	CountryService     CountryService
-	SolutionService    SolutionService
+	UserService             UserService
+	AuthService             AuthService
+	SettingsService         SettingsService
+	ApplicationService      ApplicationService
+	NominationService       NominationService
+	CountryService          CountryService
+	RegionService           RegionService
+	SolutionService         SolutionService
+	EventService            EventService
+	EventTranslationService EventTranslationService
+	EventCountryService     EventCountryService
+	EventRegionService      EventRegionService
+	EventUserService        EventUserService
 }
 
 func SetupServices(
 	userGateway gateways.UserGateway,
-	projectGateway gateways.ProjectGateway,
-	projectPageGateway gateways.ProjectPageGateway,
+	authDataGateway gateways.AuthDataGateway,
 	settingsGateway gateways.SettingsGateway,
 	applicationGateway gateways.ApplicationGateway,
 	nominationGateway gateways.NominationGateway,
 	countryGateway gateways.CountryGateway,
+	regionGateway gateways.RegionGateway,
 	solutionGateway gateways.SolutionGateway,
+	eventGateway gateways.EventGateway,
+	eventTranslationGateway gateways.EventTranslationGateway,
+	eventCountryGateway gateways.EventCountryGateway,
+	eventRegionGateway gateways.EventRegionGateway,
+	eventUserGateway gateways.EventUserGateway,
 	applicationAPI api.ApplicationAPI,
 ) Services {
 	return Services{
 		UserService: &UserServiceImpl{
 			userGateway:    userGateway,
 			countryGateway: countryGateway,
+			regionGateway:  regionGateway,
 		},
 		AuthService: &AuthServiceImpl{
 			userGateway:     userGateway,
+			authDataGateway: authDataGateway,
 			countryGateway:  countryGateway,
+			regionGateway:   regionGateway,
 			settingsGateway: settingsGateway,
-		},
-		ProjectService: &ProjectServiceImpl{
-			projectGateway: projectGateway,
-		},
-		ProjectPageService: &ProjectPageServiceImpl{
-			projectGateway:     projectGateway,
-			projectPageGateway: projectPageGateway,
 		},
 		SettingsService: &SettingsServiceImpl{
 			settingsGateway: settingsGateway,
@@ -62,9 +67,42 @@ func SetupServices(
 		CountryService: &CountryServiceImpl{
 			countryGateway: countryGateway,
 		},
-		SolutionService: SolutionServiceImpl{
+		RegionService: &RegionServiceImpl{
+			regionGateway: regionGateway,
+		},
+		SolutionService: &SolutionServiceImpl{
 			solutionGateway: solutionGateway,
 			userGateway:     userGateway,
+		},
+		EventService: &EventServiceImpl{
+			userGateway:             userGateway,
+			eventGateway:            eventGateway,
+			eventTranslationGateway: eventTranslationGateway,
+			eventCountryGateway:     eventCountryGateway,
+			eventRegionGateway:      eventRegionGateway,
+		},
+		EventTranslationService: &EventTranslationServiceImpl{
+			eventGateway:            eventGateway,
+			eventTranslationGateway: eventTranslationGateway,
+			eventUserGateway:        eventUserGateway,
+		},
+		EventCountryService: &EventCountryServiceImpl{
+			countryGateway:      countryGateway,
+			eventGateway:        eventGateway,
+			eventCountryGateway: eventCountryGateway,
+		},
+		EventRegionService: &EventRegionServiceImpl{
+			regionGateway:       regionGateway,
+			eventGateway:        eventGateway,
+			eventCountryGateway: eventCountryGateway,
+			eventRegionGateway:  eventRegionGateway,
+		},
+		EventUserService: &EventUserServiceImpl{
+			userGateway:         userGateway,
+			eventGateway:        eventGateway,
+			eventUserGateway:    eventUserGateway,
+			eventCountryGateway: eventCountryGateway,
+			eventRegionGateway:  eventRegionGateway,
 		},
 	}
 }
