@@ -88,19 +88,15 @@ func SetupServices(
 			eventUserGateway:        eventUserGateway,
 		},
 		EventCountryService: &EventCountryServiceImpl{
-			countryGateway:      countryGateway,
-			eventGateway:        eventGateway,
 			eventCountryGateway: eventCountryGateway,
 		},
 		EventRegionService: &EventRegionServiceImpl{
 			regionGateway:       regionGateway,
-			eventGateway:        eventGateway,
 			eventCountryGateway: eventCountryGateway,
 			eventRegionGateway:  eventRegionGateway,
 		},
 		EventUserService: &EventUserServiceImpl{
 			userGateway:         userGateway,
-			eventGateway:        eventGateway,
 			eventUserGateway:    eventUserGateway,
 			eventCountryGateway: eventCountryGateway,
 			eventRegionGateway:  eventRegionGateway,

@@ -14,7 +14,7 @@ type EventTranslationCore struct {
 	Name        string         `gorm:"not null"`
 	Description string         `gorm:"not null"`
 	EventID     uint
-	Event       EventCore `gorm:"foreignKey:EventID;constraint:OnDelete:CASCADE;'"`
+	Event       EventCore `gorm:"foreignKey:EventID"`
 }
 
 func (e *EventTranslationHTTP) FromCore(eventTranslation EventTranslationCore) {

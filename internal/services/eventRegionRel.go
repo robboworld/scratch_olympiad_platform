@@ -15,7 +15,6 @@ type EventRegionService interface {
 
 type EventRegionServiceImpl struct {
 	regionGateway       gateways.RegionGateway
-	eventGateway        gateways.EventGateway
 	eventCountryGateway gateways.EventCountryRelGateway
 	eventRegionGateway  gateways.EventRegionRelGateway
 }

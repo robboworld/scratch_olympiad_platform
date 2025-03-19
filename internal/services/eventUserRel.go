@@ -17,7 +17,6 @@ type EventUserService interface {
 
 type EventUserServiceImpl struct {
 	userGateway         gateways.UserGateway
-	eventGateway        gateways.EventGateway
 	eventUserGateway    gateways.EventUserRelGateway
 	eventCountryGateway gateways.EventCountryRelGateway
 	eventRegionGateway  gateways.EventRegionRelGateway

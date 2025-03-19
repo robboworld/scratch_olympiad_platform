@@ -11,8 +11,6 @@ type EventCountryService interface {
 }
 
 type EventCountryServiceImpl struct {
-	countryGateway      gateways.CountryGateway
-	eventGateway        gateways.EventGateway
 	eventCountryGateway gateways.EventCountryRelGateway
 }
 

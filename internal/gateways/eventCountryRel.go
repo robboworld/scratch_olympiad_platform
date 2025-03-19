@@ -105,7 +105,7 @@ func (e EventCountryRelGatewayImpl) DoesExistRel(rel models.EventCountryRelCore)
 	return true, nil
 }
 
-func (e EventGatewayImpl) GetEventsByCountryId(
+func (e EventCountryRelGatewayImpl) GetEventsByCountryId(
 	countryID uint,
 	offset, limit int,
 ) (events []models.EventCore, countRows uint, err error) {
@@ -132,7 +132,7 @@ func (e EventGatewayImpl) GetEventsByCountryId(
 	return events, uint(count), nil
 }
 
-func (e EventGatewayImpl) GetEventsByCountryIdAndRegionId(
+func (e EventCountryRelGatewayImpl) GetEventsByCountryIdAndRegionId(
 	countryID, regionID uint,
 	offset, limit int,
 ) (events []models.EventCore, countRows uint, err error) {
