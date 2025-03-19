@@ -110,7 +110,7 @@ func (e EventCountryRelGatewayImpl) GetEventsByCountryId(
 	offset, limit int,
 ) (events []models.EventCore, countRows uint, err error) {
 	query := e.postgresClient.Db.Model(&models.EventCore{}).
-		Joins("JOIN event_country_cores ec ON ec.event_id = event_cores.id").
+		Joins("JOIN event_country_rel_cores ec ON ec.event_id = event_cores.id").
 		Where("ec.country_id = ?", countryID)
 
 	var count int64
@@ -137,8 +137,8 @@ func (e EventCountryRelGatewayImpl) GetEventsByCountryIdAndRegionId(
 	offset, limit int,
 ) (events []models.EventCore, countRows uint, err error) {
 	query := e.postgresClient.Db.Model(&models.EventCore{}).
-		Joins("JOIN event_country_cores ec ON ec.event_id = event_cores.id").
-		Joins("JOIN event_region_cores er ON er.event_id = event_cores.id").
+		Joins("JOIN event_country_rel_cores ec ON ec.event_id = event_cores.id").
+		Joins("JOIN event_region_rel_cores er ON er.event_id = event_cores.id").
 		Where("ec.country_id = ? AND er.region_id = ?", countryID, regionID)
 
 	var count int64
