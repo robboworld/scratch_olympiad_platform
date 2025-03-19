@@ -1,0 +1,23 @@
+enum EventRole {
+    Organizer
+    Moderator
+    Expert
+}
+
+type EventRoleList {
+    roles: [EventRole!]!
+}
+
+extend type Query {
+    GetEventRolesByAccessToken(eventId: ID!): EventRoleList! @hasRole(roles: [SuperAdmin, Admin, User])
+}
+
+extend type Mutation {
+    SetOrganizerForEvent(eventId: ID!, userId: ID!): Response! @hasRole(roles: [SuperAdmin, Admin])
+    SetModeratorForEvent(eventId: ID!, userId: ID!): Response! @hasRole(roles: [SuperAdmin, Admin, User])
+    SetExpertForEvent(eventId: ID!, userId: ID!): Response! @hasRole(roles: [SuperAdmin, Admin, User])
+
+    UnsetOrganizerForEvent(eventId: ID!, userId: ID!): Response! @hasRole(roles: [SuperAdmin, Admin])
+    UnsetModeratorForEvent(eventId: ID!, userId: ID!): Response! @hasRole(roles: [SuperAdmin, Admin, User])
+    UnsetExpertForEvent(eventId: ID!, userId: ID!): Response! @hasRole(roles: [SuperAdmin, Admin, User])
+}

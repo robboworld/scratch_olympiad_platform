@@ -1,0 +1,30 @@
+type EventTranslationHttp {
+    id: ID!
+    createdAt: Timestamp!
+    updatedAt: Timestamp!
+    name: String!
+    description: String!
+    eventId: ID!
+}
+
+input NewEventTranslation {
+    name: String!
+    description: String!
+    eventId: ID!
+}
+
+input UpdateEventTranslation {
+    id: ID!
+    name: String!
+    description: String!
+}
+
+extend type Query {
+    GetEventTranslationByEventId(eventId: ID!): EventTranslationHttp! @hasRole(roles: [SuperAdmin, Admin, User])
+}
+
+extend type Mutation {
+    CreateEventTranslation(input: NewEventTranslation!): EventTranslationHttp! @hasRole(roles: [SuperAdmin, Admin, User])
+    UpdateEventTranslation(input: UpdateEventTranslation!): EventTranslationHttp! @hasRole(roles: [SuperAdmin, Admin, User])
+    DeleteEventTranslation(id: ID!): Response! @hasRole(roles: [SuperAdmin, Admin, User])
+}

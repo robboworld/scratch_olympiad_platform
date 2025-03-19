@@ -17,9 +17,9 @@ type Gateways struct {
 	Solution            SolutionGateway
 	Event               EventGateway
 	EventTranslation    EventTranslationGateway
-	EventCountryGateway EventCountryGateway
-	EventRegionGateway  EventRegionGateway
-	EventUserGateway    EventUserGateway
+	EventCountryGateway EventCountryRelGateway
+	EventRegionGateway  EventRegionRelGateway
+	EventUserGateway    EventUserRelGateway
 }
 
 func SetupGateways(pc db.PostgresClient) Gateways {
@@ -34,8 +34,8 @@ func SetupGateways(pc db.PostgresClient) Gateways {
 		Solution:            SolutionGatewayImpl{pc},
 		Event:               EventGatewayImpl{pc},
 		EventTranslation:    EventTranslationGatewayImpl{pc},
-		EventCountryGateway: EventCountryGatewayImpl{pc},
-		EventRegionGateway:  EventRegionGatewayImpl{pc},
-		EventUserGateway:    EventUserGatewayImpl{pc},
+		EventCountryGateway: EventCountryRelGatewayImpl{pc},
+		EventRegionGateway:  EventRegionRelGatewayImpl{pc},
+		EventUserGateway:    EventUserRelGatewayImpl{pc},
 	}
 }

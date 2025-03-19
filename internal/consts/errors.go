@@ -41,7 +41,12 @@ const (
 	ErrEventNotAccessible       = "event is not accessible to the user"
 )
 
-// ErrActivationLinkUnavailable have http code 503
+// http code 409
+const (
+	ErrRelationAlreadyExists = "relation already exists"
+)
+
+// http code 503
 const (
 	ErrActivationLinkUnavailable = "activation link is currently unavailable"
 )

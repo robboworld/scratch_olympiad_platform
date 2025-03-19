@@ -19,10 +19,10 @@ type EventService interface {
 type EventServiceImpl struct {
 	userGateway             gateways.UserGateway
 	eventGateway            gateways.EventGateway
-	eventUserGateway        gateways.EventUserGateway
+	eventUserGateway        gateways.EventUserRelGateway
 	eventTranslationGateway gateways.EventTranslationGateway
-	eventCountryGateway     gateways.EventCountryGateway
-	eventRegionGateway      gateways.EventRegionGateway
+	eventCountryGateway     gateways.EventCountryRelGateway
+	eventRegionGateway      gateways.EventRegionRelGateway
 }
 
 func (e EventServiceImpl) CreateEvent(newEvent models.EventCore) (event models.EventCore, err error) {
@@ -31,11 +31,11 @@ func (e EventServiceImpl) CreateEvent(newEvent models.EventCore) (event models.E
 
 func (e EventServiceImpl) UpdateEvent(event models.EventCore, clientId uint, clientRole models.Role) (updatedEvent models.EventCore, err error) {
 	if clientRole != models.RoleSuperAdmin && clientRole != models.RoleAdmin {
-		clientEventRoles, err := e.eventUserGateway.GetUserRolesForEvent(event.ID, clientId)
+		// Доступ только у SuperAdmin, Admin или Organizer
+		clientEventRoles, err := e.eventUserGateway.GetEventRoles(event.ID, clientId)
 		if err != nil {
 			return models.EventCore{}, err
 		}
-		// Если у пользователя нет роли Organizer, доступа нет
 		allowedEventRoles := []models.EventRole{models.EventRoleOrganizer}
 		if !utils.DoesHaveEventRole(clientEventRoles, allowedEventRoles) {
 			return models.EventCore{}, utils.ResponseError{
@@ -60,7 +60,7 @@ func (e EventServiceImpl) GetEventById(id, clientId uint, clientRole models.Role
 
 	if clientRole != models.RoleSuperAdmin && clientRole != models.RoleAdmin {
 		// проверка доступности мероприятия для client по стране
-		exist, err := e.eventCountryGateway.DoesExistEventCountry(event.ID, client.CountryID)
+		exist, err := e.eventCountryGateway.DoesExistRel(models.EventCountryRelCore{EventID: event.ID, CountryID: client.CountryID})
 		if err != nil {
 			return models.EventCore{}, err
 		}
@@ -78,7 +78,7 @@ func (e EventServiceImpl) GetEventById(id, clientId uint, clientRole models.Role
 					Message: consts.ErrEventNotAccessible,
 				}
 			}
-			exist, err = e.eventRegionGateway.DoesExistEventRegion(event.ID, *client.RegionID)
+			exist, err = e.eventRegionGateway.DoesExistRel(models.EventRegionRelCore{EventID: event.ID, RegionID: *client.RegionID})
 			if err != nil {
 				return models.EventCore{}, err
 			}
@@ -114,11 +114,11 @@ func (e EventServiceImpl) GetOriginalEventById(id, clientId uint, clientRole mod
 	}
 
 	if clientRole != models.RoleSuperAdmin && clientRole != models.RoleAdmin {
-		clientEventRoles, err := e.eventUserGateway.GetUserRolesForEvent(event.ID, clientId)
+		// Доступ только у SuperAdmin, Admin, Organizer
+		clientEventRoles, err := e.eventUserGateway.GetEventRoles(event.ID, clientId)
 		if err != nil {
 			return models.EventCore{}, err
 		}
-		// Если у пользователя нет роли Organizer, доступа нет
 		allowedEventRoles := []models.EventRole{models.EventRoleOrganizer}
 		if !utils.DoesHaveEventRole(clientEventRoles, allowedEventRoles) {
 			return models.EventCore{}, utils.ResponseError{
@@ -148,9 +148,9 @@ func (e EventServiceImpl) GetAllEvents(
 		}
 		// Получаем мероприятия доступные для страны и региона
 		if client.Country.HasRegions {
-			events, countRows, err = e.eventGateway.GetEventsByCountryIdAndRegionId(client.CountryID, *client.RegionID, offset, limit)
+			events, countRows, err = e.eventCountryGateway.GetEventsByCountryIdAndRegionId(client.CountryID, *client.RegionID, offset, limit)
 		} else {
-			events, countRows, err = e.eventGateway.GetEventsByCountryId(client.CountryID, offset, limit)
+			events, countRows, err = e.eventCountryGateway.GetEventsByCountryId(client.CountryID, offset, limit)
 		}
 	}
 	if err != nil {

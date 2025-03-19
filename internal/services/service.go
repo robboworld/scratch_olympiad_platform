@@ -34,9 +34,9 @@ func SetupServices(
 	solutionGateway gateways.SolutionGateway,
 	eventGateway gateways.EventGateway,
 	eventTranslationGateway gateways.EventTranslationGateway,
-	eventCountryGateway gateways.EventCountryGateway,
-	eventRegionGateway gateways.EventRegionGateway,
-	eventUserGateway gateways.EventUserGateway,
+	eventCountryGateway gateways.EventCountryRelGateway,
+	eventRegionGateway gateways.EventRegionRelGateway,
+	eventUserGateway gateways.EventUserRelGateway,
 	applicationAPI api.ApplicationAPI,
 ) Services {
 	return Services{

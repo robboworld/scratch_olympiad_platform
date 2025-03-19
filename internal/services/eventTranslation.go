@@ -20,7 +20,7 @@ type EventTranslationService interface {
 type EventTranslationServiceImpl struct {
 	eventGateway            gateways.EventGateway
 	eventTranslationGateway gateways.EventTranslationGateway
-	eventUserGateway        gateways.EventUserGateway
+	eventUserGateway        gateways.EventUserRelGateway
 }
 
 func (e EventTranslationServiceImpl) CreateEventTranslation(
@@ -35,7 +35,7 @@ func (e EventTranslationServiceImpl) CreateEventTranslation(
 	}
 
 	if clientRole != models.RoleSuperAdmin && clientRole != models.RoleAdmin {
-		clientEventRoles, err := e.eventUserGateway.GetUserRolesForEvent(eventTranslation.EventID, clientId)
+		clientEventRoles, err := e.eventUserGateway.GetEventRoles(eventTranslation.EventID, clientId)
 		if err != nil {
 			return models.EventTranslationCore{}, err
 		}
@@ -75,7 +75,7 @@ func (e EventTranslationServiceImpl) UpdateEventTranslation(
 	}
 
 	if clientRole != models.RoleSuperAdmin && clientRole != models.RoleAdmin {
-		clientEventRoles, err := e.eventUserGateway.GetUserRolesForEvent(eventTranslationCore.EventID, clientId)
+		clientEventRoles, err := e.eventUserGateway.GetEventRoles(eventTranslationCore.EventID, clientId)
 		if err != nil {
 			return models.EventTranslationCore{}, err
 		}
@@ -99,7 +99,7 @@ func (e EventTranslationServiceImpl) DeleteEventTranslation(id uint, clientId ui
 	}
 
 	if clientRole != models.RoleSuperAdmin && clientRole != models.RoleAdmin {
-		clientEventRoles, err := e.eventUserGateway.GetUserRolesForEvent(eventTranslation.EventID, clientId)
+		clientEventRoles, err := e.eventUserGateway.GetEventRoles(eventTranslation.EventID, clientId)
 		if err != nil {
 			return err
 		}
@@ -124,7 +124,7 @@ func (e EventTranslationServiceImpl) GetEventTranslationByEventId(eventId uint, 
 	}
 
 	if clientRole != models.RoleSuperAdmin && clientRole != models.RoleAdmin {
-		clientEventRoles, err := e.eventUserGateway.GetUserRolesForEvent(eventId, clientId)
+		clientEventRoles, err := e.eventUserGateway.GetEventRoles(eventId, clientId)
 		if err != nil {
 			return models.EventTranslationCore{}, err
 		}
