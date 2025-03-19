@@ -77,6 +77,7 @@ func SetupServices(
 		EventService: &EventServiceImpl{
 			userGateway:             userGateway,
 			eventGateway:            eventGateway,
+			eventUserGateway:        eventUserGateway,
 			eventTranslationGateway: eventTranslationGateway,
 			eventCountryGateway:     eventCountryGateway,
 			eventRegionGateway:      eventRegionGateway,

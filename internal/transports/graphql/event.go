@@ -66,6 +66,17 @@ func (r *mutationResolver) CreateEvent(ctx context.Context, input models.NewEven
 
 // UpdateEvent is the resolver for the UpdateEvent field.
 func (r *mutationResolver) UpdateEvent(ctx context.Context, input models.UpdateEvent) (*models.EventDetailsHTTP, error) {
+	ginContext, err := utils.GinContextFromContext(ctx)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return nil, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": err,
+			},
+		}
+	}
+	clientId := ginContext.Value(consts.KeyId).(uint)
+	clientRole := ginContext.Value(consts.KeyRole).(models.Role)
 	atoi, err := strconv.Atoi(input.ID)
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
@@ -109,7 +120,7 @@ func (r *mutationResolver) UpdateEvent(ctx context.Context, input models.UpdateE
 		StartDate:   startDate,
 		EndDate:     endDate,
 	}
-	updatedEvent, err := r.eventService.UpdateEvent(event)
+	updatedEvent, err := r.eventService.UpdateEvent(event, clientId, clientRole)
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
 		return nil, &gqlerror.Error{
@@ -759,6 +770,45 @@ func (r *queryResolver) GetEventByID(ctx context.Context, id string) (*models.Ev
 		}
 	}
 	event, err := r.eventService.GetEventById(uint(atoi), clientId, clientRole)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return nil, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": err,
+			},
+		}
+	}
+	eventHttp := models.EventDetailsHTTP{}
+	eventHttp.FromCore(event)
+	return &eventHttp, nil
+}
+
+// GetOriginalEventByID is the resolver for the GetOriginalEventById field.
+func (r *queryResolver) GetOriginalEventByID(ctx context.Context, id string) (*models.EventDetailsHTTP, error) {
+	ginContext, err := utils.GinContextFromContext(ctx)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return nil, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": err,
+			},
+		}
+	}
+	clientId := ginContext.Value(consts.KeyId).(uint)
+	clientRole := ginContext.Value(consts.KeyRole).(models.Role)
+	atoi, err := strconv.Atoi(id)
+	if err != nil {
+		r.loggers.Err.Printf("%s", err.Error())
+		return nil, &gqlerror.Error{
+			Extensions: map[string]interface{}{
+				"err": utils.ResponseError{
+					Code:    http.StatusBadRequest,
+					Message: consts.ErrAtoi,
+				},
+			},
+		}
+	}
+	event, err := r.eventService.GetOriginalEventById(uint(atoi), clientId, clientRole)
 	if err != nil {
 		r.loggers.Err.Printf("%s", err.Error())
 		return nil, &gqlerror.Error{

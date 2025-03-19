@@ -185,6 +185,7 @@ type ComplexityRoot struct {
 		GetEventByID                 func(childComplexity int, id string) int
 		GetEventRolesByAccessToken   func(childComplexity int, eventID string) int
 		GetEventTranslationByEventID func(childComplexity int, eventID string) int
+		GetOriginalEventByID         func(childComplexity int, id string) int
 		GetRegionsByCountryID        func(childComplexity int, countryID string, page *int, pageSize *int) int
 		GetSettings                  func(childComplexity int) int
 		GetUserByAccessToken         func(childComplexity int) int
@@ -277,6 +278,7 @@ type QueryResolver interface {
 	Me(ctx context.Context) (*models.UserHTTP, error)
 	GetAllCountries(ctx context.Context, page *int, pageSize *int) (*models.CountryHTTPList, error)
 	GetEventByID(ctx context.Context, id string) (*models.EventDetailsHTTP, error)
+	GetOriginalEventByID(ctx context.Context, id string) (*models.EventDetailsHTTP, error)
 	GetAllEvents(ctx context.Context, page *int, pageSize *int) (*models.EventHTTPList, error)
 	GetEventTranslationByEventID(ctx context.Context, eventID string) (*models.EventTranslationHTTP, error)
 	GetEventRolesByAccessToken(ctx context.Context, eventID string) (*models.EventRoleList, error)
@@ -1172,6 +1174,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.GetEventTranslationByEventID(childComplexity, args["eventId"].(string)), true
+
+	case "Query.GetOriginalEventById":
+		if e.complexity.Query.GetOriginalEventByID == nil {
+			break
+		}
+
+		args, err := ec.field_Query_GetOriginalEventById_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetOriginalEventByID(childComplexity, args["id"].(string)), true
 
 	case "Query.GetRegionsByCountryId":
 		if e.complexity.Query.GetRegionsByCountryID == nil {
@@ -2240,6 +2254,21 @@ func (ec *executionContext) field_Query_GetEventTranslationByEventId_args(ctx co
 		}
 	}
 	args["eventId"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_GetOriginalEventById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
 	return args, nil
 }
 
@@ -5414,7 +5443,7 @@ func (ec *executionContext) _Mutation_UpdateEvent(ctx context.Context, field gra
 			return ec.resolvers.Mutation().UpdateEvent(rctx, fc.Args["input"].(models.UpdateEvent))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin"})
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "Admin", "User"})
 			if err != nil {
 				return nil, err
 			}
@@ -8160,6 +8189,101 @@ func (ec *executionContext) fieldContext_Query_GetEventById(ctx context.Context,
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_GetEventById_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_GetOriginalEventById(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_GetOriginalEventById(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Query().GetOriginalEventByID(rctx, fc.Args["id"].(string))
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			roles, err := ec.unmarshalORole2ᚕgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐRoleᚄ(ctx, []interface{}{"SuperAdmin", "Admin", "User"})
+			if err != nil {
+				return nil, err
+			}
+			if ec.directives.HasRole == nil {
+				return nil, errors.New("directive hasRole is not implemented")
+			}
+			return ec.directives.HasRole(ctx, nil, directive0, roles)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, graphql.ErrorOnPath(ctx, err)
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(*models.EventDetailsHTTP); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/robboworld/scratch_olympiad_platform/internal/models.EventDetailsHTTP`, tmp)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.EventDetailsHTTP)
+	fc.Result = res
+	return ec.marshalNEventDetailsHttp2ᚖgithubᚗcomᚋrobboworldᚋscratch_olympiad_platformᚋinternalᚋmodelsᚐEventDetailsHTTP(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_GetOriginalEventById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_EventDetailsHttp_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_EventDetailsHttp_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_EventDetailsHttp_updatedAt(ctx, field)
+			case "name":
+				return ec.fieldContext_EventDetailsHttp_name(ctx, field)
+			case "description":
+				return ec.fieldContext_EventDetailsHttp_description(ctx, field)
+			case "startDate":
+				return ec.fieldContext_EventDetailsHttp_startDate(ctx, field)
+			case "endDate":
+				return ec.fieldContext_EventDetailsHttp_endDate(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type EventDetailsHttp", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_GetOriginalEventById_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -13448,6 +13572,28 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_GetEventById(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "GetOriginalEventById":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_GetOriginalEventById(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}

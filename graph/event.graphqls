@@ -70,6 +70,7 @@ type EventRoleList {
 
 extend type Query {
     GetEventById(id: ID!): EventDetailsHttp! @hasRole(roles: [SuperAdmin, Admin, User])
+    GetOriginalEventById(id: ID!): EventDetailsHttp! @hasRole(roles: [SuperAdmin, Admin, User])
     GetAllEvents(page: Int, pageSize: Int): EventHttpList! @hasRole(roles: [SuperAdmin, Admin, User])
     GetEventTranslationByEventId(eventId: ID!): EventTranslationHttp! @hasRole(roles: [SuperAdmin, Admin, User])
     GetEventRolesByAccessToken(eventId: ID!): EventRoleList! @hasRole(roles: [SuperAdmin, Admin, User])
@@ -77,7 +78,7 @@ extend type Query {
 
 extend type Mutation {
     CreateEvent(input: NewEvent!): EventDetailsHttp! @hasRole(roles: [SuperAdmin, Admin])
-    UpdateEvent(input: UpdateEvent!): EventDetailsHttp! @hasRole(roles: [SuperAdmin])
+    UpdateEvent(input: UpdateEvent!): EventDetailsHttp! @hasRole(roles: [SuperAdmin, Admin, User])
 
     CreateEventTranslation(input: NewEventTranslation!): EventTranslationHttp! @hasRole(roles: [SuperAdmin, Admin, User])
     UpdateEventTranslation(input: UpdateEventTranslation!): EventTranslationHttp! @hasRole(roles: [SuperAdmin, Admin, User])
