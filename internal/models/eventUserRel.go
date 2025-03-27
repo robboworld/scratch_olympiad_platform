@@ -15,8 +15,8 @@ type EventUserRelCore struct {
 	UpdatedAt time.Time
 	DeletedAt gorm.DeletedAt `gorm:"index"`
 	EventID   uint
-	Event     EventCore `gorm:"foreignKey:EventID;constraint:OnDelete:CASCADE;"`
+	Event     EventCore `gorm:"foreignKey:EventID"`
 	UserID    uint
-	User      UserCore  `gorm:"foreignKey:UserID;constraint:OnDelete:CASCADE;"`
+	User      UserCore  `gorm:"foreignKey:UserID"`
 	EventRole EventRole `gorm:"not null"`
 }

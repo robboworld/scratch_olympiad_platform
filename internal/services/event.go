@@ -12,7 +12,6 @@ type EventService interface {
 	CreateEvent(newEvent models.EventCore) (event models.EventCore, err error)
 	UpdateEvent(event models.EventCore, clientId uint, clientRole models.Role) (updatedEvent models.EventCore, err error)
 	GetEventById(id, clientId uint, clientRole models.Role) (event models.EventCore, err error)
-	GetOriginalEventById(id, clientId uint, clientRole models.Role) (event models.EventCore, err error)
 	GetAllEvents(page, pageSize *int, clientId uint, clientRole models.Role) (events []models.EventCore, countRows uint, err error)
 }
 
@@ -66,7 +65,7 @@ func (e EventServiceImpl) GetEventById(id, clientId uint, clientRole models.Role
 		}
 		if !exist {
 			return models.EventCore{}, utils.ResponseError{
-				Code:    http.StatusBadRequest,
+				Code:    http.StatusForbidden,
 				Message: consts.ErrEventNotAccessible,
 			}
 		}
@@ -74,7 +73,7 @@ func (e EventServiceImpl) GetEventById(id, clientId uint, clientRole models.Role
 		if client.Country.HasRegions {
 			if client.RegionID == nil {
 				return models.EventCore{}, utils.ResponseError{
-					Code:    http.StatusBadRequest,
+					Code:    http.StatusForbidden,
 					Message: consts.ErrEventNotAccessible,
 				}
 			}
@@ -84,50 +83,12 @@ func (e EventServiceImpl) GetEventById(id, clientId uint, clientRole models.Role
 			}
 			if !exist {
 				return models.EventCore{}, utils.ResponseError{
-					Code:    http.StatusBadRequest,
+					Code:    http.StatusForbidden,
 					Message: consts.ErrEventNotAccessible,
 				}
 			}
 		}
 	}
-
-	exists, err := e.eventTranslationGateway.DoesExistEventTranslation(id)
-	if err != nil {
-		return models.EventCore{}, err
-	}
-	if exists {
-		eventTranslation, err := e.eventTranslationGateway.GetEventTranslationByEventId(id)
-		if err != nil {
-			return models.EventCore{}, err
-		}
-		event.Name = eventTranslation.Name
-		event.Description = eventTranslation.Description
-	}
-
-	return event, nil
-}
-
-func (e EventServiceImpl) GetOriginalEventById(id, clientId uint, clientRole models.Role) (event models.EventCore, err error) {
-	event, err = e.eventGateway.GetEventById(id)
-	if err != nil {
-		return models.EventCore{}, err
-	}
-
-	if clientRole != models.RoleSuperAdmin && clientRole != models.RoleAdmin {
-		// Доступ только у SuperAdmin, Admin, Organizer
-		clientEventRoles, err := e.eventUserGateway.GetEventRoles(event.ID, clientId)
-		if err != nil {
-			return models.EventCore{}, err
-		}
-		allowedEventRoles := []models.EventRole{models.EventRoleOrganizer}
-		if !utils.DoesHaveEventRole(clientEventRoles, allowedEventRoles) {
-			return models.EventCore{}, utils.ResponseError{
-				Code:    http.StatusForbidden,
-				Message: consts.ErrAccessDenied,
-			}
-		}
-	}
-
 	return event, nil
 }
 
@@ -156,21 +117,5 @@ func (e EventServiceImpl) GetAllEvents(
 	if err != nil {
 		return nil, 0, err
 	}
-
-	for i := range events {
-		exists, err := e.eventTranslationGateway.DoesExistEventTranslation(events[i].ID)
-		if err != nil {
-			return nil, 0, err
-		}
-		if exists {
-			eventTranslation, err := e.eventTranslationGateway.GetEventTranslationByEventId(events[i].ID)
-			if err != nil {
-				return nil, 0, err
-			}
-			events[i].Name = eventTranslation.Name
-			events[i].Description = eventTranslation.Description
-		}
-	}
-
 	return events, countRows, nil
 }

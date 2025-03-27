@@ -113,22 +113,23 @@ func (e EventCountryRelGatewayImpl) GetEventsByCountryId(
 		Joins("JOIN event_country_rel_cores ec ON ec.event_id = event_cores.id").
 		Where("ec.country_id = ?", countryID)
 
-	var count int64
-	result := query.Count(&count)
-	if result.Error != nil {
-		return []models.EventCore{}, 0, utils.ResponseError{
-			Code:    http.StatusInternalServerError,
-			Message: result.Error.Error(),
-		}
-	}
-
-	result = query.Limit(limit).Offset(offset).Find(&events)
+	result := query.Limit(limit).Offset(offset).Find(&events)
 	if result.Error != nil {
 		return nil, 0, utils.ResponseError{
 			Code:    http.StatusInternalServerError,
 			Message: result.Error.Error(),
 		}
 	}
+
+	var count int64
+	result = query.Count(&count)
+	if result.Error != nil {
+		return nil, 0, utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: result.Error.Error(),
+		}
+	}
+
 	return events, uint(count), nil
 }
 
@@ -141,21 +142,22 @@ func (e EventCountryRelGatewayImpl) GetEventsByCountryIdAndRegionId(
 		Joins("JOIN event_region_rel_cores er ON er.event_id = event_cores.id").
 		Where("ec.country_id = ? AND er.region_id = ?", countryID, regionID)
 
-	var count int64
-	result := query.Count(&count)
-	if result.Error != nil {
-		return []models.EventCore{}, 0, utils.ResponseError{
-			Code:    http.StatusInternalServerError,
-			Message: result.Error.Error(),
-		}
-	}
-
-	result = query.Limit(limit).Offset(offset).Find(&events)
+	result := query.Limit(limit).Offset(offset).Find(&events)
 	if result.Error != nil {
 		return nil, 0, utils.ResponseError{
 			Code:    http.StatusInternalServerError,
 			Message: result.Error.Error(),
 		}
 	}
+
+	var count int64
+	result = query.Count(&count)
+	if result.Error != nil {
+		return nil, 0, utils.ResponseError{
+			Code:    http.StatusInternalServerError,
+			Message: result.Error.Error(),
+		}
+	}
+
 	return events, uint(count), nil
 }

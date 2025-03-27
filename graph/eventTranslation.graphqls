@@ -19,10 +19,6 @@ input UpdateEventTranslation {
     description: String!
 }
 
-extend type Query {
-    GetEventTranslationByEventId(eventId: ID!): EventTranslationHttp! @hasRole(roles: [SuperAdmin, Admin, User])
-}
-
 extend type Mutation {
     CreateEventTranslation(input: NewEventTranslation!): EventTranslationHttp! @hasRole(roles: [SuperAdmin, Admin, User])
     UpdateEventTranslation(input: UpdateEventTranslation!): EventTranslationHttp! @hasRole(roles: [SuperAdmin, Admin, User])

@@ -35,6 +35,8 @@ const (
 	ErrDoesNotMatchAgeCategory  = "does not match the age category"
 	ErrSelfAssignmentNotAllowed = "self assignment not allowed"
 	ErrEventNotAccessible       = "event is not accessible to the user"
+	ErrEmptyDataWithClaims      = "empty data with claims"
+	ErrNotFoundAuthToken        = "authToken not found in transport payload"
 )
 
 // http code 409

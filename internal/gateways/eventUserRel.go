@@ -92,7 +92,7 @@ func (e EventUserRelGatewayImpl) DeleteRel(rel models.EventUserRelCore) error {
 
 func (e EventUserRelGatewayImpl) GetEventRoles(eventId, userId uint) ([]models.EventRole, error) {
 	var roles []models.EventRole
-	if err := e.postgresClient.Db.Model(&models.EventUserRelCore{}).Select("DISTINCT(event_role)").
+	if err := e.postgresClient.Db.Model(&models.EventUserRelCore{}).
 		Where("event_id = ? AND user_id = ?", eventId, userId).
 		Pluck("event_role", &roles).Error; err != nil {
 

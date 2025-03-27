@@ -15,6 +15,7 @@ type EventDetailsHttp {
     description: String!
     startDate: Timestamp!
     endDate: Timestamp!
+    translation: EventTranslationHttp
 }
 
 input NewEvent {
@@ -39,7 +40,6 @@ type EventHttpList {
 
 extend type Query {
     GetEventById(id: ID!): EventDetailsHttp! @hasRole(roles: [SuperAdmin, Admin, User])
-    GetOriginalEventById(id: ID!): EventDetailsHttp! @hasRole(roles: [SuperAdmin, Admin, User])
     GetAllEvents(page: Int, pageSize: Int): EventHttpList! @hasRole(roles: [SuperAdmin, Admin, User])
 }
 

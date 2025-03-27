@@ -15,10 +15,7 @@ type EventTranslationGateway interface {
 	CreateEventTranslation(eventTranslation models.EventTranslationCore) (models.EventTranslationCore, error)
 	UpdateEventTranslation(eventTranslation models.EventTranslationCore) (models.EventTranslationCore, error)
 	DeleteEventTranslation(id uint) error
-	// GetEventTranslationByEventId TODO: Когда будет несколько переводов, переделать под получения списка переводов
-	GetEventTranslationByEventId(eventId uint) (eventTranslation models.EventTranslationCore, err error)
 	GetEventTranslationById(id uint) (eventTranslation models.EventTranslationCore, err error)
-	DoesExistEventTranslation(eventId uint) (exists bool, err error)
 }
 
 type EventTranslationGatewayImpl struct {
@@ -118,24 +115,6 @@ func (e EventTranslationGatewayImpl) DeleteEventTranslation(id uint) error {
 	return nil
 }
 
-func (e EventTranslationGatewayImpl) GetEventTranslationByEventId(eventId uint) (
-	eventTranslation models.EventTranslationCore, err error,
-) {
-	if err = e.postgresClient.Db.Where("event_id = ?", eventId).Take(&eventTranslation).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return eventTranslation, utils.ResponseError{
-				Code:    http.StatusBadRequest,
-				Message: consts.ErrNotFoundInDB,
-			}
-		}
-		return eventTranslation, utils.ResponseError{
-			Code:    http.StatusInternalServerError,
-			Message: err.Error(),
-		}
-	}
-	return eventTranslation, nil
-}
-
 func (e EventTranslationGatewayImpl) GetEventTranslationById(id uint) (
 	eventTranslation models.EventTranslationCore, err error,
 ) {
@@ -152,18 +131,4 @@ func (e EventTranslationGatewayImpl) GetEventTranslationById(id uint) (
 		}
 	}
 	return eventTranslation, nil
-}
-
-func (e EventTranslationGatewayImpl) DoesExistEventTranslation(eventId uint) (exists bool, err error) {
-	if err = e.postgresClient.Db.Where("event_id = ?", eventId).
-		Take(&models.EventTranslationCore{}).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return false, nil
-		}
-		return false, utils.ResponseError{
-			Code:    http.StatusInternalServerError,
-			Message: err.Error(),
-		}
-	}
-	return true, nil
 }

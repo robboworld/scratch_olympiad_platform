@@ -7,19 +7,22 @@ import (
 )
 
 type EventTranslationCore struct {
-	ID          uint `gorm:"primaryKey"`
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
-	DeletedAt   gorm.DeletedAt `gorm:"index"`
-	Name        string         `gorm:"not null"`
-	Description string         `gorm:"not null"`
-	EventID     uint
-	Event       EventCore `gorm:"foreignKey:EventID"`
+	ID        uint `gorm:"primaryKey"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt gorm.DeletedAt `gorm:"index"`
+	EventID   uint
+	Event     EventCore
+
+	Name        string `gorm:"not null"`
+	Description string `gorm:"not null"`
 }
 
-func (e *EventTranslationHTTP) FromCore(eventTranslation EventTranslationCore) {
-	e.ID = strconv.Itoa(int(eventTranslation.ID))
-	e.Name = eventTranslation.Name
-	e.Description = eventTranslation.Description
-	e.EventID = strconv.Itoa(int(eventTranslation.EventID))
+func (e *EventTranslationHTTP) FromCore(translation EventTranslationCore) {
+	e.ID = strconv.Itoa(int(translation.ID))
+	e.CreatedAt = translation.CreatedAt.Format(time.DateTime)
+	e.UpdatedAt = translation.UpdatedAt.Format(time.DateTime)
+	e.Name = translation.Name
+	e.Description = translation.Description
+	e.EventID = strconv.Itoa(int(translation.EventID))
 }

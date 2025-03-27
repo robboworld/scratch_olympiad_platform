@@ -56,7 +56,7 @@ func (e EventGatewayImpl) UpdateEvent(event models.EventCore) (updatedEvent mode
 }
 
 func (e EventGatewayImpl) GetEventById(id uint) (event models.EventCore, err error) {
-	if err = e.postgresClient.Db.First(&event, id).Error; err != nil {
+	if err = e.postgresClient.Db.Preload("Translation").First(&event, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return models.EventCore{}, utils.ResponseError{
 				Code:    http.StatusBadRequest,
@@ -74,18 +74,18 @@ func (e EventGatewayImpl) GetEventById(id uint) (event models.EventCore, err err
 func (e EventGatewayImpl) GetAllEvents(offset, limit int) (events []models.EventCore, countRows uint, err error) {
 	query := e.postgresClient.Db.Model(&models.EventCore{})
 
-	var count int64
-	result := query.Count(&count)
+	result := query.Preload("Translation").Limit(limit).Offset(offset).Find(&events)
 	if result.Error != nil {
-		return nil, 0, utils.ResponseError{
+		return []models.EventCore{}, 0, utils.ResponseError{
 			Code:    http.StatusInternalServerError,
 			Message: result.Error.Error(),
 		}
 	}
 
-	result = query.Limit(limit).Offset(offset).Find(&events)
+	var count int64
+	result = query.Count(&count)
 	if result.Error != nil {
-		return []models.EventCore{}, 0, utils.ResponseError{
+		return nil, 0, utils.ResponseError{
 			Code:    http.StatusInternalServerError,
 			Message: result.Error.Error(),
 		}

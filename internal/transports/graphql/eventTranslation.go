@@ -6,13 +6,13 @@ package resolvers
 
 import (
 	"context"
-	"github.com/robboworld/scratch_olympiad_platform/internal/consts"
-	"github.com/robboworld/scratch_olympiad_platform/pkg/utils"
-	"github.com/vektah/gqlparser/v2/gqlerror"
 	"net/http"
 	"strconv"
 
+	"github.com/robboworld/scratch_olympiad_platform/internal/consts"
 	"github.com/robboworld/scratch_olympiad_platform/internal/models"
+	"github.com/robboworld/scratch_olympiad_platform/pkg/utils"
+	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
 // CreateEventTranslation is the resolver for the CreateEventTranslation field.
@@ -138,43 +138,4 @@ func (r *mutationResolver) DeleteEventTranslation(ctx context.Context, id string
 		}
 	}
 	return &models.Response{Ok: true}, nil
-}
-
-// GetEventTranslationByEventID is the resolver for the GetEventTranslationByEventId field.
-func (r *queryResolver) GetEventTranslationByEventID(ctx context.Context, eventID string) (*models.EventTranslationHTTP, error) {
-	ginContext, err := utils.GinContextFromContext(ctx)
-	if err != nil {
-		r.loggers.Err.Printf("%s", err.Error())
-		return nil, &gqlerror.Error{
-			Extensions: map[string]interface{}{
-				"err": err,
-			},
-		}
-	}
-	clientId := ginContext.Value(consts.KeyId).(uint)
-	clientRole := ginContext.Value(consts.KeyRole).(models.Role)
-	eventIdInt, err := strconv.Atoi(eventID)
-	if err != nil {
-		r.loggers.Err.Printf("%s", err.Error())
-		return nil, &gqlerror.Error{
-			Extensions: map[string]interface{}{
-				"err": utils.ResponseError{
-					Code:    http.StatusBadRequest,
-					Message: consts.ErrAtoi,
-				},
-			},
-		}
-	}
-	eventTranslation, err := r.eventTranslationService.GetEventTranslationByEventId(uint(eventIdInt), clientId, clientRole)
-	if err != nil {
-		r.loggers.Err.Printf("%s", err.Error())
-		return nil, &gqlerror.Error{
-			Extensions: map[string]interface{}{
-				"err": err,
-			},
-		}
-	}
-	eventTranslationHttp := models.EventTranslationHTTP{}
-	eventTranslationHttp.FromCore(eventTranslation)
-	return &eventTranslationHttp, nil
 }

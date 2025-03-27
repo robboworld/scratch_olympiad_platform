@@ -173,45 +173,6 @@ func (r *queryResolver) GetEventByID(ctx context.Context, id string) (*models.Ev
 	return &eventHttp, nil
 }
 
-// GetOriginalEventByID is the resolver for the GetOriginalEventById field.
-func (r *queryResolver) GetOriginalEventByID(ctx context.Context, id string) (*models.EventDetailsHTTP, error) {
-	ginContext, err := utils.GinContextFromContext(ctx)
-	if err != nil {
-		r.loggers.Err.Printf("%s", err.Error())
-		return nil, &gqlerror.Error{
-			Extensions: map[string]interface{}{
-				"err": err,
-			},
-		}
-	}
-	clientId := ginContext.Value(consts.KeyId).(uint)
-	clientRole := ginContext.Value(consts.KeyRole).(models.Role)
-	atoi, err := strconv.Atoi(id)
-	if err != nil {
-		r.loggers.Err.Printf("%s", err.Error())
-		return nil, &gqlerror.Error{
-			Extensions: map[string]interface{}{
-				"err": utils.ResponseError{
-					Code:    http.StatusBadRequest,
-					Message: consts.ErrAtoi,
-				},
-			},
-		}
-	}
-	event, err := r.eventService.GetOriginalEventById(uint(atoi), clientId, clientRole)
-	if err != nil {
-		r.loggers.Err.Printf("%s", err.Error())
-		return nil, &gqlerror.Error{
-			Extensions: map[string]interface{}{
-				"err": err,
-			},
-		}
-	}
-	eventHttp := models.EventDetailsHTTP{}
-	eventHttp.FromCore(event)
-	return &eventHttp, nil
-}
-
 // GetAllEvents is the resolver for the GetAllEvents field.
 func (r *queryResolver) GetAllEvents(ctx context.Context, page *int, pageSize *int) (*models.EventHTTPList, error) {
 	ginContext, err := utils.GinContextFromContext(ctx)

@@ -44,13 +44,14 @@ type CountryHTTPList struct {
 }
 
 type EventDetailsHTTP struct {
-	ID          string `json:"id"`
-	CreatedAt   string `json:"createdAt"`
-	UpdatedAt   string `json:"updatedAt"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	StartDate   string `json:"startDate"`
-	EndDate     string `json:"endDate"`
+	ID          string                `json:"id"`
+	CreatedAt   string                `json:"createdAt"`
+	UpdatedAt   string                `json:"updatedAt"`
+	Name        string                `json:"name"`
+	Description string                `json:"description"`
+	StartDate   string                `json:"startDate"`
+	EndDate     string                `json:"endDate"`
+	Translation *EventTranslationHTTP `json:"translation,omitempty"`
 }
 
 type EventHTTP struct {
