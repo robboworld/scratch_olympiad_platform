@@ -12,15 +12,12 @@ type EventTranslationService interface {
 	CreateEventTranslation(eventTranslation models.EventTranslationCore, clientId uint, clientRole models.Role) (newEventTranslation models.EventTranslationCore, err error)
 	UpdateEventTranslation(eventTranslation models.EventTranslationCore, clientId uint, clientRole models.Role) (updatedEventTranslation models.EventTranslationCore, err error)
 	DeleteEventTranslation(id uint, clientId uint, clientRole models.Role) error
-
-	// GetEventTranslationByEventId TODO: Когда будет несколько переводов, переделать под получения списка переводов
-	GetEventTranslationByEventId(eventId uint, clientId uint, clientRole models.Role) (eventTranslation models.EventTranslationCore, err error)
 }
 
 type EventTranslationServiceImpl struct {
 	eventGateway            gateways.EventGateway
 	eventTranslationGateway gateways.EventTranslationGateway
-	eventUserGateway        gateways.EventUserGateway
+	eventUserGateway        gateways.EventUserRelGateway
 }
 
 func (e EventTranslationServiceImpl) CreateEventTranslation(
@@ -29,17 +26,12 @@ func (e EventTranslationServiceImpl) CreateEventTranslation(
 ) (
 	newEventTranslation models.EventTranslationCore, err error,
 ) {
-	_, err = e.eventGateway.GetEventById(eventTranslation.EventID)
-	if err != nil {
-		return models.EventTranslationCore{}, err
-	}
-
 	if clientRole != models.RoleSuperAdmin && clientRole != models.RoleAdmin {
-		clientEventRoles, err := e.eventUserGateway.GetUserRolesForEvent(eventTranslation.EventID, clientId)
+		// Доступ только у SuperAdmin, Admin, Organizer
+		clientEventRoles, err := e.eventUserGateway.GetEventRoles(eventTranslation.EventID, clientId)
 		if err != nil {
 			return models.EventTranslationCore{}, err
 		}
-		// Если у пользователя нет роли Organizer, доступа нет
 		allowedEventRoles := []models.EventRole{models.EventRoleOrganizer}
 		if !utils.DoesHaveEventRole(clientEventRoles, allowedEventRoles) {
 			return models.EventTranslationCore{}, utils.ResponseError{
@@ -48,18 +40,6 @@ func (e EventTranslationServiceImpl) CreateEventTranslation(
 			}
 		}
 	}
-
-	exists, err := e.eventTranslationGateway.DoesExistEventTranslation(eventTranslation.EventID)
-	if err != nil {
-		return models.EventTranslationCore{}, err
-	}
-	if exists {
-		return models.EventTranslationCore{}, utils.ResponseError{
-			Code:    http.StatusBadRequest,
-			Message: consts.ErrTranslationForEventAlreadyExist,
-		}
-	}
-
 	return e.eventTranslationGateway.CreateEventTranslation(eventTranslation)
 }
 
@@ -75,11 +55,11 @@ func (e EventTranslationServiceImpl) UpdateEventTranslation(
 	}
 
 	if clientRole != models.RoleSuperAdmin && clientRole != models.RoleAdmin {
-		clientEventRoles, err := e.eventUserGateway.GetUserRolesForEvent(eventTranslationCore.EventID, clientId)
+		// Доступ только у SuperAdmin, Admin, Organizer
+		clientEventRoles, err := e.eventUserGateway.GetEventRoles(eventTranslationCore.EventID, clientId)
 		if err != nil {
 			return models.EventTranslationCore{}, err
 		}
-		// Если у пользователя нет роли Organizer, доступа нет
 		allowedEventRoles := []models.EventRole{models.EventRoleOrganizer}
 		if !utils.DoesHaveEventRole(clientEventRoles, allowedEventRoles) {
 			return models.EventTranslationCore{}, utils.ResponseError{
@@ -99,11 +79,11 @@ func (e EventTranslationServiceImpl) DeleteEventTranslation(id uint, clientId ui
 	}
 
 	if clientRole != models.RoleSuperAdmin && clientRole != models.RoleAdmin {
-		clientEventRoles, err := e.eventUserGateway.GetUserRolesForEvent(eventTranslation.EventID, clientId)
+		// Доступ только у SuperAdmin, Admin, Organizer
+		clientEventRoles, err := e.eventUserGateway.GetEventRoles(eventTranslation.EventID, clientId)
 		if err != nil {
 			return err
 		}
-		// Если у пользователя нет роли Organizer, доступа нет
 		allowedEventRoles := []models.EventRole{models.EventRoleOrganizer}
 		if !utils.DoesHaveEventRole(clientEventRoles, allowedEventRoles) {
 			return utils.ResponseError{
@@ -113,30 +93,4 @@ func (e EventTranslationServiceImpl) DeleteEventTranslation(id uint, clientId ui
 		}
 	}
 	return e.eventTranslationGateway.DeleteEventTranslation(id)
-}
-
-func (e EventTranslationServiceImpl) GetEventTranslationByEventId(eventId uint, clientId uint, clientRole models.Role) (
-	eventTranslation models.EventTranslationCore, err error,
-) {
-	_, err = e.eventGateway.GetEventById(eventId)
-	if err != nil {
-		return models.EventTranslationCore{}, err
-	}
-
-	if clientRole != models.RoleSuperAdmin && clientRole != models.RoleAdmin {
-		clientEventRoles, err := e.eventUserGateway.GetUserRolesForEvent(eventId, clientId)
-		if err != nil {
-			return models.EventTranslationCore{}, err
-		}
-		// Если у пользователя нет роли Organizer, доступа нет
-		allowedEventRoles := []models.EventRole{models.EventRoleOrganizer}
-		if !utils.DoesHaveEventRole(clientEventRoles, allowedEventRoles) {
-			return models.EventTranslationCore{}, utils.ResponseError{
-				Code:    http.StatusForbidden,
-				Message: consts.ErrAccessDenied,
-			}
-		}
-	}
-
-	return e.eventTranslationGateway.GetEventTranslationByEventId(eventId)
 }

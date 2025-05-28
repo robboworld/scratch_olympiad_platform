@@ -34,9 +34,9 @@ func SetupServices(
 	solutionGateway gateways.SolutionGateway,
 	eventGateway gateways.EventGateway,
 	eventTranslationGateway gateways.EventTranslationGateway,
-	eventCountryGateway gateways.EventCountryGateway,
-	eventRegionGateway gateways.EventRegionGateway,
-	eventUserGateway gateways.EventUserGateway,
+	eventCountryGateway gateways.EventCountryRelGateway,
+	eventRegionGateway gateways.EventRegionRelGateway,
+	eventUserGateway gateways.EventUserRelGateway,
 	applicationAPI api.ApplicationAPI,
 ) Services {
 	return Services{
@@ -77,6 +77,7 @@ func SetupServices(
 		EventService: &EventServiceImpl{
 			userGateway:             userGateway,
 			eventGateway:            eventGateway,
+			eventUserGateway:        eventUserGateway,
 			eventTranslationGateway: eventTranslationGateway,
 			eventCountryGateway:     eventCountryGateway,
 			eventRegionGateway:      eventRegionGateway,
@@ -87,19 +88,15 @@ func SetupServices(
 			eventUserGateway:        eventUserGateway,
 		},
 		EventCountryService: &EventCountryServiceImpl{
-			countryGateway:      countryGateway,
-			eventGateway:        eventGateway,
 			eventCountryGateway: eventCountryGateway,
 		},
 		EventRegionService: &EventRegionServiceImpl{
 			regionGateway:       regionGateway,
-			eventGateway:        eventGateway,
 			eventCountryGateway: eventCountryGateway,
 			eventRegionGateway:  eventRegionGateway,
 		},
 		EventUserService: &EventUserServiceImpl{
 			userGateway:         userGateway,
-			eventGateway:        eventGateway,
 			eventUserGateway:    eventUserGateway,
 			eventCountryGateway: eventCountryGateway,
 			eventRegionGateway:  eventRegionGateway,

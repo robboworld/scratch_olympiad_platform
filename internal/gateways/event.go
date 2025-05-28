@@ -16,8 +16,6 @@ type EventGateway interface {
 	UpdateEvent(event models.EventCore) (updatedEvent models.EventCore, err error)
 	GetEventById(id uint) (event models.EventCore, err error)
 	GetAllEvents(offset, limit int) (events []models.EventCore, countRows uint, err error)
-	GetEventsByCountryId(countryId uint, offset, limit int) (events []models.EventCore, countRows uint, err error)
-	GetEventsByCountryIdAndRegionId(countryId uint, regionId uint, offset, limit int) (events []models.EventCore, countRows uint, err error)
 }
 
 type EventGatewayImpl struct {
@@ -58,7 +56,7 @@ func (e EventGatewayImpl) UpdateEvent(event models.EventCore) (updatedEvent mode
 }
 
 func (e EventGatewayImpl) GetEventById(id uint) (event models.EventCore, err error) {
-	if err = e.postgresClient.Db.First(&event, id).Error; err != nil {
+	if err = e.postgresClient.Db.Preload("Translation").First(&event, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return models.EventCore{}, utils.ResponseError{
 				Code:    http.StatusBadRequest,
@@ -76,76 +74,21 @@ func (e EventGatewayImpl) GetEventById(id uint) (event models.EventCore, err err
 func (e EventGatewayImpl) GetAllEvents(offset, limit int) (events []models.EventCore, countRows uint, err error) {
 	query := e.postgresClient.Db.Model(&models.EventCore{})
 
-	var count int64
-	result := query.Count(&count)
+	result := query.Preload("Translation").Limit(limit).Offset(offset).Find(&events)
 	if result.Error != nil {
-		return nil, 0, utils.ResponseError{
+		return []models.EventCore{}, 0, utils.ResponseError{
 			Code:    http.StatusInternalServerError,
 			Message: result.Error.Error(),
 		}
 	}
 
-	result = query.Limit(limit).Offset(offset).Find(&events)
+	var count int64
+	result = query.Count(&count)
 	if result.Error != nil {
-		return []models.EventCore{}, 0, utils.ResponseError{
+		return nil, 0, utils.ResponseError{
 			Code:    http.StatusInternalServerError,
 			Message: result.Error.Error(),
 		}
 	}
 	return events, uint(count), result.Error
-}
-
-func (e EventGatewayImpl) GetEventsByCountryIdAndRegionId(
-	countryID, regionID uint,
-	offset, limit int,
-) (events []models.EventCore, countRows uint, err error) {
-	query := e.postgresClient.Db.Model(&models.EventCore{}).
-		Joins("JOIN event_country_cores ec ON ec.event_id = event_cores.id").
-		Joins("JOIN event_region_cores er ON er.event_id = event_cores.id").
-		Where("ec.country_id = ? AND er.region_id = ?", countryID, regionID)
-
-	var count int64
-	result := query.Count(&count)
-	if result.Error != nil {
-		return []models.EventCore{}, 0, utils.ResponseError{
-			Code:    http.StatusInternalServerError,
-			Message: result.Error.Error(),
-		}
-	}
-
-	result = query.Limit(limit).Offset(offset).Find(&events)
-	if result.Error != nil {
-		return nil, 0, utils.ResponseError{
-			Code:    http.StatusInternalServerError,
-			Message: result.Error.Error(),
-		}
-	}
-	return events, uint(count), nil
-}
-
-func (e EventGatewayImpl) GetEventsByCountryId(
-	countryID uint,
-	offset, limit int,
-) (events []models.EventCore, countRows uint, err error) {
-	query := e.postgresClient.Db.Model(&models.EventCore{}).
-		Joins("JOIN event_country_cores ec ON ec.event_id = event_cores.id").
-		Where("ec.country_id = ?", countryID)
-
-	var count int64
-	result := query.Count(&count)
-	if result.Error != nil {
-		return []models.EventCore{}, 0, utils.ResponseError{
-			Code:    http.StatusInternalServerError,
-			Message: result.Error.Error(),
-		}
-	}
-
-	result = query.Limit(limit).Offset(offset).Find(&events)
-	if result.Error != nil {
-		return nil, 0, utils.ResponseError{
-			Code:    http.StatusInternalServerError,
-			Message: result.Error.Error(),
-		}
-	}
-	return events, uint(count), nil
 }

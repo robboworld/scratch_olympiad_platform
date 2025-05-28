@@ -56,7 +56,7 @@ func (r RegionGatewayImpl) GetRegionsByCountryId(countryId uint, offset, limit i
 }
 
 func (r RegionGatewayImpl) GetRegionById(id uint) (region models.RegionCore, err error) {
-	if err = r.postgresClient.Db.Where("id = ?", id).Take(&region).Error; err != nil {
+	if err = r.postgresClient.Db.Preload("Country").Where("id = ?", id).Take(&region).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return region, utils.ResponseError{
 				Code:    http.StatusBadRequest,

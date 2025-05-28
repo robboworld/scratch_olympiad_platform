@@ -10,7 +10,7 @@ import (
 
 type EventService interface {
 	CreateEvent(newEvent models.EventCore) (event models.EventCore, err error)
-	UpdateEvent(event models.EventCore) (updatedEvent models.EventCore, err error)
+	UpdateEvent(event models.EventCore, clientId uint, clientRole models.Role) (updatedEvent models.EventCore, err error)
 	GetEventById(id, clientId uint, clientRole models.Role) (event models.EventCore, err error)
 	GetAllEvents(page, pageSize *int, clientId uint, clientRole models.Role) (events []models.EventCore, countRows uint, err error)
 }
@@ -18,16 +18,31 @@ type EventService interface {
 type EventServiceImpl struct {
 	userGateway             gateways.UserGateway
 	eventGateway            gateways.EventGateway
+	eventUserGateway        gateways.EventUserRelGateway
 	eventTranslationGateway gateways.EventTranslationGateway
-	eventCountryGateway     gateways.EventCountryGateway
-	eventRegionGateway      gateways.EventRegionGateway
+	eventCountryGateway     gateways.EventCountryRelGateway
+	eventRegionGateway      gateways.EventRegionRelGateway
 }
 
 func (e EventServiceImpl) CreateEvent(newEvent models.EventCore) (event models.EventCore, err error) {
 	return e.eventGateway.CreateEvent(newEvent)
 }
 
-func (e EventServiceImpl) UpdateEvent(event models.EventCore) (updatedEvent models.EventCore, err error) {
+func (e EventServiceImpl) UpdateEvent(event models.EventCore, clientId uint, clientRole models.Role) (updatedEvent models.EventCore, err error) {
+	if clientRole != models.RoleSuperAdmin && clientRole != models.RoleAdmin {
+		// Доступ только у SuperAdmin, Admin или Organizer
+		clientEventRoles, err := e.eventUserGateway.GetEventRoles(event.ID, clientId)
+		if err != nil {
+			return models.EventCore{}, err
+		}
+		allowedEventRoles := []models.EventRole{models.EventRoleOrganizer}
+		if !utils.DoesHaveEventRole(clientEventRoles, allowedEventRoles) {
+			return models.EventCore{}, utils.ResponseError{
+				Code:    http.StatusForbidden,
+				Message: consts.ErrAccessDenied,
+			}
+		}
+	}
 	return e.eventGateway.UpdateEvent(event)
 }
 
@@ -44,13 +59,13 @@ func (e EventServiceImpl) GetEventById(id, clientId uint, clientRole models.Role
 
 	if clientRole != models.RoleSuperAdmin && clientRole != models.RoleAdmin {
 		// проверка доступности мероприятия для client по стране
-		exist, err := e.eventCountryGateway.DoesExistEventCountry(event.ID, client.CountryID)
+		exist, err := e.eventCountryGateway.DoesExistRel(models.EventCountryRelCore{EventID: event.ID, CountryID: client.CountryID})
 		if err != nil {
 			return models.EventCore{}, err
 		}
 		if !exist {
 			return models.EventCore{}, utils.ResponseError{
-				Code:    http.StatusBadRequest,
+				Code:    http.StatusForbidden,
 				Message: consts.ErrEventNotAccessible,
 			}
 		}
@@ -58,36 +73,22 @@ func (e EventServiceImpl) GetEventById(id, clientId uint, clientRole models.Role
 		if client.Country.HasRegions {
 			if client.RegionID == nil {
 				return models.EventCore{}, utils.ResponseError{
-					Code:    http.StatusBadRequest,
+					Code:    http.StatusForbidden,
 					Message: consts.ErrEventNotAccessible,
 				}
 			}
-			exist, err = e.eventRegionGateway.DoesExistEventRegion(event.ID, *client.RegionID)
+			exist, err = e.eventRegionGateway.DoesExistRel(models.EventRegionRelCore{EventID: event.ID, RegionID: *client.RegionID})
 			if err != nil {
 				return models.EventCore{}, err
 			}
 			if !exist {
 				return models.EventCore{}, utils.ResponseError{
-					Code:    http.StatusBadRequest,
+					Code:    http.StatusForbidden,
 					Message: consts.ErrEventNotAccessible,
 				}
 			}
 		}
 	}
-
-	exists, err := e.eventTranslationGateway.DoesExistEventTranslation(id)
-	if err != nil {
-		return models.EventCore{}, err
-	}
-	if exists {
-		eventTranslation, err := e.eventTranslationGateway.GetEventTranslationByEventId(id)
-		if err != nil {
-			return models.EventCore{}, err
-		}
-		event.Name = eventTranslation.Name
-		event.Description = eventTranslation.Description
-	}
-
 	return event, nil
 }
 
@@ -108,29 +109,13 @@ func (e EventServiceImpl) GetAllEvents(
 		}
 		// Получаем мероприятия доступные для страны и региона
 		if client.Country.HasRegions {
-			events, countRows, err = e.eventGateway.GetEventsByCountryIdAndRegionId(client.CountryID, *client.RegionID, offset, limit)
+			events, countRows, err = e.eventCountryGateway.GetEventsByCountryIdAndRegionId(client.CountryID, *client.RegionID, offset, limit)
 		} else {
-			events, countRows, err = e.eventGateway.GetEventsByCountryId(client.CountryID, offset, limit)
+			events, countRows, err = e.eventCountryGateway.GetEventsByCountryId(client.CountryID, offset, limit)
 		}
 	}
 	if err != nil {
 		return nil, 0, err
 	}
-
-	for i := range events {
-		exists, err := e.eventTranslationGateway.DoesExistEventTranslation(events[i].ID)
-		if err != nil {
-			return nil, 0, err
-		}
-		if exists {
-			eventTranslation, err := e.eventTranslationGateway.GetEventTranslationByEventId(events[i].ID)
-			if err != nil {
-				return nil, 0, err
-			}
-			events[i].Name = eventTranslation.Name
-			events[i].Description = eventTranslation.Description
-		}
-	}
-
 	return events, countRows, nil
 }

@@ -7,15 +7,15 @@ import (
 )
 
 type EventCore struct {
-	ID        uint `gorm:"primaryKey"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt gorm.DeletedAt `gorm:"index"`
-
-	Name        string    `gorm:"not null"`
-	Description string    `gorm:"not null"`
-	StartDate   time.Time `gorm:"not null"`
-	EndDate     time.Time `gorm:"not null"`
+	ID          uint `gorm:"primaryKey"`
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+	DeletedAt   gorm.DeletedAt        `gorm:"index"`
+	Name        string                `gorm:"not null"`
+	Description string                `gorm:"not null"`
+	StartDate   time.Time             `gorm:"not null"`
+	EndDate     time.Time             `gorm:"not null"`
+	Translation *EventTranslationCore `gorm:"foreignKey:EventID;constraint:OnDelete:CASCADE"`
 }
 
 func (e *EventHTTP) FromCore(event EventCore) {
@@ -35,6 +35,12 @@ func (e *EventDetailsHTTP) FromCore(event EventCore) {
 	e.Description = event.Description
 	e.StartDate = event.StartDate.Format(time.DateOnly)
 	e.EndDate = event.EndDate.Format(time.DateOnly)
+
+	if event.Translation != nil {
+		translationHttp := EventTranslationHTTP{}
+		translationHttp.FromCore(*event.Translation)
+		e.Translation = &translationHttp
+	}
 }
 
 func FromEventsCore(eventsCore []EventCore) (eventsHttp []*EventHTTP) {
